@@ -1,115 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Adastral Trail Compass</title>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7l57TFhjYSpFeVY1FsiKxtogVV1QfmRM&libraries=maps,marker&v=beta"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adastral Park Trail</title>
+<script src="https://maps.googleapis.com/maps/api/js?key=AAAAAAAA&libraries=maps,marker&v=beta"></script>
 <style>
-  body {
-    font-family: system-ui, sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 1rem;
-    background: #eef3ff;
+  body { margin:0; font-family:Arial, sans-serif; background:#f5f5f5; }
+  #map { height: 45vh; width: 100%; }
+  #controls { text-align:center; padding:0.5rem; background:#fff; }
+  button { padding:10px 16px; border:none; background:#0057b8; color:white; border-radius:8px; font-size:16px; }
+  button:active { background:#004399; }
+  #nearest { text-align:center; padding:0.8rem; background:#fff; }
+  #trailList { padding:0.5rem; }
+  .trail-item {
+    display:flex; align-items:center; background:#fff; margin:6px 0;
+    padding:10px; border-radius:12px; box-shadow:0 1px 4px rgba(0,0,0,0.1);
   }
-  #heading { font-size: 2rem; color: #0057B8; margin: 1rem 0; }
-  #map { height: 400px; width: 100%; margin-top: 1rem; border-radius: 10px; }
-  #arrow { width: 100px; transition: transform 0.5s ease-out; }
-  button { background: #0057B8; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; }
-  button:disabled { opacity: 0.5; }
+  .trail-item img { width:70px; height:70px; border-radius:8px; object-fit:cover; margin-right:10px; }
+  .trail-info { flex:1; }
+  .trail-name { font-weight:bold; color:#0057b8; margin:0; }
+  .trail-dist { font-size:13px; color:#666; }
+  .tick { font-size:20px; color:green; margin-left:6px; visibility:hidden; }
+  .visited .tick { visibility:visible; }
+  .visited img { opacity:0.5; }
+  .visited button { background:#ccc; pointer-events:none; }
+  .read-more { background:#007bff; color:white; padding:6px 10px; border:none; border-radius:6px; }
+  .user-dot, .next-dot {
+    width:18px; height:18px; border-radius:50%; border:2px solid white;
+  }
+  .user-dot {
+    background: radial-gradient(circle, yellow 40%, orange 80%);
+    box-shadow:0 0 8px rgba(255,255,0,0.8);
+    animation: flash 1s infinite alternate;
+  }
+  .next-dot {
+    background: radial-gradient(circle, #00b2ff 30%, #0057b8 80%);
+    box-shadow:0 0 10px rgba(0,150,255,0.8);
+    animation: pulse 1.6s infinite ease-in-out;
+  }
+  @keyframes flash { 0%{opacity:1;transform:scale(1);}100%{opacity:0.6;transform:scale(1.2);} }
+  @keyframes pulse { 0%{transform:scale(1);opacity:1;}50%{transform:scale(1.5);opacity:0.5;}100%{transform:scale(1);opacity:1;} }
 </style>
 </head>
 <body>
-
-<h1>📍 Adastral Trail</h1>
-<p>Tap below to enable motion access and follow the arrow to your nearest location.</p>
-<button id="enableCompass">Enable Compass</button>
-
-<div id="heading">Heading: --°</div>
-<img id="arrow" src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Arrow_up.svg" alt="arrow" />
-
 <div id="map"></div>
+<div id="controls">
+  <button id="updateBtn">🔄 Update My Position</button>
+</div>
+<div id="nearest">Nearest point: <span id="nearestName">–</span></div>
+<div id="trailList"></div>
 
 <script>
 const spots = [
-  { name: "Main Lab Block", lat: 52.05674493, lng: 1.27986381 },
-  { name: "Acoustic Block", lat: 52.05671008, lng: 1.28002642 },
-  { name: "Old Post Room", lat: 52.05734795, lng: 1.27954631 },
-  { name: "Innovation Martlesham", lat: 52.05744922, lng: 1.28119050 }
+  { name:"Main Lab Block", lat:52.05674493, lng:1.27986381,
+    image:"https://upload.wikimedia.org/wikipedia/commons/e/e8/Adastral_Park_main_building.jpg",
+    html:"Originally known as the Main Lab Block (B62)..."},
+  { name:"Acoustic Block", lat:52.05671008, lng:1.28002642,
+    image:"https://upload.wikimedia.org/wikipedia/commons/5/5a/Anechoic_chamber.jpg",
+    html:"The Acoustic Block houses anechoic and reverberation chambers..."},
+  { name:"Old Post Room", lat:52.05734795, lng:1.27954631, html:"Old Post Room..." },
+  { name:"B1", lat:52.06050806, lng:1.27999692, html:"B1..." },
+  { name:"Waveguide", lat:52.06077374, lng:1.28135277, html:"Waveguide..." },
+  { name:"Submarine, Robotics and Drones", lat:52.0593466, lng:1.28245784, html:"Submarine..." },
+  { name:"The Digitech Centre", lat:52.05925789, lng:1.28514944, html:"Digitech..." },
+  { name:"Martlesham Teleport", lat:52.05930828, lng:1.28618477, html:"Teleport..." },
+  { name:"ROMES", lat:52.05926545, lng:1.2858495, html:"ROMES..." },
+  { name:"Smart Home", lat:52.0592116, lng:1.28462507, html:"Smart Home..." },
+  { name:"Sports Hall", lat:52.05920839, lng:1.28417848, html:"Sports Hall..." },
+  { name:"Gaming", lat:52.05886422, lng:1.28180741, html:"Gaming..." },
+  { name:"Emergency Services", lat:52.05734862, lng:1.28259329, html:"Emergency..." },
+  { name:"Network Ops", lat:52.05718534, lng:1.2811905, html:"Network Ops..." },
+  { name:"Innovation Martlesham", lat:52.05744922, lng:1.2811905, html:"Innovation..." },
+  { name:"Heritage Centre", lat:52.05891122, lng:1.27937062, html:"Heritage..." }
 ];
 
-let userPos = null;
-let compassHeading = 0;
+let map, userMarker, nextMarker;
+let visited = new Set(JSON.parse(localStorage.getItem("visitedSpots")||"[]"));
+let userPos = {lat:52.0579, lng:1.2800};
 
-function bearingTo(lat1, lon1, lat2, lon2) {
-  const toRad = Math.PI / 180;
-  const y = Math.sin((lon2 - lon1) * toRad) * Math.cos(lat2 * toRad);
-  const x = Math.cos(lat1 * toRad) * Math.sin(lat2 * toRad) -
-            Math.sin(lat1 * toRad) * Math.cos(lat2 * toRad) * Math.cos((lon2 - lon1) * toRad);
-  return (Math.atan2(y, x) / toRad + 360) % 360;
+function haversine(lat1,lon1,lat2,lon2){
+  const R=6371000,toRad=Math.PI/180;
+  const dLat=(lat2-lat1)*toRad,dLon=(lon2-lon1)*toRad;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*toRad)*Math.cos(lat2*toRad)*Math.sin(dLon/2)**2;
+  return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function bearing(lat1,lon1,lat2,lon2){
+  const φ1=lat1*Math.PI/180,φ2=lat2*Math.PI/180,Δλ=(lon2-lon1)*Math.PI/180;
+  const y=Math.sin(Δλ)*Math.cos(φ2),x=Math.cos(φ1)*Math.sin(φ2)-Math.sin(φ1)*Math.cos(φ2)*Math.cos(Δλ);
+  return (Math.atan2(y,x)*180/Math.PI+360)%360;
 }
 
-function findNearest(lat, lng) {
-  let nearest = null, min = Infinity;
-  spots.forEach(s => {
-    const d = Math.hypot(s.lat - lat, s.lng - lng);
-    if (d < min) { min = d; nearest = s; }
+function findNearest(lat,lng){
+  let min=Infinity,nearest=null;
+  spots.forEach(s=>{
+    const d=haversine(lat,lng,s.lat,s.lng);
+    if(d<min){min=d;nearest={...s,dist:d};}
   });
   return nearest;
 }
 
-function updateArrow() {
-  if (!userPos) return;
-  const nearest = findNearest(userPos.lat, userPos.lng);
-  if (!nearest) return;
-  const target = bearingTo(userPos.lat, userPos.lng, nearest.lat, nearest.lng);
-  const rel = (target - compassHeading + 360) % 360;
-  document.getElementById('arrow').style.transform = `rotate(${rel}deg)`;
+function initMap(){
+  map=new google.maps.Map(document.getElementById("map"),{center:userPos,zoom:17,mapId:"DEMO_MAP_ID"});
+  userMarker=new google.maps.marker.AdvancedMarkerElement({
+    map,position:userPos,content:Object.assign(document.createElement('div'),{className:'user-dot'})
+  });
+  nextMarker=new google.maps.marker.AdvancedMarkerElement({
+    map,position:userPos,content:Object.assign(document.createElement('div'),{className:'next-dot'})
+  });
+  buildList();
 }
 
-function initMap(lat, lng) {
-  const map = new google.maps.Map(document.getElementById('map'), {
-    center: { lat, lng }, zoom: 17, mapId: "DEMO_MAP_ID"
-  });
-  spots.forEach(s => new google.maps.marker.AdvancedMarkerElement({
-    map, position: { lat: s.lat, lng: s.lng }, title: s.name
-  }));
-  new google.maps.marker.AdvancedMarkerElement({
-    map, position: { lat, lng },
-    title: "You are here",
-    content: Object.assign(document.createElement('div'), {
-      style: 'background:yellow;width:18px;height:18px;border-radius:50%;border:2px solid white;'
-    })
+function buildList(){
+  const list=document.getElementById("trailList");
+  list.innerHTML="";
+  spots.forEach(s=>{
+    const item=document.createElement("div");
+    item.className="trail-item"+(visited.has(s.name)?" visited":"");
+    item.innerHTML=`
+      <img src="${s.image||'https://via.placeholder.com/80'}">
+      <div class="trail-info">
+        <p class="trail-name">${s.name}<span class="tick">✔</span></p>
+        <p class="trail-dist" id="dist-${s.name.replace(/\s+/g,'_')}">–</p>
+        <button class="read-more" disabled>Read More</button>
+      </div>`;
+    list.appendChild(item);
   });
 }
 
-document.getElementById('enableCompass').addEventListener('click', async () => {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(pos => {
-      userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-      initMap(userPos.lat, userPos.lng);
+function updatePosition(){
+  if(!navigator.geolocation){alert("No GPS support");return;}
+  navigator.geolocation.getCurrentPosition(pos=>{
+    userPos={lat:pos.coords.latitude,lng:pos.coords.longitude};
+    map.setCenter(userPos);
+    userMarker.position=userPos;
+
+    const nearest=findNearest(userPos.lat,userPos.lng);
+    document.getElementById("nearestName").textContent=`${nearest.name} (${nearest.dist.toFixed(0)} m)`;
+    nextMarker.position={lat:nearest.lat,lng:nearest.lng};
+
+    // Update list distances + enable read more if near
+    spots.forEach(s=>{
+      const d=haversine(userPos.lat,userPos.lng,s.lat,s.lng);
+      const el=document.getElementById("dist-"+s.name.replace(/\s+/g,'_'));
+      if(el)el.textContent=d<1000?`${d.toFixed(0)} m`:`${(d/1000).toFixed(2)} km`;
+      if(d<=10 && !visited.has(s.name)){
+        visited.add(s.name);
+        localStorage.setItem("visitedSpots",JSON.stringify([...visited]));
+      }
     });
-  }
+    buildList(); // refresh ticks
+  },err=>alert("GPS error: "+err.message));
+}
 
-  if (typeof DeviceOrientationEvent !== "undefined" &&
-      typeof DeviceOrientationEvent.requestPermission === "function") {
-    const res = await DeviceOrientationEvent.requestPermission();
-    if (res === "granted") {
-      window.addEventListener("deviceorientation", e => {
-        if (e.webkitCompassHeading !== undefined) {
-          compassHeading = e.webkitCompassHeading;
-        } else if (e.alpha !== null) {
-          compassHeading = 360 - e.alpha;
-        }
-        document.getElementById('heading').textContent =
-          "Heading: " + compassHeading.toFixed(1) + "°";
-        updateArrow();
-      });
-    }
-  }
-});
+document.getElementById("updateBtn").addEventListener("click",updatePosition);
+window.initMap=initMap;
 </script>
-
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AAAAAAAA&callback=initMap"></script>
 </body>
 </html>
