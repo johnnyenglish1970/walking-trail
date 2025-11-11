@@ -153,9 +153,8 @@ function updatePosition(){
   },err=>alert("GPS error: "+err.message));
 }
 
-document.getElementById("updateBtn").addEventListener("click",updatePosition);
-window.initMap=initMap;
+document.getElementById("updateBtn").addEventListener("click", updatePosition);
+window.addEventListener('load', initMap);
 </script>
-
 </body>
 </html>
