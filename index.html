@@ -3,16 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Adastral Park Trail</title>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7l57TFhjYSpFeVY1FsiKxtogVV1QfmRM&libraries=maps,marker&v=beta"></script>
+<title>Adastral Park Trail + Compass</title>
+<script src="https://maps.googleapis.com/maps/api/js?key=AAAAAAAA&libraries=maps,marker&v=beta"></script>
 <style>
-  body { margin:0; font-family:Arial, sans-serif; background:#f5f5f5; }
-  #map { height: 45vh; width: 100%; }
-  #controls { text-align:center; padding:0.5rem; background:#fff; }
+  body { margin:0; font-family:Arial, sans-serif; background:#f5f5f5; text-align:center; }
+  #map { height:45vh; width:100%; }
+  #controls { padding:0.5rem; background:#fff; }
   button { padding:10px 16px; border:none; background:#0057b8; color:white; border-radius:8px; font-size:16px; }
-  button:active { background:#004399; }
-  #nearest { text-align:center; padding:0.8rem; background:#fff; }
-  #trailList { padding:0.5rem; }
+  #nearest { padding:0.5rem; background:#fff; font-weight:bold; }
+  #trailList { padding:0.5rem; text-align:left; }
   .trail-item {
     display:flex; align-items:center; background:#fff; margin:6px 0;
     padding:10px; border-radius:12px; box-shadow:0 1px 4px rgba(0,0,0,0.1);
@@ -24,23 +23,22 @@
   .tick { font-size:20px; color:green; margin-left:6px; visibility:hidden; }
   .visited .tick { visibility:visible; }
   .visited img { opacity:0.5; }
-  .visited button { background:#ccc; pointer-events:none; }
   .read-more { background:#007bff; color:white; padding:6px 10px; border:none; border-radius:6px; }
-  .user-dot, .next-dot {
-    width:18px; height:18px; border-radius:50%; border:2px solid white;
+  #compass {
+    width:100%; height:120px; background:#fff; display:flex;
+    flex-direction:column; align-items:center; justify-content:center;
+    border-top:1px solid #ddd; margin-top:5px;
   }
-  .user-dot {
-    background: radial-gradient(circle, yellow 40%, orange 80%);
-    box-shadow:0 0 8px rgba(255,255,0,0.8);
-    animation: flash 1s infinite alternate;
+  #arrow {
+    width:80px; height:80px; transition:transform 0.3s ease-out;
   }
-  .next-dot {
-    background: radial-gradient(circle, #00b2ff 30%, #0057b8 80%);
-    box-shadow:0 0 10px rgba(0,150,255,0.8);
-    animation: pulse 1.6s infinite ease-in-out;
-  }
-  @keyframes flash { 0%{opacity:1;transform:scale(1);}100%{opacity:0.6;transform:scale(1.2);} }
-  @keyframes pulse { 0%{transform:scale(1);opacity:1;}50%{transform:scale(1.5);opacity:0.5;}100%{transform:scale(1);opacity:1;} }
+  .user-dot, .next-dot { width:18px; height:18px; border-radius:50%; border:2px solid white; }
+  .user-dot { background: radial-gradient(circle, yellow 40%, orange 80%);
+    box-shadow:0 0 8px rgba(255,255,0,0.8); animation: flash 1s infinite alternate; }
+  .next-dot { background: radial-gradient(circle, #00b2ff 30%, #0057b8 80%);
+    box-shadow:0 0 10px rgba(0,150,255,0.8); animation: pulse 1.6s infinite ease-in-out; }
+  @keyframes flash { 0%{opacity:1;}100%{opacity:0.6;} }
+  @keyframes pulse { 0%{transform:scale(1);}50%{transform:scale(1.5);}100%{transform:scale(1);} }
 </style>
 </head>
 <body>
@@ -49,35 +47,39 @@
   <button id="updateBtn">🔄 Update My Position</button>
 </div>
 <div id="nearest">Nearest point: <span id="nearestName">–</span></div>
+
+<!-- 🧭 Compass Section -->
+<div id="compass">
+  <img id="arrow" src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Red_Arrow_Up.svg" alt="Compass Arrow">
+  <p id="headingText">Heading: 0°</p>
+</div>
+
 <div id="trailList"></div>
 
 <script>
 const spots = [
-  { name:"Main Lab Block", lat:52.05674493, lng:1.27986381,
-    image:"https://upload.wikimedia.org/wikipedia/commons/e/e8/Adastral_Park_main_building.jpg",
-    html:"Originally known as the Main Lab Block (B62)..."},
-  { name:"Acoustic Block", lat:52.05671008, lng:1.28002642,
-    image:"https://upload.wikimedia.org/wikipedia/commons/5/5a/Anechoic_chamber.jpg",
-    html:"The Acoustic Block houses anechoic and reverberation chambers..."},
-  { name:"Old Post Room", lat:52.05734795, lng:1.27954631, html:"Old Post Room..." },
-  { name:"B1", lat:52.06050806, lng:1.27999692, html:"B1..." },
-  { name:"Waveguide", lat:52.06077374, lng:1.28135277, html:"Waveguide..." },
-  { name:"Submarine, Robotics and Drones", lat:52.0593466, lng:1.28245784, html:"Submarine..." },
-  { name:"The Digitech Centre", lat:52.05925789, lng:1.28514944, html:"Digitech..." },
-  { name:"Martlesham Teleport", lat:52.05930828, lng:1.28618477, html:"Teleport..." },
-  { name:"ROMES", lat:52.05926545, lng:1.2858495, html:"ROMES..." },
-  { name:"Smart Home", lat:52.0592116, lng:1.28462507, html:"Smart Home..." },
-  { name:"Sports Hall", lat:52.05920839, lng:1.28417848, html:"Sports Hall..." },
-  { name:"Gaming", lat:52.05886422, lng:1.28180741, html:"Gaming..." },
-  { name:"Emergency Services", lat:52.05734862, lng:1.28259329, html:"Emergency..." },
-  { name:"Network Ops", lat:52.05718534, lng:1.2811905, html:"Network Ops..." },
-  { name:"Innovation Martlesham", lat:52.05744922, lng:1.2811905, html:"Innovation..." },
-  { name:"Heritage Centre", lat:52.05891122, lng:1.27937062, html:"Heritage..." }
+  { name:"Main Lab Block", lat:52.05674493, lng:1.27986381 },
+  { name:"Acoustic Block", lat:52.05671008, lng:1.28002642 },
+  { name:"Old Post Room", lat:52.05734795, lng:1.27954631 },
+  { name:"B1", lat:52.06050806, lng:1.27999692 },
+  { name:"Waveguide", lat:52.06077374, lng:1.28135277 },
+  { name:"Submarine, Robotics and Drones", lat:52.0593466, lng:1.28245784 },
+  { name:"The Digitech Centre", lat:52.05925789, lng:1.28514944 },
+  { name:"Martlesham Teleport", lat:52.05930828, lng:1.28618477 },
+  { name:"ROMES", lat:52.05926545, lng:1.2858495 },
+  { name:"Smart Home", lat:52.0592116, lng:1.28462507 },
+  { name:"Sports Hall", lat:52.05920839, lng:1.28417848 },
+  { name:"Gaming", lat:52.05886422, lng:1.28180741 },
+  { name:"Emergency Services", lat:52.05734862, lng:1.28259329 },
+  { name:"Network Ops", lat:52.05718534, lng:1.2811905 },
+  { name:"Innovation Martlesham", lat:52.05744922, lng:1.2811905 },
+  { name:"Heritage Centre", lat:52.05891122, lng:1.27937062 }
 ];
 
 let map, userMarker, nextMarker;
 let visited = new Set(JSON.parse(localStorage.getItem("visitedSpots")||"[]"));
 let userPos = {lat:52.0579, lng:1.2800};
+let compassHeading = 0;
 
 function haversine(lat1,lon1,lat2,lon2){
   const R=6371000,toRad=Math.PI/180;
@@ -85,12 +87,6 @@ function haversine(lat1,lon1,lat2,lon2){
   const a=Math.sin(dLat/2)**2+Math.cos(lat1*toRad)*Math.cos(lat2*toRad)*Math.sin(dLon/2)**2;
   return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
-function bearing(lat1,lon1,lat2,lon2){
-  const φ1=lat1*Math.PI/180,φ2=lat2*Math.PI/180,Δλ=(lon2-lon1)*Math.PI/180;
-  const y=Math.sin(Δλ)*Math.cos(φ2),x=Math.cos(φ1)*Math.sin(φ2)-Math.sin(φ1)*Math.cos(φ2)*Math.cos(Δλ);
-  return (Math.atan2(y,x)*180/Math.PI+360)%360;
-}
-
 function findNearest(lat,lng){
   let min=Infinity,nearest=null;
   spots.forEach(s=>{
@@ -101,8 +97,6 @@ function findNearest(lat,lng){
 }
 
 function initMap(){
-  window.addEventListener('load', initMap);
-
   map=new google.maps.Map(document.getElementById("map"),{center:userPos,zoom:17,mapId:"DEMO_MAP_ID"});
   userMarker=new google.maps.marker.AdvancedMarkerElement({
     map,position:userPos,content:Object.assign(document.createElement('div'),{className:'user-dot'})
@@ -111,6 +105,7 @@ function initMap(){
     map,position:userPos,content:Object.assign(document.createElement('div'),{className:'next-dot'})
   });
   buildList();
+  startCompass(); // 🧭 start compass here
 }
 
 function buildList(){
@@ -120,7 +115,7 @@ function buildList(){
     const item=document.createElement("div");
     item.className="trail-item"+(visited.has(s.name)?" visited":"");
     item.innerHTML=`
-      <img src="${s.image||'https://via.placeholder.com/80'}">
+      <img src="https://via.placeholder.com/80">
       <div class="trail-info">
         <p class="trail-name">${s.name}<span class="tick">✔</span></p>
         <p class="trail-dist" id="dist-${s.name.replace(/\s+/g,'_')}">–</p>
@@ -141,7 +136,6 @@ function updatePosition(){
     document.getElementById("nearestName").textContent=`${nearest.name} (${nearest.dist.toFixed(0)} m)`;
     nextMarker.position={lat:nearest.lat,lng:nearest.lng};
 
-    // Update list distances + enable read more if near
     spots.forEach(s=>{
       const d=haversine(userPos.lat,userPos.lng,s.lat,s.lng);
       const el=document.getElementById("dist-"+s.name.replace(/\s+/g,'_'));
@@ -151,11 +145,40 @@ function updatePosition(){
         localStorage.setItem("visitedSpots",JSON.stringify([...visited]));
       }
     });
-    buildList(); // refresh ticks
+    buildList();
   },err=>alert("GPS error: "+err.message));
 }
 
-document.getElementById("updateBtn").addEventListener("click", updatePosition);
+// 🧭 COMPASS FUNCTION
+function startCompass(){
+  function handleOrientation(event){
+    let heading;
+    if(event.webkitCompassHeading!==undefined) heading=event.webkitCompassHeading;
+    else if(event.alpha!==null) heading=360-event.alpha;
+    if(heading===undefined||isNaN(heading)) return;
+    compassHeading=heading;
+    document.getElementById("arrow").style.transform=`rotate(${heading}deg)`;
+    document.getElementById("headingText").textContent=`Heading: ${heading.toFixed(1)}°`;
+  }
+
+  if(typeof DeviceOrientationEvent!=="undefined" &&
+     typeof DeviceOrientationEvent.requestPermission==="function"){
+    DeviceOrientationEvent.requestPermission()
+      .then(res=>{
+        if(res==="granted"){
+          window.addEventListener("deviceorientation",handleOrientation,true);
+        }else{
+          alert("Compass permission denied");
+        }
+      })
+      .catch(()=>alert("Compass not supported"));
+  }else{
+    window.addEventListener("deviceorientationabsolute",handleOrientation,true);
+    window.addEventListener("deviceorientation",handleOrientation,true);
+  }
+}
+
+document.getElementById("updateBtn").addEventListener("click",updatePosition);
 window.addEventListener('load', initMap);
 </script>
 </body>
