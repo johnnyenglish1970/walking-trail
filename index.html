@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Adastral Trail Compass</title>
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=maps,marker&v=beta"></script>
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 1rem;
+    background: #eef3ff;
+  }
+  #heading { font-size: 2rem; color: #0057B8; margin: 1rem 0; }
+  #map { height: 400px; width: 100%; margin-top: 1rem; border-radius: 10px; }
+  #arrow { width: 100px; transition: transform 0.5s ease-out; }
+  button { background: #0057B8; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; }
+  button:disabled { opacity: 0.5; }
+</style>
+</head>
+<body>
+
+<h1>📍 Adastral Trail</h1>
+<p>Tap below to enable motion access and follow the arrow to your nearest location.</p>
+<button id="enableCompass">Enable Compass</button>
+
+<div id="heading">Heading: --°</div>
+<img id="arrow" src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Arrow_up.svg" alt="arrow" />
+
+<div id="map"></div>
+
+<script>
+const spots = [
+  { name: "Main Lab Block", lat: 52.05674493, lng: 1.27986381 },
+  { name: "Acoustic Block", lat: 52.05671008, lng: 1.28002642 },
+  { name: "Old Post Room", lat: 52.05734795, lng: 1.27954631 },
+  { name: "Innovation Martlesham", lat: 52.05744922, lng: 1.28119050 }
+];
+
+let userPos = null;
+let compassHeading = 0;
+
+function bearingTo(lat1, lon1, lat2, lon2) {
+  const toRad = Math.PI / 180;
+  const y = Math.sin((lon2 - lon1) * toRad) * Math.cos(lat2 * toRad);
+  const x = Math.cos(lat1 * toRad) * Math.sin(lat2 * toRad) -
+            Math.sin(lat1 * toRad) * Math.cos(lat2 * toRad) * Math.cos((lon2 - lon1) * toRad);
+  return (Math.atan2(y, x) / toRad + 360) % 360;
+}
+
+function findNearest(lat, lng) {
+  let nearest = null, min = Infinity;
+  spots.forEach(s => {
+    const d = Math.hypot(s.lat - lat, s.lng - lng);
+    if (d < min) { min = d; nearest = s; }
+  });
+  return nearest;
+}
+
+function updateArrow() {
+  if (!userPos) return;
+  const nearest = findNearest(userPos.lat, userPos.lng);
+  if (!nearest) return;
+  const target = bearingTo(userPos.lat, userPos.lng, nearest.lat, nearest.lng);
+  const rel = (target - compassHeading + 360) % 360;
+  document.getElementById('arrow').style.transform = `rotate(${rel}deg)`;
+}
+
+function initMap(lat, lng) {
+  const map = new google.maps.Map(document.getElementById('map'), {
+    center: { lat, lng }, zoom: 17, mapId: "DEMO_MAP_ID"
+  });
+  spots.forEach(s => new google.maps.marker.AdvancedMarkerElement({
+    map, position: { lat: s.lat, lng: s.lng }, title: s.name
+  }));
+  new google.maps.marker.AdvancedMarkerElement({
+    map, position: { lat, lng },
+    title: "You are here",
+    content: Object.assign(document.createElement('div'), {
+      style: 'background:yellow;width:18px;height:18px;border-radius:50%;border:2px solid white;'
+    })
+  });
+}
+
+document.getElementById('enableCompass').addEventListener('click', async () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      initMap(userPos.lat, userPos.lng);
+    });
+  }
+
+  if (typeof DeviceOrientationEvent !== "undefined" &&
+      typeof DeviceOrientationEvent.requestPermission === "function") {
+    const res = await DeviceOrientationEvent.requestPermission();
+    if (res === "granted") {
+      window.addEventListener("deviceorientation", e => {
+        if (e.webkitCompassHeading !== undefined) {
+          compassHeading = e.webkitCompassHeading;
+        } else if (e.alpha !== null) {
+          compassHeading = 360 - e.alpha;
+        }
+        document.getElementById('heading').textContent =
+          "Heading: " + compassHeading.toFixed(1) + "°";
+        updateArrow();
+      });
+    }
+  }
+});
+</script>
+
+</body>
+</html>
