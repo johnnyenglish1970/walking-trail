@@ -66,43 +66,57 @@ button {
 }
 
 /* ===================== COMPASS & CONTROLS ===================== */
-.compass-section {
+/* ===================== COMPASS & CONTROLS ===================== */
+#compass {
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
   text-align: center;
-  margin: 20px 0;
+  padding: 10px 0;
 }
 
+/* Arrow container + overlay */
+#arrow-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+/* Base arrow */
 #arrow {
   width: 80px;
   height: 80px;
-  margin: 0 auto 10px;
-  background: url("images/arrow.png") no-repeat center/contain;
-  position: relative;
+  margin: 0 auto;
+  display: block;
   transition: transform 0.25s linear;
   opacity: 0.5;
   filter: grayscale(100%);
 }
 
-/* Red X overlay when inactive */
-#arrow::after {
-  content: "✖";
+/* Red X overlay (shows when inactive) */
+#cross-overlay {
   position: absolute;
-  color: red;
-  font-size: 2rem;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  opacity: 1;
+  color: red;
+  font-size: 64px;
+  font-weight: bold;
+  opacity: 0.85;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
+/* Hide cross + restore full arrow color when active */
 #arrow.active {
   opacity: 1;
   filter: none;
 }
-
-#arrow.active::after {
-  content: "";
+#arrow.active + #cross-overlay {
+  opacity: 0;
 }
 
+/* Compass button */
 #startCompassBtn {
   background: #0057b8;
   color: #fff;
@@ -119,6 +133,13 @@ button {
   background: #ccc;
   color: #555;
   cursor: not-allowed;
+}
+
+/* Texts under compass */
+#headingText,
+#compassStatus {
+  margin: 5px 0;
+  font-size: 0.95rem;
 }
 
 /* ===================== USER DOT ===================== */
