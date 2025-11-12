@@ -90,25 +90,36 @@ function onPositionUpdated() {
 }
 
 function refreshNearestAndDistances() {
-  const currentSpot = spots[currentSpotIndex];
-  if (!currentSpot) return;
-
-  const dist = haversine(userPos.lat, userPos.lng, currentSpot.lat, currentSpot.lng);
-  nearestCache = { ...currentSpot, dist };
+  if (!spots?.length || !userPos?.lat) return;
+  const nearest = findNearest(userPos.lat, userPos.lng);
+  if (!nearest) return;
+  nearestCache = nearest;
 
   document.getElementById("nearestName").textContent =
-    `${currentSpot.name} (${dist.toFixed(0)} m)`;
+    `${nearest.name} (${nearest.dist.toFixed(0)} m)`;
+
   if (nextMarker.setPosition)
-    nextMarker.setPosition({ lat: currentSpot.lat, lng: currentSpot.lng });
+    nextMarker.setPosition({ lat: nearest.lat, lng: nearest.lng });
 
-  if (dist <= 10 && !visited.has(currentSpot.name)) {
-    visited.add(currentSpot.name);
-    advanceToNextSpot();
-  }
+  let changed = false;
+  spots.forEach((s, i) => {
+    const d = haversine(userPos.lat, userPos.lng, s.lat, s.lng);
+    const el = document.getElementById("dist-" + toKey(s.name));
+    if (el) el.textContent = d < 1000 ? `${d.toFixed(0)} m` : `${(d / 1000).toFixed(2)} km`;
 
-  updateProgress();
+    // ✅ NEW: trigger when within 10 m
+    if (d <= 10 && !visited.has(s.name)) {
+      visited.add(s.name);
+      changed = true;
+      if (spotMarkers[i]?.content) spotMarkers[i].content.classList.add("visited");
+
+      // 🟡 automatically open pop-up for this spot
+      openSpotModal(s.name);
+    }
+  });
+
+  if (changed) { saveState(); buildList(); }
   aimCompassAtNearest();
-  buildList();
 }
 
 function advanceToNextSpot() {
