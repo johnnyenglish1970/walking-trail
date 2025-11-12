@@ -19,10 +19,12 @@ body {
 ===================== */
 #banner {
   width: 100%;
+  max-width: 800px;
   height: auto;
   max-height: 180px;
   object-fit: cover;
   display: block;
+  margin: 0 auto;
   border-bottom: 3px solid #0057b8;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
