@@ -4,19 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Adastral Park Trail + Compass</title>
+<link rel="stylesheet" href="style.css">
 
+<script src="spots.js"></script>
   <!-- Google Maps API -->
  <script async
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSs51HP1Rv75vKBoU1UQD3M0er3fVshWg&libraries=maps,marker&v=beta">
 </script>
+<script src="script.js" defer></script>
   
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- Data + Script -->
-  <script src="spots.js" defer></script>
-  <script src="script.js" defer></script>
 </head>
 <body>
   <div id="map"></div>
@@ -28,24 +24,26 @@
     <select id="testSelect"><option value="">🧪 Test location…</option></select>
   </div>
 
-  <div id="nearest">Nearest point: <span id="nearestName">–</span></div>
+  <div id="progressBar"><span id="progressText">Progress: 0 / 0</span></div>
+  <div id="nearest">Next spot: <span id="nearestName">–</span></div>
 
   <div id="compass">
-    <img id="arrow" src="images/arrow.svg" alt="Compass Arrow" />
+    <img id="arrow" src="images/arrow.svg" alt="Compass Arrow">
     <p id="headingText">Heading: 0°</p>
     <p id="compassStatus">Waiting for motion permission...</p>
   </div>
 
   <div id="trailList"></div>
 
-  <dialog id="spotModal" aria-labelledby="spotTitle">
+  <dialog id="spotModal">
     <div class="modal-inner">
       <div class="modal-header">
         <h3 id="spotTitle"></h3>
-        <button id="closeModal" class="btn-secondary">✖ Close</button>
+        <button id="closeModal">✖ Close</button>
       </div>
-      <div id="spotBody" class="modal-body"></div>
+      <div id="spotBody"></div>
     </div>
   </dialog>
 </body>
 </html>
+
