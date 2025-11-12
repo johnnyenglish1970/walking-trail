@@ -121,16 +121,22 @@ function refreshNearestAndDistances() {
     if (el) el.textContent = d < 1000 ? `${d.toFixed(0)} m` : `${(d / 1000).toFixed(2)} km`;
   });
 
-  // Arrival check (15m)
-  if (dist <= 15 && !visited.has(current.name)) {
-    visited.add(current.name);
-    const m = spotMarkers[currentSpotIndex];
-    if (m?.content) m.content.classList.add("visited");
-    saveState();
-    buildList();
-    openSpotModal(current.name);
-    advanceToNextSpot();
-  }
+  // Arrival check (radius)
+ const proximity = current.radius || 15;  // fallback to 15 m if not set
+
+if (dist <= proximity && !visited.has(current.name)) {
+  visited.add(current.name);
+
+  // Tint the marker if using AdvancedMarkerElement
+  const m = spotMarkers[currentSpotIndex];
+  if (m?.content) m.content.classList.add("visited");
+
+  saveState();
+  buildList();
+  openSpotModal(current.name);
+  advanceToNextSpot();
+}
+
 
   aimCompassAtNearest();
   updateProgress();
