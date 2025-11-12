@@ -135,6 +135,9 @@ function setupCompassButton() {
   const arrow = document.getElementById("arrow");
   const status = document.getElementById("compassStatus");
 
+  // ensure the arrow starts greyed out
+  arrow.classList.remove("active");
+
   btn.addEventListener("click", () => {
     status.textContent = "Requesting motion permission...";
     if (typeof DeviceOrientationEvent !== "undefined" &&
@@ -149,7 +152,6 @@ function setupCompassButton() {
         status.textContent = "Permission request failed.";
       });
     } else {
-      // Non-iOS devices
       activateCompass();
     }
   });
@@ -158,7 +160,7 @@ function setupCompassButton() {
     window.addEventListener("deviceorientation", handleOrientation, true);
     btn.textContent = "🧭 Compass active";
     btn.disabled = true;
-    arrow.classList.add("active");
+    arrow.classList.add("active"); // <— only now activates
     status.textContent = "Compass active ✓";
   }
 
