@@ -167,19 +167,25 @@ button:disabled {
 #arrow {
   width: 90px;
   height: 90px;
-  transition: transform 0.25s linear, filter 0.2s ease;
-  filter: grayscale(100%) brightness(0.5); /* <— this ensures grey default */
-  opacity: 0.8;
+  transition: transform 0.25s linear, filter 0.3s ease, opacity 0.3s ease;
   margin-bottom: 10px;
 }
 
+/* Default (disabled) state — much duller now */
+#arrow:not(.active) {
+  filter: grayscale(100%) brightness(0.25) contrast(0.6);
+  opacity: 0.4;
+}
+
+/* Active (live compass) state */
 #arrow.active {
   filter: none;
   opacity: 1;
 }
 
+/* When user has arrived at a spot */
 #arrow.arrived {
-  filter: hue-rotate(90deg) brightness(1.1);
+  filter: hue-rotate(90deg) brightness(1.2) saturate(1.2);
 }
 
 #startCompassBtn {
