@@ -71,6 +71,7 @@ function initMap() {
   if (MAP_ID) mapOpts.mapId = MAP_ID;
   map = new google.maps.Map(document.getElementById("map"), mapOpts);
 
+  // ---- Styles for Advanced Markers ----
   const style = document.createElement("style");
   style.textContent = `
     .user-dot {width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle,yellow 40%,orange 80%);}
@@ -80,17 +81,28 @@ function initMap() {
   `;
   document.head.appendChild(style);
 
+  // ---- Create Markers ----
   userMarker = makeDotMarker({ map, position: userPos, className: "user-dot", title: "You" });
   nextMarker = makeDotMarker({ map, position: userPos, className: "next-dot", title: "Nearest" });
+
   spotMarkers = spots.map(s =>
     makeDotMarker({ map, position: { lat: s.lat, lng: s.lng }, className: "spot-dot", title: s.name })
   );
 
+  // ---- Fit map to show all spots + your location ----
+  const bounds = new google.maps.LatLngBounds();
+  spots.forEach(s => bounds.extend({ lat: s.lat, lng: s.lng }));
+  bounds.extend(userPos); // include your last known position
+  map.fitBounds(bounds, 80); // 80px padding around edges
+
+  // ---- Continue setup ----
   buildList();
   setupCompassButton();
   attachHandlers();
   buildTestDropdown();
   startWatchingPosition();
+
+  // Delay distance refresh slightly so map loads first
   setTimeout(refreshNearestAndDistances, 300);
 }
 
