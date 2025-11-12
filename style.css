@@ -1,32 +1,22 @@
-/* ========== GLOBAL STYLES ========== */
+/* =====================
+   Global Layout
+===================== */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #f5f5f5;
   text-align: center;
-  color: #222;
 }
 
-button, select {
-  padding: 10px 14px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-button:disabled {
-  background: #aaa;
-  cursor: not-allowed;
-}
-
-/* ========== MAP ========== */
 #map {
   height: 45vh;
   width: 100%;
+  border-bottom: 2px solid #ddd;
 }
 
-/* ========== CONTROLS ========== */
+/* =====================
+   Control Buttons
+===================== */
 #controls {
   padding: 0.5rem;
   background: #fff;
@@ -35,211 +25,277 @@ button:disabled {
   gap: 10px;
   flex-wrap: wrap;
   align-items: center;
+  border-bottom: 1px solid #ddd;
 }
 
-#controls button {
+button,
+select {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+button {
   background: #0057b8;
-  color: #fff;
+  color: white;
+  cursor: pointer;
+  transition: background 0.25s ease;
 }
 
-#controls select {
+button:hover {
+  background: #004494;
+}
+
+button:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+select {
   background: #eee;
+  cursor: pointer;
 }
 
-/* ========== PROGRESS + NEAREST ========== */
-#progressBar {
-  background: #fff;
-  padding: 6px;
-  font-weight: bold;
-}
-
+/* =====================
+   Nearest Point Info
+===================== */
 #nearest {
   padding: 0.5rem;
   background: #fff;
   font-weight: bold;
+  border-bottom: 1px solid #ddd;
 }
 
-/* ========== TRAIL LIST ========== */
-#trailList {
-  padding: 0.5rem;
-  text-align: left;
-}
-
-.trail-item {
-  display: flex;
-  align-items: center;
-  background: #fff;
-  margin: 6px 0;
-  padding: 10px;
-  border-radius: 12px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-  transition: background 0.2s ease;
-}
-
-.trail-item:hover {
-  background: #f9f9f9;
-}
-
-.img-wrap {
-  position: relative;
-  width: 70px;
-  height: 70px;
-  margin-right: 10px;
-}
-
-.trail-item img {
-  width: 70px;
-  height: 70px;
-  border-radius: 8px;
-  object-fit: cover;
-  display: block;
-}
-
-.tick-overlay {
-  position: absolute;
-  inset: 0;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,128,0,0.15);
-  color: #0a0;
-  font-size: 28px;
-  font-weight: 700;
-  opacity: 0;
-  transition: opacity .2s ease;
-}
-
-.visited .tick-overlay {
-  opacity: 1;
-}
-
-.trail-info {
-  flex: 1;
-}
-
-.trail-name {
-  font-weight: bold;
-  color: #0057b8;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.trail-dist {
-  font-size: 13px;
-  color: #666;
-  margin-bottom: 4px;
-}
-
-.read-more {
-  background: #007bff;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 6px;
-}
-
-.skip-btn {
-  background: #888;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 6px;
-  margin-left: 6px;
-}
-
-.visited img {
-  opacity: 0.6;
-}
-
-/* ========== COMPASS SECTION ========== */
+/* =====================
+   Compass Section
+===================== */
 #compass {
   width: 100%;
   background: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   border-top: 1px solid #ddd;
-  padding: 15px 0;
   margin-top: 5px;
-}
-
-/* Container for arrow + overlay */
-#arrow-container {
+  padding: 10px 0;
   position: relative;
-  width: 100px;
-  height: 100px;
-  margin-bottom: 10px;
 }
 
+/* Arrow image */
 #arrow {
-  width: 100%;
-  height: 100%;
-  display: block;
-  transition: transform 0.25s linear, filter 0.3s ease;
+  width: 80px;
+  height: 80px;
+  transition: transform 0.2s linear, filter 0.3s ease;
+  position: relative;
 }
 
-/* RED CROSS overlay (centered and visible) */
-#cross-overlay {
+/* Red cross overlay when inactive */
+#arrow::after {
+  content: "✖";
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 70px;
-  font-weight: 800;
-  color: rgba(255, 0, 0, 0.85);
-  text-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
-  pointer-events: none;
+  transform: translate(-50%, -50%) scale(1.5);
+  font-size: 42px;
+  color: rgba(220, 0, 0, 0.85);
   opacity: 1;
-  transition: opacity 0.4s ease;
-  z-index: 5; /* ensures it’s above the arrow */
+  transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
-/* When compass is active, fade the cross away */
-#arrow.active + #cross-overlay {
+/* Active compass (remove red cross) */
+#arrow.active::after {
   opacity: 0;
 }
 
+/* When arrived (green tint) */
 #arrow.arrived {
   filter: hue-rotate(90deg) brightness(1.1);
 }
 
-#startCompassBtn {
-  background: #0057b8;
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-bottom: 6px;
-}
-
-#startCompassBtn:disabled {
-  background: #aaa;
-  cursor: not-allowed;
-}
-
-
 #headingText {
-  font-size: 15px;
+  font-size: 14px;
   color: #333;
-  margin: 6px 0 0 0;
+  margin-top: 6px;
 }
 
 #compassStatus {
   font-size: 14px;
-  color: #444;
+  color: #555;
   margin-top: 4px;
 }
 
-/* ========== MODAL POPUP ========== */
-dialog {
+/* =====================
+   Pulsing User Location
+===================== */
+.user-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: radial-gradient(circle, #fff700 30%, #ffcc00 80%);
+  box-shadow: 0 0 14px rgba(255, 230, 0, 0.9);
+  animation: pulse-user 1.8s infinite ease-in-out;
+}
+
+@keyframes pulse-user {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(255, 230, 0, 0.7);
+  }
+  50% {
+    transform: scale(1.25);
+    box-shadow: 0 0 25px rgba(255, 255, 0, 1);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(255, 230, 0, 0.7);
+  }
+}
+
+/* =====================
+   Trail List Section Strips
+===================== */
+#trailList {
+  padding: 0.5rem;
+  text-align: left;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Trail item card */
+.trail-item {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 12px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.trail-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Title bar */
+.trail-header {
+  background: #777;
+  color: #fff;
+  padding: 10px 14px;
+  font-weight: bold;
+  font-size: 1.05rem;
+  text-align: left;
+  transition: background 0.3s ease;
+}
+
+/* Blue when visited */
+.visited .trail-header {
+  background: #0057b8;
+}
+
+/* Inner content layout */
+.trail-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+}
+
+/* Image and tick overlay */
+.img-wrap {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  flex-shrink: 0;
+}
+
+.trail-item img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.tick-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 128, 0, 0.2);
+  color: #0a0;
+  font-size: 28px;
+  font-weight: bold;
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.visited .tick-overlay {
+  opacity: 1;
+}
+
+/* Text snippet */
+.trail-text {
+  flex: 1;
+  color: #333;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+/* Distance under text */
+.trail-dist {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Buttons row */
+.trail-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 10px 14px 14px;
+  border-top: 1px solid #eee;
+}
+
+/* Buttons */
+.trail-buttons button {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s ease;
+}
+
+.trail-buttons button:hover {
+  background: #005fa3;
+}
+
+.trail-buttons button:disabled {
+  background: #bbb;
+  cursor: not-allowed;
+}
+
+/* =====================
+   Modal Pop-up
+===================== */
+dialog#spotModal {
   border: none;
   border-radius: 12px;
-  padding: 0;
-  width: 90%;
   max-width: 700px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  width: 90%;
+  padding: 0;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
 }
 
 .modal-inner {
@@ -254,9 +310,10 @@ dialog {
   gap: 10px;
 }
 
-#spotTitle {
-  margin: 0;
-  color: #0057b8;
+.modal-body img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 12px;
 }
 
 #closeModal {
@@ -266,59 +323,9 @@ dialog {
   border-radius: 6px;
   padding: 8px 12px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 #closeModal:hover {
   background: #ddd;
-}
-
-#spotBody img {
-  width: 100%;
-  border-radius: 10px;
-  margin-bottom: 12px;
-}
-
-#spotBody p {
-  line-height: 1.4;
-  margin-bottom: 8px;
-}
-
-/* Pulsing user location dot */
-.user-dot {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  background: radial-gradient(circle, #fff700 30%, #ffcc00 80%);
-  box-shadow: 0 0 12px rgba(255, 230, 0, 0.8);
-  animation: pulse-user 1.8s infinite ease-in-out;
-}
-
-@keyframes pulse-user {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 10px rgba(255, 230, 0, 0.7);
-  }
-  50% {
-    transform: scale(1.25);
-    box-shadow: 0 0 25px rgba(255, 255, 0, 0.9);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 10px rgba(255, 230, 0, 0.7);
-  }
-}
-
-/* ========== SMALL SCREENS ========== */
-@media (max-width: 600px) {
-  #controls {
-    flex-direction: column;
-  }
-  .trail-item {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .trail-info {
-    width: 100%;
-  }
 }
