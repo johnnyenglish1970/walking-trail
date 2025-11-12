@@ -8,9 +8,11 @@
 <style>
   body { margin:0; font-family:Arial, sans-serif; background:#f5f5f5; text-align:center; }
   #map { height:45vh; width:100%; }
-  #controls { padding:0.5rem; background:#fff; display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
-  button { padding:10px 16px; border:none; background:#0057b8; color:white; border-radius:8px; font-size:16px; cursor:pointer; }
+  #controls { padding:0.5rem; background:#fff; display:flex; justify-content:center; gap:10px; flex-wrap:wrap; align-items:center; }
+  button, select { padding:10px 14px; border:none; border-radius:8px; font-size:16px; }
+  button { background:#0057b8; color:white; cursor:pointer; }
   button:disabled { background:#aaa; cursor:not-allowed; }
+  select { background:#eee; cursor:pointer; }
   #nearest { padding:0.5rem; background:#fff; font-weight:bold; }
   #trailList { padding:0.5rem; text-align:left; }
 
@@ -50,7 +52,7 @@
   @keyframes flash { 0%{opacity:1;}100%{opacity:0.6;} }
   @keyframes pulse { 0%{transform:scale(1);}50%{transform:scale(1.5);}100%{transform:scale(1);} }
 
-  /* Modal (pop-up) */
+  /* Modal */
   dialog { border:none; border-radius:12px; padding:0; max-width:600px; width:min(92vw, 600px); }
   .modal-inner { padding:16px; text-align:left; }
   .modal-header { display:flex; align-items:center; justify-content:space-between; }
@@ -67,11 +69,14 @@
   <button id="updateBtn">🔄 Update My Position</button>
   <button id="startCompassBtn">🧭 Enable Compass</button>
   <button id="resetBtn" title="Clear progress">♻️ Reset Trail</button>
+  <!-- 🧪 Test dropdown -->
+  <select id="testSelect">
+    <option value="">🧪 Test location…</option>
+  </select>
 </div>
 
 <div id="nearest">Nearest point: <span id="nearestName">–</span></div>
 
-<!-- 🧭 Compass Section -->
 <div id="compass">
   <img id="arrow" src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Red_Arrow_Up.svg" alt="Compass Arrow">
   <p id="headingText">Heading: 0°</p>
@@ -80,7 +85,6 @@
 
 <div id="trailList"></div>
 
-<!-- Single reusable modal -->
 <dialog id="spotModal" aria-labelledby="spotTitle">
   <div class="modal-inner">
     <div class="modal-header">
@@ -95,144 +99,99 @@
 </dialog>
 
 <script>
-/* ===== Data ===== */
+/* ==== Data ==== */
 const spots = [
-  { name:"Main Lab Block", lat:52.05674493, lng:1.27986381, img:"https://via.placeholder.com/80", info:"Main Lab Block info text…" },
-  { name:"Acoustic Block", lat:52.05671008, lng:1.28002642, img:"https://via.placeholder.com/80", info:"Acoustic Block info…" },
-  { name:"Old Post Room", lat:52.05734795, lng:1.27954631, img:"https://via.placeholder.com/80", info:"Old Post Room info…" },
-  { name:"B1", lat:52.06050806, lng:1.27999692, img:"https://via.placeholder.com/80", info:"B1 info…" },
-  { name:"Waveguide", lat:52.06077374, lng:1.28135277, img:"https://via.placeholder.com/80", info:"Waveguide info…" },
-  { name:"Submarine, Robotics and Drones", lat:52.0593466, lng:1.28245784, img:"https://via.placeholder.com/80", info:"SRD info…" },
-  { name:"The Digitech Centre", lat:52.05925789, lng:1.28514944, img:"https://via.placeholder.com/80", info:"Digitech info…" },
-  { name:"Martlesham Teleport", lat:52.05930828, lng:1.28618477, img:"https://via.placeholder.com/80", info:"Teleport info…" },
-  { name:"ROMES", lat:52.05926545, lng:1.2858495, img:"https://via.placeholder.com/80", info:"ROMES info…" },
-  { name:"Smart Home", lat:52.0592116, lng:1.28462507, img:"https://via.placeholder.com/80", info:"Smart Home info…" },
-  { name:"Sports Hall", lat:52.05920839, lng:1.28417848, img:"https://via.placeholder.com/80", info:"Sports Hall info…" },
-  { name:"Gaming", lat:52.05886422, lng:1.28180741, img:"https://via.placeholder.com/80", info:"Gaming info…" },
-  { name:"Emergency Services", lat:52.05734862, lng:1.28259329, img:"https://via.placeholder.com/80", info:"Emergency Services info…" },
-  { name:"Network Ops", lat:52.05718534, lng:1.2811905, img:"https://via.placeholder.com/80", info:"Network Ops info…" },
-  { name:"Innovation Martlesham", lat:52.05744922, lng:1.2811905, img:"https://via.placeholder.com/80", info:"Innovation Martlesham info…" },
-  { name:"Heritage Centre", lat:52.05891122, lng:1.27937062, img:"https://via.placeholder.com/80", info:"Heritage Centre info…" }
+  { name:"Main Lab Block", lat:52.05674493, lng:1.27986381, info:"Main Lab Block info…" },
+  { name:"Acoustic Block", lat:52.05671008, lng:1.28002642, info:"Acoustic Block info…" },
+  { name:"Old Post Room", lat:52.05734795, lng:1.27954631, info:"Old Post Room info…" },
+  { name:"B1", lat:52.06050806, lng:1.27999692, info:"B1 info…" },
+  { name:"Waveguide", lat:52.06077374, lng:1.28135277, info:"Waveguide info…" },
+  { name:"Submarine, Robotics and Drones", lat:52.0593466, lng:1.28245784, info:"SRD info…" },
+  { name:"The Digitech Centre", lat:52.05925789, lng:1.28514944, info:"Digitech info…" },
+  { name:"Martlesham Teleport", lat:52.05930828, lng:1.28618477, info:"Teleport info…" },
+  { name:"ROMES", lat:52.05926545, lng:1.2858495, info:"ROMES info…" },
+  { name:"Smart Home", lat:52.0592116, lng:1.28462507, info:"Smart Home info…" },
+  { name:"Sports Hall", lat:52.05920839, lng:1.28417848, info:"Sports Hall info…" },
+  { name:"Gaming", lat:52.05886422, lng:1.28180741, info:"Gaming info…" },
+  { name:"Emergency Services", lat:52.05734862, lng:1.28259329, info:"Emergency Services info…" },
+  { name:"Network Ops", lat:52.05718534, lng:1.2811905, info:"Network Ops info…" },
+  { name:"Innovation Martlesham", lat:52.05744922, lng:1.2811905, info:"Innovation Martlesham info…" },
+  { name:"Heritage Centre", lat:52.05891122, lng:1.27937062, info:"Heritage Centre info…" }
 ];
 
 let map, userMarker, nextMarker;
-let spotMarkers = [];
-let watchId = null;
+let spotMarkers=[];
+let watchId=null;
+let visited=new Set(JSON.parse(localStorage.getItem("visitedSpots")||"[]"));
+let userPos=JSON.parse(localStorage.getItem("lastUserPos")||'{"lat":52.0579,"lng":1.2800}');
+let compassHeading=0;
+let nearestCache=null;
+let testingMode=false;
 
-let visited = new Set(JSON.parse(localStorage.getItem("visitedSpots")||"[]"));
-let userPos = JSON.parse(localStorage.getItem("lastUserPos") || '{"lat":52.0579,"lng":1.2800}');
-let compassHeading = 0;
-let nearestCache = null;
+/* ==== Helpers ==== */
+const toKey=n=>n.replace(/\s+/g,'_');
+function haversine(lat1,lon1,lat2,lon2){const R=6371000,toRad=Math.PI/180;const dLat=(lat2-lat1)*toRad,dLon=(lon2-lon1)*toRad;const a=Math.sin(dLat/2)**2+Math.cos(lat1*toRad)*Math.cos(lat2*toRad)*Math.sin(dLon/2)**2;return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
+function bearing(lat1,lon1,lat2,lon2){const toRad=Math.PI/180,toDeg=180/Math.PI;const φ1=lat1*toRad,φ2=lat2*toRad,Δλ=(lon2-lon1)*toRad;const y=Math.sin(Δλ)*Math.cos(φ2);const x=Math.cos(φ1)*Math.cos(φ2)-Math.sin(φ1)*Math.sin(φ2)*Math.cos(Δλ);return((Math.atan2(y,x)*toDeg+360)%360);}
+function findNearest(lat,lng){let min=Infinity,nearest=null;spots.forEach(s=>{const d=haversine(lat,lng,s.lat,s.lng);if(d<min){min=d;nearest={...s,dist:d};}});return nearest;}
+function saveState(){localStorage.setItem("visitedSpots",JSON.stringify([...visited]));localStorage.setItem("lastUserPos",JSON.stringify(userPos));}
 
-/* ===== Utilities ===== */
-function toKey(name){ return name.replace(/\s+/g,'_'); }
-
-function haversine(lat1,lon1,lat2,lon2){
-  const R=6371000,toRad=Math.PI/180;
-  const dLat=(lat2-lat1)*toRad,dLon=(lon2-lon1)*toRad;
-  const a=Math.sin(dLat/2)**2+Math.cos(lat1*toRad)*Math.cos(lat2*toRad)*Math.sin(dLon/2)**2;
-  return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-}
-function bearing(lat1, lon1, lat2, lon2){
-  // returns bearing in degrees from point 1 to point 2
-  const toRad = Math.PI/180, toDeg = 180/Math.PI;
-  const φ1 = lat1*toRad, φ2 = lat2*toRad, Δλ = (lon2-lon1)*toRad;
-  const y = Math.sin(Δλ) * Math.cos(φ2);
-  const x = Math.cos(φ1)*Math.cos(φ2) - Math.sin(φ1)*Math.sin(φ2)*Math.cos(Δλ);
-  return ( (Math.atan2(y,x)*toDeg + 360) % 360 );
-}
-function findNearest(lat,lng){
-  let min=Infinity,nearest=null;
-  spots.forEach(s=>{
-    const d=haversine(lat,lng,s.lat,s.lng);
-    if(d<min){min=d;nearest={...s,dist:d};}
-  });
-  return nearest;
-}
-function saveState(){
-  localStorage.setItem("visitedSpots", JSON.stringify([...visited]));
-  localStorage.setItem("lastUserPos", JSON.stringify(userPos));
-}
-
-/* ===== Map & UI build ===== */
+/* ==== Map ==== */
 function initMap(){
   map=new google.maps.Map(document.getElementById("map"),{center:userPos,zoom:17,mapId:"DEMO_MAP_ID"});
-  userMarker=new google.maps.marker.AdvancedMarkerElement({
-    map,position:userPos,content:Object.assign(document.createElement('div'),{className:'user-dot'})
+  userMarker=new google.maps.marker.AdvancedMarkerElement({map,position:userPos,content:Object.assign(document.createElement('div'),{className:'user-dot'})});
+  nextMarker=new google.maps.marker.AdvancedMarkerElement({map,position:userPos,content:Object.assign(document.createElement('div'),{className:'next-dot'})});
+  spotMarkers=spots.map(s=>{
+    const el=document.createElement('div');
+    el.style.width='14px';el.style.height='14px';el.style.border='2px solid white';el.style.borderRadius='50%';
+    el.style.background=visited.has(s.name)?'linear-gradient(#4caf50,#2e7d32)':'linear-gradient(#00b2ff,#0057b8)';
+    return new google.maps.marker.AdvancedMarkerElement({map,position:{lat:s.lat,lng:s.lng},content:el,title:s.name});
   });
-  nextMarker=new google.maps.marker.AdvancedMarkerElement({
-    map,position:userPos,content:Object.assign(document.createElement('div'),{className:'next-dot'})
-  });
-
-  // Add markers for all spots (and tint when visited)
-  spotMarkers = spots.map(s=>{
-    const el = document.createElement('div');
-    el.style.width='14px'; el.style.height='14px'; el.style.border='2px solid white';
-    el.style.borderRadius='50%';
-    const isVisited = visited.has(s.name);
-    el.style.background = isVisited ? 'linear-gradient(#4caf50,#2e7d32)' : 'linear-gradient(#00b2ff,#0057b8)';
-    return new google.maps.marker.AdvancedMarkerElement({
-      map, position:{lat:s.lat,lng:s.lng}, content:el, title:s.name
-    });
-  });
-
   buildList();
   setupCompassButton();
   attachBasicHandlers();
+  buildTestDropdown();
 
-  // Start passive live tracking (watchPosition)
   startWatchingPosition();
-  // Initial compute
   refreshNearestAndDistances();
 }
 
-/* Build the list and wire the buttons */
+/* ==== Build list ==== */
 function buildList(){
   const list=document.getElementById("trailList");
   list.innerHTML="";
   spots.forEach(s=>{
+    const v=visited.has(s.name);
     const item=document.createElement("div");
-    const v = visited.has(s.name);
     item.className="trail-item"+(v?" visited":"");
-
-    const btnLabel = v ? "Read more" : "Find spot to read more…";
-
+    const btnLabel=v?"Read more":"Find spot to read more…";
     item.innerHTML=`
-      <div class="img-wrap">
-        <img src="${s.img}" alt="${s.name}">
-        <div class="tick-overlay">✔</div>
-      </div>
+      <div class="img-wrap"><img src="https://via.placeholder.com/80" alt="${s.name}"><div class="tick-overlay">✔</div></div>
       <div class="trail-info">
         <p class="trail-name">${s.name}<span class="tick">✔</span></p>
         <p class="trail-dist" id="dist-${toKey(s.name)}">–</p>
         <button class="read-more" data-spot="${s.name}" ${v?"":"disabled"}>${btnLabel}</button>
       </div>`;
-
-    // Button handler
-    item.querySelector(".read-more").addEventListener("click", (e)=>{
-      const spotName = e.currentTarget.getAttribute("data-spot");
-      openSpotModal(spotName);
-    });
-
+    item.querySelector(".read-more").addEventListener("click",e=>openSpotModal(e.currentTarget.dataset.spot));
     list.appendChild(item);
   });
 }
 
-/* ===== Position & distances ===== */
+/* ==== GPS & test ==== */
 function updatePositionOnce(){
-  if(!navigator.geolocation){ alert("No GPS support"); return; }
+  if(!navigator.geolocation){alert("No GPS support");return;}
   navigator.geolocation.getCurrentPosition(pos=>{
     userPos={lat:pos.coords.latitude,lng:pos.coords.longitude};
     onPositionUpdated();
-  },err=>alert("GPS error: "+err.message), { enableHighAccuracy:true, maximumAge:1000, timeout:8000 });
+  },err=>alert("GPS error: "+err.message),{enableHighAccuracy:true,maximumAge:1000,timeout:8000});
 }
 function startWatchingPosition(){
-  if(!navigator.geolocation) return;
-  if (watchId) navigator.geolocation.clearWatch(watchId);
-  watchId = navigator.geolocation.watchPosition(pos=>{
-    userPos = { lat:pos.coords.latitude, lng:pos.coords.longitude };
+  if(!navigator.geolocation||testingMode)return;
+  if(watchId)navigator.geolocation.clearWatch(watchId);
+  watchId=navigator.geolocation.watchPosition(pos=>{
+    if(testingMode)return;
+    userPos={lat:pos.coords.latitude,lng:pos.coords.longitude};
     onPositionUpdated();
-  }, _err => {}, { enableHighAccuracy:true, maximumAge:1500, timeout:15000 });
+  },()=>{}, {enableHighAccuracy:true,maximumAge:1500,timeout:15000});
 }
 function onPositionUpdated(){
   saveState();
@@ -241,137 +200,110 @@ function onPositionUpdated(){
   refreshNearestAndDistances();
 }
 
-/* Core loop: nearest, distances, visit detection, compass aim */
+/* ==== Core logic ==== */
 function refreshNearestAndDistances(){
   const nearest=findNearest(userPos.lat,userPos.lng);
-  nearestCache = nearest;
+  nearestCache=nearest;
   document.getElementById("nearestName").textContent=`${nearest.name} (${nearest.dist.toFixed(0)} m)`;
   nextMarker.position={lat:nearest.lat,lng:nearest.lng};
-
-  // update each distance + detect "found"
-  let listChanged = false;
-  spots.forEach((s, idx)=>{
+  let changed=false;
+  spots.forEach((s,idx)=>{
     const d=haversine(userPos.lat,userPos.lng,s.lat,s.lng);
     const el=document.getElementById("dist-"+toKey(s.name));
-    if(el) el.textContent = d<1000?`${d.toFixed(0)} m`:`${(d/1000).toFixed(2)} km`;
-
-    const wasVisited = visited.has(s.name);
-    // 10 m threshold
-    if(d<=10 && !wasVisited){
-      visited.add(s.name);
-      listChanged = true;
-      // update corresponding map marker color
-      const markerEl = spotMarkers[idx].content;
-      markerEl.style.background = 'linear-gradient(#4caf50,#2e7d32)';
-    }
+    if(el)el.textContent=d<1000?`${d.toFixed(0)} m`:`${(d/1000).toFixed(2)} km`;
+    if(d<=10&&!visited.has(s.name)){visited.add(s.name);changed=true;spotMarkers[idx].content.style.background='linear-gradient(#4caf50,#2e7d32)';}
   });
-
-  if(listChanged){
-    saveState();
-    buildList();
-  }
-
-  // Update compass relative arrow (bearing minus device heading)
+  if(changed){saveState();buildList();}
   aimCompassAtNearest();
 }
 
-/* ===== Compass handling ===== */
+/* ==== Compass ==== */
 function setupCompassButton(){
-  const btn = document.getElementById("startCompassBtn");
-  const status = document.getElementById("compassStatus");
-
-  btn.addEventListener("click", () => {
-    status.textContent = "Requesting motion permission...";
-    if (typeof DeviceOrientationEvent !== "undefined" &&
-        typeof DeviceOrientationEvent.requestPermission === "function") {
-      DeviceOrientationEvent.requestPermission()
-        .then((res) => {
-          if (res === "granted") {
-            window.addEventListener("deviceorientation", handleOrientation, true);
-            btn.textContent = "🧭 Compass Active";
-            btn.disabled = true;
-            status.textContent = "Compass active ✓ Rotate your phone!";
-          } else {
-            status.textContent = "Permission denied for motion sensors.";
-          }
-        })
-        .catch((err) => status.textContent = "Compass not supported: " + err);
-    } else {
-      // Android / desktop
-      window.addEventListener("deviceorientationabsolute", handleOrientation, true);
-      window.addEventListener("deviceorientation", handleOrientation, true);
-      btn.textContent = "🧭 Compass Active";
-      btn.disabled = true;
-      status.textContent = "Compass active ✓ Rotate your device!";
+  const btn=document.getElementById("startCompassBtn");
+  const status=document.getElementById("compassStatus");
+  btn.addEventListener("click",()=>{
+    status.textContent="Requesting motion permission...";
+    if(typeof DeviceOrientationEvent!=="undefined"&&typeof DeviceOrientationEvent.requestPermission==="function"){
+      DeviceOrientationEvent.requestPermission().then(res=>{
+        if(res==="granted"){window.addEventListener("deviceorientation",handleOrientation,true);
+          btn.textContent="🧭 Compass Active";btn.disabled=true;
+          status.textContent="Compass active ✓ Rotate your phone!";}
+        else status.textContent="Permission denied.";
+      }).catch(err=>status.textContent="Compass not supported: "+err);
+    }else{
+      window.addEventListener("deviceorientationabsolute",handleOrientation,true);
+      window.addEventListener("deviceorientation",handleOrientation,true);
+      btn.textContent="🧭 Compass Active";btn.disabled=true;
+      status.textContent="Compass active ✓ Rotate your device!";
     }
   });
-
-  function handleOrientation(event) {
-    let heading;
-    if (event.webkitCompassHeading !== undefined) {
-      heading = event.webkitCompassHeading; // iOS (0 = North, clockwise)
-    } else if (event.alpha !== null) {
-      // alpha is 0 at North on some devices but may be device coordinates; we’ll assume compass-like
-      heading = 360 - event.alpha; // convert to clockwise-from-North
-    }
-    if (heading === undefined || isNaN(heading)) return;
-    compassHeading = heading;
-    document.getElementById("headingText").textContent = `Heading: ${heading.toFixed(1)}°`;
+  function handleOrientation(event){
+    let h;if(event.webkitCompassHeading!==undefined){h=event.webkitCompassHeading;}
+    else if(event.alpha!==null){h=360-event.alpha;}
+    if(h===undefined||isNaN(h))return;
+    compassHeading=h;document.getElementById("headingText").textContent=`Heading: ${h.toFixed(1)}°`;
     aimCompassAtNearest();
   }
 }
-
 function aimCompassAtNearest(){
-  const arrow = document.getElementById("arrow");
-  const status = document.getElementById("compassStatus");
-  if(!nearestCache) return;
-  // Bearing from user to nearest
-  const brg = bearing(userPos.lat, userPos.lng, nearestCache.lat, nearestCache.lng);
-  // Rotate arrow by relative angle so that when you turn, it still points toward target
-  const rel = (brg - compassHeading + 360) % 360;
-  arrow.style.transform = `rotate(${rel}deg)`;
-  status.textContent = `Pointing to: ${nearestCache.name} – ${nearestCache.dist.toFixed(0)} m`;
+  const arrow=document.getElementById("arrow");
+  if(!nearestCache)return;
+  const brg=bearing(userPos.lat,userPos.lng,nearestCache.lat,nearestCache.lng);
+  const rel=(brg-compassHeading+360)%360;
+  arrow.style.transform=`rotate(${rel}deg)`;
+  document.getElementById("compassStatus").textContent=`Pointing to: ${nearestCache.name} – ${nearestCache.dist.toFixed(0)} m`;
 }
 
-/* ===== Pop-up (modal) ===== */
-const spotModal = document.getElementById("spotModal");
-const spotTitle = document.getElementById("spotTitle");
-const spotBody = document.getElementById("spotBody");
-document.getElementById("closeModal").addEventListener("click", ()=> spotModal.close());
-document.getElementById("modalOk").addEventListener("click", ()=> spotModal.close());
+/* ==== Pop-up ==== */
+const spotModal=document.getElementById("spotModal");
+document.getElementById("closeModal").onclick=()=>spotModal.close();
+document.getElementById("modalOk").onclick=()=>spotModal.close();
 function openSpotModal(name){
-  const s = spots.find(x=>x.name===name);
-  if(!s) return;
-  spotTitle.textContent = s.name;
-  spotBody.innerHTML = `
-    <p>${s.info}</p>
-    <p><strong>Coordinates:</strong> ${s.lat.toFixed(6)}, ${s.lng.toFixed(6)}</p>
-  `;
-  if (typeof spotModal.showModal === "function") {
-    spotModal.showModal();
-  } else {
-    alert(`${s.name}\n\n${s.info}`);
-  }
+  const s=spots.find(x=>x.name===name);
+  if(!s)return;
+  document.getElementById("spotTitle").textContent=s.name;
+  document.getElementById("spotBody").innerHTML=`<p>${s.info}</p><p><strong>Coords:</strong> ${s.lat.toFixed(6)}, ${s.lng.toFixed(6)}</p>`;
+  spotModal.showModal();
 }
 
-/* ===== Misc controls ===== */
+/* ==== Controls ==== */
 function attachBasicHandlers(){
-  document.getElementById("updateBtn").addEventListener("click", updatePositionOnce);
-  document.getElementById("resetBtn").addEventListener("click", ()=>{
-    if(!confirm("Reset your trail progress?")) return;
-    visited.clear();
-    localStorage.removeItem("visitedSpots");
-    // reset spot markers color
-    spotMarkers.forEach(m=>{
-      const el = m.content;
-      el.style.background = 'linear-gradient(#00b2ff,#0057b8)';
-    });
+  document.getElementById("updateBtn").onclick=updatePositionOnce;
+  document.getElementById("resetBtn").onclick=()=>{
+    if(!confirm("Reset your trail progress?"))return;
+    visited.clear();localStorage.removeItem("visitedSpots");
+    spotMarkers.forEach(m=>m.content.style.background='linear-gradient(#00b2ff,#0057b8)');
     buildList();
+  };
+}
+
+/* ==== Test dropdown ==== */
+function buildTestDropdown(){
+  const sel=document.getElementById("testSelect");
+  spots.forEach(s=>{
+    const o=document.createElement("option");
+    o.value=JSON.stringify({lat:s.lat,lng:s.lng,name:s.name});
+    o.textContent=s.name;sel.appendChild(o);
+  });
+  sel.addEventListener("change",e=>{
+    const val=e.target.value;
+    if(!val){
+      testingMode=false;
+      startWatchingPosition();
+      alert("✅ Returned to live GPS mode.");
+      return;
+    }
+    testingMode=true;
+    if(watchId)navigator.geolocation.clearWatch(watchId);
+    const loc=JSON.parse(val);
+    userPos={lat:loc.lat,lng:loc.lng};
+    onPositionUpdated();
+    alert(`🧪 Spoofed location set to "${loc.name}".`);
   });
 }
 
-/* ===== Boot ===== */
-window.addEventListener('load', initMap);
+/* ==== Boot ==== */
+window.addEventListener('load',initMap);
 </script>
 </body>
 </html>
