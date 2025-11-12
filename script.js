@@ -1,5 +1,5 @@
 /* ===================== CONFIG ===================== */
-const MAP_ID = "7ff992b63cb3134a409381f6"; // optional Google Map ID
+/*const MAP_ID = "7ff992b63cb3134a409381f6"; // optional Google Map ID*/
 
 /* ===================== STATE ===================== */
 let map, userMarker, nextMarker, spotMarkers = [];
