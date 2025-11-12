@@ -233,41 +233,50 @@ function aimCompassAtNearest() {
 function buildList() {
   const list = document.getElementById("trailList");
   list.innerHTML = "";
-
   spots.forEach((s, i) => {
     const v = visited.has(s.name);
-    const isCurrent = i === currentSpotIndex;
     const btnLabel = v ? "Read more" : "Find spot to read more…";
+    const snippet = (s.info || "").split(".")[0] + "."; // first sentence only
 
     const item = document.createElement("div");
-    item.className = "trail-item" + (v ? " visited" : "") + (isCurrent ? " current-spot" : "");
-
+    item.className = "trail-item" + (v ? " visited" : "");
     item.innerHTML = `
-      <div class="img-wrap">
-        <img src="${s.img}" alt="${s.name}">
-        <div class="tick-overlay">✔</div>
-      </div>
-      <div class="trail-info">
-        <p class="trail-name">${i + 1}. ${s.name}</p>
-        <p class="trail-dist" id="dist-${toKey(s.name)}">–</p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="read-more" data-spot="${s.name}" ${v ? "" : "disabled"}>${btnLabel}</button>
-          ${isCurrent && !v ? `<button class="skip-btn" data-index="${i}">Skip this spot</button>` : ""}
+      <div class="trail-header">${s.name}</div>
+      <div class="trail-content">
+        <div class="img-wrap">
+          <img src="${s.img}" alt="${s.name}">
+          <div class="tick-overlay">✔</div>
         </div>
-      </div>`;
+        <div class="trail-text">
+          <p>${snippet}</p>
+          <p class="trail-dist" id="dist-${toKey(s.name)}">–</p>
+        </div>
+      </div>
+      <div class="trail-buttons">
+        <button class="read-more" data-spot="${s.name}" ${v ? "" : "disabled"}>${btnLabel}</button>
+        <button class="skip-btn" data-spot="${s.name}">Skip this spot</button>
+      </div>
+    `;
+
+    item.querySelector(".read-more").onclick = () => openSpotModal(s.name);
+    item.querySelector(".skip-btn").onclick = () => skipSpot(s.name);
 
     list.appendChild(item);
-    item.querySelector(".read-more").onclick = () => openSpotModal(s.name);
-    const skip = item.querySelector(".skip-btn");
-    if (skip) skip.onclick = () => {
-      visited.add(s.name);
-      advanceToNextSpot();
-      buildList();
-    };
+    const m = spotMarkers[i];
+    if (m?.content) m.content.classList.toggle("visited", v);
   });
-
-  updateProgress();
 }
+
+function skipSpot(name) {
+  const index = spots.findIndex(s => s.name === name);
+  if (index !== -1) {
+    visited.add(name);
+    saveState();
+    buildList();
+    alert(`⏭️ You skipped "${name}". Moving to the next spot.`);
+  }
+}
+
 
 function openSpotModal(name) {
   const s = spots.find(x => x.name === name);
