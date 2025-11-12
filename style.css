@@ -375,3 +375,29 @@ dialog#spotModal {
 #resetBtn:hover {
   background: #b71c1c;
 }
+
+@media (max-width: 600px) {
+  #top-wrap, #map, #trailList, #nearest, #controls, #compass {
+    width: 95%;
+    margin: 10px auto;
+  }
+
+  #title-bar {
+    font-size: 1.1rem;
+    padding: 10px;
+  }
+
+  .trail-body {
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+
+  .trail-image img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .trail-snippet {
+    font-size: 0.85rem;
+  }
+}
