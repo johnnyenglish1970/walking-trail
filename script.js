@@ -251,24 +251,34 @@ function buildList() {
     const isSkipped = skipped.has(s.name);
     const disabled = isVisited || isSkipped;
 
+    const snippet = (s.info || "").split(".")[0] + "."; // short preview
+
     const item = document.createElement("div");
     item.className = "trail-item" + (isVisited ? " visited" : isSkipped ? " skipped" : "");
 
     item.innerHTML = `
-      <div class="spot-header"><h3 class="trail-title">${s.name}</h3></div>
-      <div class="spot-body">
-        <div class="spot-content">
+      <div class="trail-header ${isVisited ? "visited" : ""}">
+        <h3>${s.name}</h3>
+      </div>
+      <div class="trail-body">
+        <div class="trail-image">
           <img src="${s.img}" alt="${s.name}">
+        </div>
+        <div class="trail-text">
+          <p class="trail-snippet">${snippet}</p>
           <p class="trail-dist" id="dist-${toKey(s.name)}">–</p>
         </div>
-        <div class="spot-buttons">
-          <button class="read-more" data-spot="${s.name}" ${!isVisited ? "disabled" : ""}>Read More</button>
-          <button class="skip-btn" data-skip="${s.name}" ${disabled ? "disabled" : ""}>Skip This Spot</button>
-        </div>
-      </div>`;
+      </div>
+      <div class="trail-buttons">
+        <button class="read-more" data-spot="${s.name}" ${!isVisited ? "disabled" : ""}>Read More</button>
+        <button class="skip-btn" data-skip="${s.name}" ${disabled ? "disabled" : ""}>Skip This Spot</button>
+      </div>
+    `;
 
+    // Events
     item.querySelector(".read-more").onclick = () => openSpotModal(s.name);
     item.querySelector(".skip-btn").onclick = () => skipSpot(s.name);
+
     list.appendChild(item);
 
     const m = spotMarkers[i];
