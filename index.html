@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Adastral Park Trail + Compass</title>
+<!-- Keep beta for AdvancedMarkerElement; will still work if it’s absent -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7l57TFhjYSpFeVY1FsiKxtogVV1QfmRM&libraries=maps,marker&v=beta"></script>
 <style>
   body { margin:0; font-family:Arial, sans-serif; background:#f5f5f5; text-align:center; }
@@ -44,31 +45,11 @@
   }
   #arrow {
     width:80px; height:80px; transition:transform 0.2s linear, filter 0.3s ease;
-    filter: grayscale(100%) brightness(0.6);
+    filter: grayscale(100%) brightness(0.6); /* grey until enabled */
   }
   #arrow.active { filter: none; }
-  #arrow.arrived { filter: hue-rotate(90deg) brightness(1.1); }
+  #arrow.arrived { filter: hue-rotate(90deg) brightness(1.1); } /* greenish when arrived */
   #compassStatus { font-size:14px; color:#444; margin-top:6px; }
-  .user-dot, .next-dot { width:18px; height:18px; border-radius:50%; border:2px solid white; }
-  .user-dot {
-    background: radial-gradient(circle, yellow 40%, orange 80%);
-    box-shadow:0 0 8px rgba(255,255,0,0.8); animation: flash 1s infinite alternate;
-  }
-  .next-dot {
-    background: radial-gradient(circle, #00b2ff 30%, #0057b8 80%);
-    box-shadow:0 0 10px rgba(0,150,255,0.8); animation: pulse 1.6s infinite ease-in-out;
-  }
-  @keyframes flash { 0%{opacity:1;}100%{opacity:0.6;} }
-  @keyframes pulse { 0%{transform:scale(1);}50%{transform:scale(1.5);}100%{transform:scale(1);} }
-
-  /* Modal */
-  dialog { border:none; border-radius:12px; padding:0; max-width:700px; width:min(94vw, 700px); }
-  .modal-inner { padding:16px; text-align:left; }
-  .modal-header { display:flex; align-items:center; justify-content:space-between; gap:10px; }
-  .modal-header h3 { margin:0; }
-  .modal-body img { width:100%; border-radius:10px; margin-bottom:12px; }
-  .modal-body p { margin:0 0 10px 0; line-height:1.45; white-space:pre-wrap; }
-  .btn-secondary { background:#eee; color:#333; }
 </style>
 </head>
 <body>
@@ -84,6 +65,7 @@
 <div id="nearest">Nearest point: <span id="nearestName">–</span></div>
 
 <div id="compass">
+  <!-- Host this locally at /images/arrow.svg (from earlier step) -->
   <img id="arrow" src="images/arrow.svg" alt="Compass Arrow">
   <p id="headingText">Heading: 0°</p>
   <p id="compassStatus">Waiting for motion permission...</p>
@@ -92,69 +74,232 @@
 <div id="trailList"></div>
 
 <dialog id="spotModal" aria-labelledby="spotTitle">
-  <div class="modal-inner">
-    <div class="modal-header">
-      <h3 id="spotTitle"></h3>
-      <button id="closeModal" class="btn-secondary">✖ Close</button>
+  <div class="modal-inner" style="padding:16px;text-align:left;max-width:700px;">
+    <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+      <h3 id="spotTitle" style="margin:0;"></h3>
+      <button id="closeModal" class="btn-secondary" style="background:#eee;color:#333;border:none;border-radius:6px;padding:8px 12px;">✖ Close</button>
     </div>
-    <div id="spotBody" class="modal-body"></div>
+    <div id="spotBody" class="modal-body" style="margin-top:12px;">
+      <!-- filled dynamically -->
+    </div>
   </div>
 </dialog>
 
 <script>
-// ---- config ----
-const IMAGE_EXT="jpg";
-const IMAGE_PATH="images/";
+// ===================== CONFIG =====================
+const MAP_ID = ""; // Optional. Put your real Map ID here; leave empty to run without it.
+const IMAGE_EXT = "jpg";
+const IMAGE_PATH = "images/";
 
-// ---- data (trimmed for brevity; keep your full list) ----
-const spots=[ /* ... your 17 spots as in previous version ... */ ];
+// ===================== DATA (full content) =====================
+const spots = [
+  { name:"Main Lab Block (Orion/Antares)", lat:52.05674493, lng:1.27986381, info:`Originally known as the Main Lab Block or B62. This building housed a significant proportion of the labs and offices on site when it was built. It was built to a very high specification and took a long time to complete - it was started in 1971 and was not officially opened (by the Queen) until late 1975. Part of the reason for the delay was the main contractor - Mitchell - going into liquidation in 1973. This stopped work for several months, until the contractor was taken over by Tarmac. Each floor was originally around 12 foot high with a 5 to 6 foot void in between the floors for the services. It's said that the 12 foot high rooms were designed to accommodate telephone exchange racks, though in reality very few of them needed to!  Unusually for a building of that era, it was fully air-conditioned. The balconies all the way around all of the floors are notable. Originally when the floors were divided into rooms and corridors the fire exits for each room opened onto the balconies. The building is almost all open plan offices with false floors and ceilings to create a more pleasant modern desk-based working environment.
 
-// derive image filenames
-const toFileName=name=>name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')+'.'+IMAGE_EXT;
-spots.forEach(s=>s.img=IMAGE_PATH+toFileName(s.name));
+The building was considered leading edge when it was built. It was one of the earlier examples of a large building that used poured concrete. The balconies were prefabricated concrete sections and balcony claddings were new types of finish. A small model building with balcony sections was put up roughly where the pond is, to try out different claddings. Unfortunately during the late 1980s gales some of the cladding blew off and travelled over the roofs of several cars in the next door car park where the Ross and Vega buildings are now. The model buildings very quickly demolished after that.
 
-// ---- helpers ----
-function haversine(lat1,lon1,lat2,lon2){const R=6371000,toRad=Math.PI/180;
-const dLat=(lat2-lat1)*toRad,dLon=(lon2-lon1)*toRad;
-const a=Math.sin(dLat/2)**2+Math.cos(lat1*toRad)*Math.cos(lat2*toRad)*Math.sin(dLon/2)**2;
-return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
-function bearing(lat1,lon1,lat2,lon2){const toRad=Math.PI/180,toDeg=180/Math.PI;
-const φ1=lat1*toRad,φ2=lat2*toRad,Δλ=(lon2-lon1)*toRad;
-const y=Math.sin(Δλ)*Math.cos(φ2);
-const x=Math.cos(φ1)*Math.sin(φ2)-Math.sin(φ1)*Math.cos(φ2)*Math.cos(Δλ);
-return (Math.atan2(y,x)*toDeg+360)%360;}
-const toKey=n=>n.replace(/\s+/g,'_');
+Antares Building
+Originally known as the Administration Building. When built, the canteen and other staff facilities (including a staff bar!) occupied the top floor of the building. During the 1987 autumn storms many of the top floor window panels were blown out. The site was closed for some days whilst the mess was cleared up; a surprise extra holiday for the workers (in the pre-Internet area when home working wasn’t feasible) Senior management offices and the library occupied the first and second floors. The ground floor features the large John Bray lecture theatre, the Small Lecture Theatre and a large foyer.
 
-// ---- state ----
-let map,userMarker,nextMarker,spotMarkers=[];
-let watchId=null,testingMode=false;
-let visited=new Set(JSON.parse(localStorage.getItem("visitedSpots")||"[]"));
-let userPos=JSON.parse(localStorage.getItem("lastUserPos")||'{"lat":52.0579,"lng":1.2800}');
-let compassHeading=0,nearestCache=null;
+The Towers
+The radio tower at the front of the building complex was originally in use as a microwave transmission tower, just like the post office towers in London and Birmingham. For many years the personnel and training departments lived in the offices in the square block, which formed the ninth and tenth floors of the tower. More recently, like many other tall buildings, it has been used as a mobile phone transmitter location. The tower is the Adastral Park icon, featuring in many publications and websites. It can be seen from many miles around, including from the River Deben. Being so tall it has aircraft warning lights at the top of the tower.
+The water tower towards the rear of the building contacts was primarily built to accommodate the heating and air-conditioning plant for the main lab block and the other buildings in the complex.
 
-// ---- map ----
-function initMap(){
-  map=new google.maps.Map(document.getElementById("map"),{center:userPos,zoom:17,mapId:"YOUR_MAP_ID_HERE"});
-  userMarker=new google.maps.marker.AdvancedMarkerElement({map,position:userPos,content:Object.assign(document.createElement('div'),{className:'user-dot'})});
-  nextMarker=new google.maps.marker.AdvancedMarkerElement({map,position:userPos,content:Object.assign(document.createElement('div'),{className:'next-dot'})});
-  spotMarkers=spots.map(s=>{
-    const el=document.createElement('div');
-    el.style.width='14px';el.style.height='14px';el.style.border='2px solid white';el.style.borderRadius='50%';
-    el.style.background=visited.has(s.name)?'linear-gradient(#4caf50,#2e7d32)':'linear-gradient(#00b2ff,#0057b8)';
-    return new google.maps.marker.AdvancedMarkerElement({map,position:{lat:s.lat,lng:s.lng},content:el,title:s.name});
+Listen to Mike Warden talk about his memories of the Hurricane damage in 1987:
+
+Listen to Pete Cochrane recall some unusual incidents with low flying aircraft:` },
+  { name:"Acoustic Block", lat:52.05671008, lng:1.28002642, info:`The Adastral Acoustic Block includes anechoic chambers and a reverberation room and is an important facility for the site to allow audio experimentation and measurement - a key part of telecommunications.
+
+Listen to Chris Adams describe how an anechoic chamber and reverberation room works and how they are used:` },
+  { name:"Old Post Room", lat:52.05734795, lng:1.27954631, info:`At one time, a former WW2 building stood in this location. The building was the old hospital for the RAF Martlesham Heath airfield. When the GPO took over the site, the building became the post room until it was demolished.
+
+Listen to Bernie Fenn talk about his memories of working in the building:
+
+The building was demolished as part of a major redevelopment of the site in the 1990’s. 
+
+Listen to Bruce Boxall talk about the background to this redevelopment:
+
+In this recording, Bruce talks about the specific changes that were made as part of the redevelopment:` },
+  { name:"B1", lat:52.06050806, lng:1.27999692, info:`If you look to your west, you’ll see Building B1 at the end of the roadway. The building was one of the former RAF Martlesham Heath buildings from WW2. Currently it is part of Innovation Martlesham. The building is rumoured to be haunted.
+
+Listen to Mike Warden talk about sightings of the ghost of B1:
+
+Listen to Bernie Fenn talk about trying to spot the ghost:` },
+  { name:"Waveguide", lat:52.06077374, lng:1.28135277, info:`One the other side of the road underneath the slabs is where a waveguide was installed.
+One of the first research divisions to move up from Dollis Hill to the new Post Office Research Centre was the microwave waveguide transmission division.
+Microwave radio transmissions could be sent along these waveguides - basically precision engineered piping, with a helix of wire wound around the outside, to keep the signal inside the waveguide. Waveguides were seen as a faster and more reliable way to send microwave radio signals than broadcasting into the air.
+The waveguides installed underneath these slabs were the first serious attempt at waveguide transmission by the Post Office.
+Later a waveguide system was built between the Portman Road telephone exchange in Ipswich and the exchange in Wickham Market.
+This carried live telephone calls for a number of years in the 1970s and 80s.
+However by the mid-1970s it was obvious that a better waveguide had been found - fibre optic cables. These acted as waveguides for infrared laser light. They could carry much more information microwave waveguides ever could, they were smaller and also cheaper and easier to produce.
+
+The Post Office and later BT became world leaders in fibre-optic communication in the late 1970s and in the 1980s.
+
+Scroll the slider images below to see images of the installation of the trial waveguide project.` },
+  { name:"Submarine, Robotics and Drones", lat:52.05934660, lng:1.28245784, info:`The building’s original use was to house the subsea cable testing facility - hence there is still a 12.5T gantry crane that is still in place. Currently, the facility is used for robotics and drones R&D and houses a unique set of indoor testbeds that emulate the real world civil engineering environments found under footways, in ducts and up poles.
+
+Listen to Jon Wakeling talk about some of the research work that is happening:
+
+Listen to Bruce Boxall talk about his work in silicon as part of the submarine network:` },
+  { name:"The Digitech Centre", lat:52.05925789, lng:1.28514944, info:`The new Digitech Centre was opened in 2021 and is a partnership between BT and the University of Suffolk to provide a facility that teaches digital sciences at undergraduate and post graduate degree levels.
+
+Listen to Tim Whitely describe his perspectives about the new centre:
+
+Listen to Meral Bence describe the creation of the new centre:` },
+  { name:"Martlesham Teleport", lat:52.05930828, lng:1.28618477, info:`If you look ahead through the trees you should see the satellite dishes of Martlesham Teleport. The Teleport is one of a handful of earth stations. These dishes were originally operated by BT but are now operated by Arqiva. They are used by broadcasters around the world, to transmit content between different broadcasters and locations. For instance it is understood that the funeral of Diana Princess of Wales in 1997 was relayed around the world from here. The site is still the most easterly satellite earth station.
+
+Listen to Jon Wakeling talk about the history of the teleport and how it came about:` },
+  { name:"ROMES", lat:52.05926545, lng:1.28584950, info:`This area was formerly used to store emergency exchange hardware that could support rural exchanges in the event of emergencies (e.g. fire or flood), but now with the evolution of technology, the facility is no longer needed and the area is used for new research into space communications.
+
+Listen to Jon Wakeling talk about the area and its use:` },
+  { name:"Smart Home", lat:52.05921160, lng:1.28462507, info:`This Smart home is being built in partnership between BT and the Univeristy of Suffolk as part of the Digitech Project. The building allows testing and experimentation of emerging technologies in construction, living and sustainability.
+
+Listen to Meral Bence describe this new facility:` },
+  { name:"Sports Hall", lat:52.05920839, lng:1.28417848, info:`The sports hall helps to support health and wellbeing through teamwork and fitness. The facility houses basketball, netball and badminton courts, keep fit classes, Judo and even indoor model aeroplane flying.
+Adastral has seem some famous sporting visitors over the years including Austin Healey, Lawrence Dallaglio, Sam Quek, Daley Thompson and the GB Archery Team.
+
+Listen to Bernie Fenn talk about his memories of playing sport at Adastral Park:` },
+  { name:"Gaming", lat:52.05886422, lng:1.28180741, info:`Wireplay was an online multiplayer gaming network developed by BT in the 1990’s. It was available as a dial-up service that allowed players to enjoy playing PC games with each other remotely.
+
+Listen to Chris Adams talk about gaming and the development of Wireplay:` },
+  { name:"Emergency Services", lat:52.05734862, lng:1.28259329, info:`Did you know that Adastral Park has its own emergency services team with fire and ambulance vehicles?
+
+Listen to Mike Warden talk about the formation of the BT Emergency Team in 1977:
+
+In this recording Mike talks about the development of the team and purchase of its first Fire Engine:
+
+Mike recalls some Emergency incidents at the Park:
+
+In this recording Bernie Fenn talks about a worrying power incident:` },
+  { name:"Network Ops", lat:52.05718534, lng:1.28119050, info:`The Network Operation Centre plays a critical role in managing BT’s network including its 10.5 million Broadband customers, several million ethernet and leased line circuits, plus mobile backhaul services.
+
+Listen to Andy Skingley talk about the history of the Network Operations Centre and how it has evolved to what it is today:
+
+Listen to Andy outline some situations where the NoC helps deal with network issues:` },
+  { name:"Innovation Martlesham", lat:52.05744922, lng:1.28119050, info:`Innovation Martlesham is the name of the vibrant ecosystem of ICT/Digital companies. It was launched in 2011 and created to bring experts in Technology together to support collaboration and creativity, and establish new innovative digital technology in the ICT/ Digital Sector.
+
+Listen to Nicky Daniels talk about Innovation Martlesham and what it seeks to achieve:` },
+  { name:"Heritage Centre", lat:52.05891122, lng:1.27937062, info:`Congratulations! You have arrived at the last location on the trail.
+This is the new Adastral Park Heritage Centre. Please take the time to visit this new facility and enjoy learning about more of the history of the site and some of the important work that has happened here.
+
+Listen to Terry Henshall talk about this exciting new centre:` }
+];
+
+// auto image paths
+const toFileName = name =>
+  name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'') + '.' + IMAGE_EXT;
+spots.forEach(s => s.img = IMAGE_PATH + toFileName(s.name));
+
+// ===================== HELPERS =====================
+const toKey = n => n.replace(/\s+/g,'_');
+function haversine(lat1,lon1,lat2,lon2){
+  const R=6371000,toRad=Math.PI/180;
+  const dLat=(lat2-lat1)*toRad,dLon=(lon2-lon1)*toRad;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*toRad)*Math.cos(lat2*toRad)*Math.sin(dLon/2)**2;
+  return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function bearing(lat1,lon1,lat2,lon2){
+  const toRad=Math.PI/180,toDeg=180/Math.PI;
+  const φ1=lat1*toRad, φ2=lat2*toRad, Δλ=(lon2-lon1)*toRad;
+  const y=Math.sin(Δλ)*Math.cos(φ2);
+  const x=Math.cos(φ1)*Math.sin(φ2) - Math.sin(φ1)*Math.cos(φ2)*Math.cos(Δλ);
+  return (Math.atan2(y,x)*toDeg + 360) % 360;
+}
+function findNearest(lat,lng){
+  let min=Infinity, nearest=null;
+  spots.forEach(s=>{
+    const d=haversine(lat,lng,s.lat,s.lng);
+    if(d<min){min=d; nearest={...s, dist:d};}
   });
-  buildList();setupCompassButton();attachBasicHandlers();buildTestDropdown();startWatchingPosition();refreshNearestAndDistances();
+  return nearest;
+}
+function saveState(){
+  localStorage.setItem("visitedSpots", JSON.stringify([...visited]));
+  localStorage.setItem("lastUserPos", JSON.stringify(userPos));
 }
 
-// ---- list ----
+// ===================== STATE =====================
+let map, userMarker, nextMarker, spotMarkers=[];
+let watchId=null, testingMode=false;
+let visited=new Set(JSON.parse(localStorage.getItem("visitedSpots")||"[]"));
+let userPos=JSON.parse(localStorage.getItem("lastUserPos")||'{"lat":52.0579,"lng":1.2800}');
+let compassHeading=0, nearestCache=null;
+
+// ===================== MARKER FACTORY (robust) =====================
+// Returns a Google Maps marker instance (Advanced if possible, otherwise classic Marker)
+function makeDotMarker({map, position, className, title}) {
+  // Try AdvancedMarkerElement
+  if (google?.maps?.marker?.AdvancedMarkerElement) {
+    const el = document.createElement('div');
+    el.className = className;
+    // if CSS not provided, fallback style
+    if (!el.style.width) { el.style.width='18px'; el.style.height='18px'; el.style.borderRadius='50%'; el.style.border='2px solid #fff'; el.style.background='#0057b8'; }
+    return new google.maps.marker.AdvancedMarkerElement({ map, position, content: el, title });
+  }
+  // Fallback to classic Marker with vector icon
+  return new google.maps.Marker({
+    map, position, title,
+    icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 6,
+      strokeColor: '#ffffff',
+      strokeWeight: 2,
+      fillColor: className.includes('user-dot') ? '#ff9800' :
+                 className.includes('next-dot') ? '#0057b8' : '#0057b8',
+      fillOpacity: 1
+    }
+  });
+}
+
+// ===================== MAP =====================
+function initMap(){
+  const mapOpts = { center:userPos, zoom:17 };
+  if (MAP_ID) mapOpts.mapId = MAP_ID; // only set if provided
+  map = new google.maps.Map(document.getElementById("map"), mapOpts);
+
+  // CSS classes used by advanced dots
+  const style = document.createElement('style');
+  style.textContent = `
+    .user-dot{width:18px;height:18px;border-radius:50%;border:2px solid #fff;
+      background: radial-gradient(circle, yellow 40%, orange 80%);
+      box-shadow:0 0 8px rgba(255,255,0,0.8);}
+    .next-dot{width:18px;height:18px;border-radius:50%;border:2px solid #fff;
+      background: radial-gradient(circle, #00b2ff 30%, #0057b8 80%);
+      box-shadow:0 0 10px rgba(0,150,255,0.8);}
+    .spot-dot{width:14px;height:14px;border-radius:50%;border:2px solid #fff;
+      background: linear-gradient(#00b2ff,#0057b8);}
+    .spot-dot.visited{background: linear-gradient(#4caf50,#2e7d32);}
+  `;
+  document.head.appendChild(style);
+
+  userMarker = makeDotMarker({ map, position:userPos, className:'user-dot', title:'You' });
+  nextMarker = makeDotMarker({ map, position:userPos, className:'next-dot', title:'Nearest spot' });
+
+  spotMarkers = spots.map(s=>{
+    const m = makeDotMarker({ map, position:{lat:s.lat,lng:s.lng}, className:'spot-dot' , title:s.name });
+    // If Advanced markers, we can tint via class on its content
+    if (m.content) m.content.classList.toggle('visited', visited.has(s.name));
+    return m;
+  });
+
+  buildList();
+  setupCompassButton();
+  attachBasicHandlers();
+  buildTestDropdown();
+
+  startWatchingPosition();
+  refreshNearestAndDistances();
+}
+
+// ===================== LIST UI =====================
 function buildList(){
-  const list=document.getElementById("trailList");list.innerHTML="";
-  spots.forEach(s=>{
+  const list=document.getElementById("trailList");
+  list.innerHTML="";
+  spots.forEach((s, idx)=>{
     const v=visited.has(s.name);
-    const btnLabel=v?"Read more":"Find spot to read more…";
+    const btnLabel = v ? "Read more" : "Find spot to read more…";
     const item=document.createElement("div");
     item.className="trail-item"+(v?" visited":"");
-    item.innerHTML=`
+    item.innerHTML = `
       <div class="img-wrap">
         <img src="${s.img}" alt="${s.name}">
         <div class="tick-overlay">✔</div>
@@ -164,110 +309,200 @@ function buildList(){
         <p class="trail-dist" id="dist-${toKey(s.name)}">–</p>
         <button class="read-more" data-spot="${s.name}" ${v?"":"disabled"}>${btnLabel}</button>
       </div>`;
-    item.querySelector(".read-more").addEventListener("click",e=>openSpotModal(e.currentTarget.dataset.spot));
+    item.querySelector(".read-more").addEventListener("click",
+      e => openSpotModal(e.currentTarget.getAttribute("data-spot")));
     list.appendChild(item);
+
+    // keep map dot color in sync for Advanced markers
+    const m = spotMarkers[idx];
+    if (m?.content) m.content.classList.toggle('visited', v);
   });
 }
 
-// ---- geolocation ----
-function startWatchingPosition(){if(!navigator.geolocation||testingMode)return;
-if(watchId)navigator.geolocation.clearWatch(watchId);
-watchId=navigator.geolocation.watchPosition(pos=>{if(testingMode)return;
-userPos={lat:pos.coords.latitude,lng:pos.coords.longitude};onPositionUpdated();},
-()=>{}, {enableHighAccuracy:true,maximumAge:1500,timeout:15000});}
-function onPositionUpdated(){localStorage.setItem("lastUserPos",JSON.stringify(userPos));
-map.setCenter(userPos);userMarker.position=userPos;refreshNearestAndDistances();}
-function findNearest(lat,lng){let min=Infinity,nearest=null;
-spots.forEach(s=>{const d=haversine(lat,lng,s.lat,s.lng);if(d<min){min=d;nearest={...s,dist:d};}});
-return nearest;}
+// ===================== POSITION / NEAREST =====================
+function startWatchingPosition(){
+  if(!navigator.geolocation || testingMode) return;
+  if (watchId) navigator.geolocation.clearWatch(watchId);
+  watchId = navigator.geolocation.watchPosition(pos=>{
+    if (testingMode) return;
+    userPos={lat:pos.coords.latitude,lng:pos.coords.longitude};
+    onPositionUpdated();
+  }, ()=>{}, { enableHighAccuracy:true, maximumAge:1500, timeout:15000 });
+}
+function onPositionUpdated(){
+  saveState();
+  map.setCenter(userPos);
+  if (userMarker.setPosition) userMarker.setPosition(userPos); // classic Marker
+  if (userMarker.position !== undefined) userMarker.position = userPos; // Advanced
+  refreshNearestAndDistances();
+}
 function refreshNearestAndDistances(){
-  const nearest=findNearest(userPos.lat,userPos.lng);nearestCache=nearest;
-  document.getElementById("nearestName").textContent=`${nearest.name} (${nearest.dist.toFixed(0)} m)`;
-  nextMarker.position={lat:nearest.lat,lng:nearest.lng};
+  const nearest = findNearest(userPos.lat, userPos.lng);
+  nearestCache = nearest;
+
+  document.getElementById("nearestName").textContent =
+    `${nearest.name} (${nearest.dist.toFixed(0)} m)`;
+
+  if (nextMarker.setPosition) nextMarker.setPosition({lat:nearest.lat,lng:nearest.lng});
+  if (nextMarker.position !== undefined) nextMarker.position = {lat:nearest.lat,lng:nearest.lng};
+
   let changed=false;
   spots.forEach((s,i)=>{
     const d=haversine(userPos.lat,userPos.lng,s.lat,s.lng);
     const el=document.getElementById("dist-"+toKey(s.name));
-    if(el)el.textContent=d<1000?`${d.toFixed(0)} m`:`${(d/1000).toFixed(2)} km`;
-    if(d<=10&&!visited.has(s.name)){visited.add(s.name);changed=true;
-      spotMarkers[i].content.style.background='linear-gradient(#4caf50,#2e7d32)';}
+    if(el) el.textContent = d<1000?`${d.toFixed(0)} m`:`${(d/1000).toFixed(2)} km`;
+    if (d<=10 && !visited.has(s.name)){
+      visited.add(s.name); changed=true;
+      // tint map dot if Advanced
+      const m = spotMarkers[i];
+      if (m?.content) m.content.classList.add('visited');
+    }
   });
-  if(changed){localStorage.setItem("visitedSpots",JSON.stringify([...visited]));buildList();}
+  if (changed){ saveState(); buildList(); }
   aimCompassAtNearest();
 }
 
-// ---- compass ----
+// ===================== COMPASS =====================
 function setupCompassButton(){
-  const btn=document.getElementById("startCompassBtn");
-  const arrow=document.getElementById("arrow");
-  const status=document.getElementById("compassStatus");
-  btn.addEventListener("click",()=>{
-    status.textContent="Requesting motion permission...";
-    if(typeof DeviceOrientationEvent!=="undefined"&&typeof DeviceOrientationEvent.requestPermission==="function"){
+  const btn = document.getElementById("startCompassBtn");
+  const arrow = document.getElementById("arrow");
+  const status = document.getElementById("compassStatus");
+
+  btn.addEventListener("click", () => {
+    status.textContent = "Requesting motion permission...";
+    if (typeof DeviceOrientationEvent !== "undefined" &&
+        typeof DeviceOrientationEvent.requestPermission === "function") {
       DeviceOrientationEvent.requestPermission().then(res=>{
-        if(res==="granted"){
-          window.addEventListener("deviceorientation",handleOrientation,true);
-          btn.textContent="🧭 Compass Active";btn.disabled=true;arrow.classList.add("active");
+        if (res === "granted") {
+          window.addEventListener("deviceorientation", handleOrientation, true);
+          btn.textContent="🧭 Compass Active"; btn.disabled=true; arrow.classList.add("active");
           status.textContent="Compass active ✓ Rotate your phone!";
-        }else status.textContent="Permission denied.";
-      }).catch(err=>status.textContent="Compass not supported: "+err);
-    }else{
-      window.addEventListener("deviceorientationabsolute",handleOrientation,true);
-      window.addEventListener("deviceorientation",handleOrientation,true);
-      btn.textContent="🧭 Compass Active";btn.disabled=true;arrow.classList.add("active");
+        } else {
+          status.textContent="Permission denied.";
+        }
+      }).catch(err => status.textContent = "Compass not supported: " + err);
+    } else {
+      window.addEventListener("deviceorientationabsolute", handleOrientation, true);
+      window.addEventListener("deviceorientation", handleOrientation, true);
+      btn.textContent="🧭 Compass Active"; btn.disabled=true; arrow.classList.add("active");
       status.textContent="Compass active ✓ Rotate your device!";
     }
   });
+
   function handleOrientation(event){
     let heading;
-    if(event.webkitCompassHeading!==undefined){heading=event.webkitCompassHeading;}
-    else if(event.alpha!==null){heading=360-event.alpha-180;if(heading<0)heading+=360;}
-    if(heading===undefined||isNaN(heading))return;
-    compassHeading=heading;aimCompassAtNearest();
+    if (event.webkitCompassHeading !== undefined) {
+      heading = event.webkitCompassHeading;         // iOS: 0 = North
+    } else if (event.alpha !== null) {
+      heading = 360 - event.alpha - 180;            // Android: adjust (you asked for 180° flip)
+      if (heading < 0) heading += 360;
+    }
+    if (heading===undefined || isNaN(heading)) return;
+    compassHeading = heading;
+    aimCompassAtNearest(); // always re-aim arrow to nearest spot
   }
 }
 function aimCompassAtNearest(){
-  if(!nearestCache)return;
-  const arrow=document.getElementById("arrow");
-  const brg=bearing(userPos.lat,userPos.lng,nearestCache.lat,nearestCache.lng);
-  const rel=(brg-compassHeading+360)%360;
-  arrow.style.transform=`rotate(${rel}deg)`;
-  if(nearestCache.dist<=10)arrow.classList.add("arrived");else arrow.classList.remove("arrived");
-  document.getElementById("headingText").textContent=`Heading: ${compassHeading.toFixed(1)}°`;
-  document.getElementById("compassStatus").textContent=`Arrow → ${nearestCache.name} (${nearestCache.dist.toFixed(0)} m)`;
+  if (!nearestCache) return;
+  const arrow = document.getElementById("arrow");
+  const brg = bearing(userPos.lat, userPos.lng, nearestCache.lat, nearestCache.lng);
+  const rel = (brg - compassHeading + 360) % 360;
+  arrow.style.transform = `rotate(${rel}deg)`;
+  if (nearestCache.dist <= 10) arrow.classList.add('arrived'); else arrow.classList.remove('arrived');
+  document.getElementById("headingText").textContent = `Heading: ${compassHeading.toFixed(1)}°`;
+  document.getElementById("compassStatus").textContent = `Arrow → ${nearestCache.name} (${nearestCache.dist.toFixed(0)} m)`;
 }
 
-// ---- modal ----
-const spotModal=document.getElementById("spotModal");
-document.getElementById("closeModal").onclick=()=>spotModal.close();
+// ===================== POP-UPS =====================
+const spotModal = document.getElementById("spotModal");
+document.getElementById("closeModal").onclick = () => spotModal.close();
+
 function openSpotModal(name){
-  const s=spots.find(x=>x.name===name);if(!s)return;
-  const infoHtml=`<p>${(s.info||"").trim().replace(/\n{2,}/g,"</p><p>").replace(/\n/g,"<br>")}</p>`;
-  document.getElementById("spotTitle").textContent=s.name;
-  document.getElementById("spotBody").innerHTML=`<img src="${s.img}" alt="${s.name}">${infoHtml}<p><strong>Location:</strong> ${s.lat.toFixed(6)}, ${s.lng.toFixed(6)}</p>`;
+  const s = spots.find(x=>x.name===name);
+  if(!s) return;
+  const infoHtml = `<p>${(s.info||"").trim()
+    .replace(/\n{2,}/g,'</p><p>')
+    .replace(/\n/g,'<br>')
+  }</p>`;
+  document.getElementById("spotTitle").textContent = s.name;
+  document.getElementById("spotBody").innerHTML = `
+    <img src="${s.img}" alt="${s.name}" style="width:100%;border-radius:10px;margin-bottom:12px;">
+    ${infoHtml}
+    <p><strong>Location:</strong> ${s.lat.toFixed(6)}, ${s.lng.toFixed(6)}</p>
+  `;
   spotModal.showModal();
 }
 
-// ---- controls ----
-function attachBasicHandlers(){
-  document.getElementById("updateBtn").onclick=()=>navigator.geolocation&&navigator.geolocation.getCurrentPosition(p=>{userPos={lat:p.coords.latitude,lng:p.coords.longitude};onPositionUpdated();});
-  document.getElementById("resetBtn").onclick=()=>{if(!confirm("Reset your trail progress?"))return;
-    visited.clear();localStorage.removeItem("visitedSpots");spotMarkers.forEach(m=>m.content.style.background='linear-gradient(#00b2ff,#0057b8)');buildList();};
+// ===================== CONTROLS =====================
+function buildList(){
+  const list=document.getElementById("trailList");
+  list.innerHTML="";
+  spots.forEach((s, idx)=>{
+    const v=visited.has(s.name);
+    const btnLabel = v ? "Read more" : "Find spot to read more…";
+    const item=document.createElement("div");
+    item.className="trail-item"+(v?" visited":"");
+    item.innerHTML = `
+      <div class="img-wrap">
+        <img src="${s.img}" alt="${s.name}">
+        <div class="tick-overlay">✔</div>
+      </div>
+      <div class="trail-info">
+        <p class="trail-name">${s.name}<span class="tick">✔</span></p>
+        <p class="trail-dist" id="dist-${toKey(s.name)}">–</p>
+        <button class="read-more" data-spot="${s.name}" ${v?"":"disabled"}>${btnLabel}</button>
+      </div>`;
+    item.querySelector(".read-more").addEventListener("click", e=>openSpotModal(e.currentTarget.dataset.spot));
+    list.appendChild(item);
+
+    const m = spotMarkers[idx];
+    if (m?.content) m.content.classList.toggle('visited', v);
+  });
 }
+
+document.getElementById("updateBtn").onclick = ()=>{
+  if(!navigator.geolocation){ alert("No GPS support"); return; }
+  navigator.geolocation.getCurrentPosition(pos=>{
+    userPos={lat:pos.coords.latitude,lng:pos.coords.longitude};
+    onPositionUpdated();
+  }, err=>alert("GPS error: "+err.message), { enableHighAccuracy:true, maximumAge:1000, timeout:8000 });
+};
+
+document.getElementById("resetBtn").onclick = ()=>{
+  if(!confirm("Reset your trail progress?")) return;
+  visited.clear();
+  localStorage.removeItem("visitedSpots");
+  // reset dot styles if Advanced
+  spotMarkers.forEach(m=>{ if(m?.content) m.content.classList.remove('visited'); });
+  buildList();
+};
+
 function buildTestDropdown(){
   const sel=document.getElementById("testSelect");
-  spots.forEach(s=>{const o=document.createElement("option");o.value=JSON.stringify({lat:s.lat,lng:s.lng,name:s.name});o.textContent=s.name;sel.appendChild(o);});
-  sel.addEventListener("change",e=>{
+  spots.forEach(s=>{
+    const o=document.createElement("option");
+    o.value=JSON.stringify({lat:s.lat,lng:s.lng,name:s.name});
+    o.textContent=s.name;
+    sel.appendChild(o);
+  });
+  sel.addEventListener("change", e=>{
     const val=e.target.value;
-    if(!val){testingMode=false;startWatchingPosition();alert("✅ Returned to live GPS mode.");return;}
-    testingMode=true;if(watchId)navigator.geolocation.clearWatch(watchId);
-    const loc=JSON.parse(val);userPos={lat:loc.lat,lng:loc.lng};onPositionUpdated();
+    if(!val){
+      testingMode=false; startWatchingPosition();
+      alert("✅ Returned to live GPS mode.");
+      return;
+    }
+    testingMode=true;
+    if (watchId) navigator.geolocation.clearWatch(watchId);
+    const loc=JSON.parse(val);
+    userPos={lat:loc.lat,lng:loc.lng};
+    onPositionUpdated();
     alert(`🧪 Spoofed location set to "${loc.name}".`);
   });
 }
 
-// ---- boot ----
-window.addEventListener("load",initMap);
+// ===================== BOOT =====================
+window.addEventListener('load', initMap);
 </script>
 </body>
 </html>
