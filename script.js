@@ -141,26 +141,39 @@ function setupCompassButton() {
         typeof DeviceOrientationEvent.requestPermission === "function") {
       DeviceOrientationEvent.requestPermission().then(res => {
         if (res === "granted") {
-          window.addEventListener("deviceorientation", handleOrientation, true);
-          btn.disabled = true; btn.textContent = "🧭 Compass Active"; arrow.classList.add("active");
-          status.textContent = "Compass active ✓";
-        } else status.textContent = "Permission denied.";
+          activateCompass();
+        } else {
+          status.textContent = "Permission denied.";
+        }
+      }).catch(() => {
+        status.textContent = "Permission request failed.";
       });
     } else {
-      window.addEventListener("deviceorientation", handleOrientation, true);
-      btn.disabled = true; btn.textContent = "🧭 Compass Active"; arrow.classList.add("active");
-      status.textContent = "Compass active ✓";
+      // Non-iOS devices
+      activateCompass();
     }
   });
 
+  function activateCompass() {
+    window.addEventListener("deviceorientation", handleOrientation, true);
+    btn.textContent = "🧭 Compass active";
+    btn.disabled = true;
+    arrow.classList.add("active");
+    status.textContent = "Compass active ✓";
+  }
+
   function handleOrientation(e) {
     let heading;
-    if (e.webkitCompassHeading !== undefined) heading = e.webkitCompassHeading;
-    else if (e.alpha !== null) {
+    if (e.webkitCompassHeading !== undefined) {
+      heading = e.webkitCompassHeading;
+    } else if (e.alpha !== null) {
       heading = 360 - e.alpha - 180;
       if (heading < 0) heading += 360;
     }
-    if (!isNaN(heading)) { compassHeading = heading; aimCompassAtNearest(); }
+    if (!isNaN(heading)) {
+      compassHeading = heading;
+      aimCompassAtNearest();
+    }
   }
 }
 
