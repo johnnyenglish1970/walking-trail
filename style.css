@@ -61,44 +61,57 @@ button {
 }
 
 @media (max-width: 480px) {
-  #banner { height: 120px; }
-  #map    { height: 300px; }
+  .trail-body {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .trail-image img {
+    width: 100%;
+    height: auto;
+  }
 }
 
 /* ===================== COMPASS & CONTROLS ===================== */
-/* ===================== COMPASS & CONTROLS ===================== */
+/* ===================== COMPASS & CONTROLS (UPDATED) ===================== */
 #compass {
   width: 100%;
   max-width: 800px;
   margin: 20px auto;
-  text-align: center;
   padding: 10px 0;
+  display: flex;                 /* stack vertically */
+  flex-direction: column;
+  align-items: center;           /* center everything horizontally */
+  text-align: center;
 }
 
-/* Arrow container + overlay */
+/* Square container so the arrow + red X align perfectly */
 #arrow-container {
   position: relative;
-  display: inline-block;
+  width: 84px;
+  height: 84px;
+  display: block;
   margin-bottom: 10px;
 }
 
-/* Base arrow */
+/* Arrow fills the box and rotates around its center */
 #arrow {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto;
+  width: 100%;
+  height: 100%;
   display: block;
+  margin: 0;
   transition: transform 0.25s linear;
+  transform-origin: 50% 50%;
   opacity: 0.5;
   filter: grayscale(100%);
 }
 
-/* Red X overlay (shows when inactive) */
+/* Red X overlay (visible when inactive) */
 #cross-overlay {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: red;
   font-size: 64px;
   font-weight: bold;
@@ -107,7 +120,7 @@ button {
   transition: opacity 0.3s ease;
 }
 
-/* Hide cross + restore full arrow color when active */
+/* When compass becomes active: arrow colored, cross fades */
 #arrow.active {
   opacity: 1;
   filter: none;
@@ -116,8 +129,10 @@ button {
   opacity: 0;
 }
 
-/* Compass button */
+/* Centered button */
 #startCompassBtn {
+  align-self: center;
+  margin-top: 8px;
   background: #0057b8;
   color: #fff;
   border: none;
@@ -128,7 +143,6 @@ button {
   font-weight: 500;
   margin-bottom: 10px;
 }
-
 #startCompassBtn:disabled {
   background: #ccc;
   color: #555;
@@ -137,10 +151,14 @@ button {
 
 /* Texts under compass */
 #headingText,
-#compassStatus {
+#compassStatus,
+#progressText {
+  width: 100%;
+  text-align: center;
   margin: 5px 0;
   font-size: 0.95rem;
 }
+
 
 /* ===================== USER DOT ===================== */
 .user-dot {
