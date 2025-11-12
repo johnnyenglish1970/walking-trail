@@ -274,11 +274,6 @@ function buildList() {
         <button class="skip-btn" data-skip="${s.name}">
             ${isVisited ? "✅ Found!" : isSkipped ? "⏭️ Skipped" : "Skip This Spot"}
           </button>
-          const skipBtn = item.querySelector(".skip-btn");
-            if (isVisited || isSkipped) {
-          skipBtn.disabled = true;
-        }
-
       </div>
     `;
 
@@ -286,6 +281,11 @@ function buildList() {
     item.querySelector(".read-more").onclick = () => openSpotModal(s.name);
     item.querySelector(".skip-btn").onclick = () => skipSpot(s.name);
 
+    const skipBtn = item.querySelector(".skip-btn");
+            if (isVisited || isSkipped) {
+          skipBtn.disabled = true;
+        }
+    
     list.appendChild(item);
 
     const m = spotMarkers[i];
