@@ -443,7 +443,7 @@ function setupCompassButton(){
     if (event.webkitCompassHeading !== undefined) heading = event.webkitCompassHeading;
     else if (event.alpha !== null) {
   // Android / Chrome: alpha=0 when facing East, so subtract 90° to make 0 = North
-  heading = 360 - event.alpha - 180;
+  heading = 360 - event.alpha - 90;
   if (heading < 0) heading += 360;
 }
     if (heading===undefined || isNaN(heading)) return;
