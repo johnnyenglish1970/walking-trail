@@ -271,7 +271,14 @@ function buildList() {
       </div>
       <div class="trail-buttons">
         <button class="read-more" data-spot="${s.name}" ${!isVisited ? "disabled" : ""}>Read More</button>
-        <button class="skip-btn" data-skip="${s.name}" ${disabled ? "disabled" : ""}>Skip This Spot</button>
+        <button class="skip-btn" data-skip="${s.name}">
+            ${isVisited ? "✅ Found!" : isSkipped ? "⏭️ Skipped" : "Skip This Spot"}
+          </button>
+          const skipBtn = item.querySelector(".skip-btn");
+            if (isVisited || isSkipped) {
+          skipBtn.disabled = true;
+        }
+
       </div>
     `;
 
