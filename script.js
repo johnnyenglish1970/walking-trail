@@ -91,36 +91,57 @@ function onPositionUpdated() {
 
 function refreshNearestAndDistances() {
   if (!spots?.length || !userPos?.lat) return;
-  const nearest = findNearest(userPos.lat, userPos.lng);
-  if (!nearest) return;
-  nearestCache = nearest;
 
-  document.getElementById("nearestName").textContent =
-    `${nearest.name} (${nearest.dist.toFixed(0)} m)`;
+  // Target = current spot in the sequence (not nearest)
+  const current = spots[currentSpotIndex];
+  if (!current) return;
 
-  if (nextMarker.setPosition)
-    nextMarker.setPosition({ lat: nearest.lat, lng: nearest.lng });
+  // Distance to current target
+  const dist = haversine(userPos.lat, userPos.lng, current.lat, current.lng);
 
-  let changed = false;
+  // Keep compass aiming data in sync
+  nearestCache = { ...current, dist };
+
+  // UI: “Next spot” label + move the blue "next" marker
+  const nearestEl = document.getElementById("nearestName");
+  if (nearestEl) nearestEl.textContent = `${current.name} (${dist.toFixed(0)} m)`;
+
+  if (nextMarker?.setPosition) {
+    nextMarker.setPosition({ lat: current.lat, lng: current.lng });
+  } else if (nextMarker) {
+    nextMarker.position = { lat: current.lat, lng: current.lng }; // Advanced marker fallback
+  }
+
+  // Update all distance badges in the list
   spots.forEach((s, i) => {
     const d = haversine(userPos.lat, userPos.lng, s.lat, s.lng);
-    const el = document.getElementById("dist-" + toKey(s.name));
+    const el = document.getElementById("dist-" + s.name.replace(/\s+/g, "_"));
     if (el) el.textContent = d < 1000 ? `${d.toFixed(0)} m` : `${(d / 1000).toFixed(2)} km`;
-
-    // ✅ NEW: trigger when within 10 m
-    if (d <= 10 && !visited.has(s.name)) {
-      visited.add(s.name);
-      changed = true;
-      if (spotMarkers[i]?.content) spotMarkers[i].content.classList.add("visited");
-
-      // 🟡 automatically open pop-up for this spot
-      openSpotModal(s.name);
-    }
   });
 
-  if (changed) { saveState(); buildList(); }
+  // Arrived? Mark visited, open pop-up, advance to next in sequence
+  if (dist <= 10 && !visited.has(current.name)) {
+    visited.add(current.name);
+
+    // Tint marker if using AdvancedMarkerElement
+    const m = spotMarkers[currentSpotIndex];
+    if (m?.content) m.content.classList.add("visited");
+
+    saveState();
+    buildList();
+
+    // Open the pop-up for the spot we just reached
+    openSpotModal(current.name);
+
+    // Then move the trail to the next target
+    advanceToNextSpot();
+  }
+
+  // Progress text and compass direction
+  updateProgress();
   aimCompassAtNearest();
 }
+
 
 function advanceToNextSpot() {
   if (currentSpotIndex < spots.length - 1) {
