@@ -380,6 +380,43 @@ dialog#spotModal {
   color: #333;
   text-align: left;
 }
+
+/* ===================== AUDIO IN MODAL ===================== */
+.audio-section {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #ddd;
+}
+
+.audio-section h4 {
+  margin-bottom: 6px;
+  font-size: 1rem;
+  color: #0057b8;
+}
+
+.audio-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.audio-btn {
+  background: #0057b8;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.audio-btn:hover {
+  background: #003f80;
+}
+
 /* ===================== FOOTER ===================== */
 #resetBtn {
   display: block;
