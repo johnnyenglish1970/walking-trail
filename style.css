@@ -338,33 +338,48 @@ dialog#spotModal {
   max-width: 420px;
   width: 90%;
   box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+  overflow: hidden;
 }
-#spotTitle {
+
+#spotHeader {
   background: #0057b8;
   color: white;
   font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 10px 14px;
-  border-radius: 12px 12px 0 0;
 }
+
+#spotTitle {
+  font-size: 1.1rem;
+  margin: 0;
+  flex: 1;
+}
+
+#closeModal {
+  background: transparent;
+  color: white;
+  border: none;
+  font-size: 1.4rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 10px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+#closeModal:hover {
+  color: #ffcc00;
+}
+
 #spotBody {
   padding: 14px;
   background: #fff;
   font-size: 0.95rem;
   color: #333;
+  text-align: left;
 }
-#closeModal {
-  background: #888;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  margin: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-#closeModal:hover {
-  background: #555;
-}
-
 /* ===================== FOOTER ===================== */
 #resetBtn {
   display: block;
