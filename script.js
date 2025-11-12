@@ -1,4 +1,6 @@
-/* ===================== CONFIG & STATE ===================== */
+/* ===================== CONFIG ===================== */
+const MAP_ID = "3fe9650f3654faf0bee8e2e2"; // ✅ Your Map ID
+
 let map, userMarker, nextMarker, spotMarkers = [];
 let watchId = null, testingMode = false;
 let visited = new Set(JSON.parse(localStorage.getItem("visitedSpots") || "[]"));
@@ -36,28 +38,15 @@ function saveState() {
 
 /* ===================== MAP ===================== */
 function makeDotMarker({ map, position, className, title }) {
-  if (google?.maps?.marker?.AdvancedMarkerElement) {
-    const el = document.createElement("div");
-    el.className = className;
-    return new google.maps.marker.AdvancedMarkerElement({ map, position, content: el, title });
-  }
-  return new google.maps.Marker({
-    map,
-    position,
-    title,
-    icon: {
-      path: google.maps.SymbolPath.CIRCLE,
-      scale: 6,
-      strokeColor: "#fff",
-      strokeWeight: 2,
-      fillColor: "#0057b8",
-      fillOpacity: 1
-    }
+  const el = document.createElement("div");
+  el.className = className;
+  return new google.maps.marker.AdvancedMarkerElement({
+    map, position, content: el, title
   });
 }
 
 function initMap() {
-  const mapOpts = { center: userPos, zoom: 17 };
+  const mapOpts = { center: userPos, zoom: 17, mapId: MAP_ID };
   map = new google.maps.Map(document.getElementById("map"), mapOpts);
 
   const style = document.createElement("style");
