@@ -25,6 +25,25 @@ body {
 }
 
 /* =====================
+   Title Bar Under Banner
+===================== */
+#title-bar {
+  width: 100%;
+  max-width: 800px;
+  background-color: #003366; /* dark BT blue */
+  color: #ffffff;
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 12px 0;
+  text-align: center;
+  margin: 0 auto;
+  border-bottom: 3px solid #0057b8; /* lighter accent border */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* =====================
    Top Banner Image
 ===================== */
 #banner {
