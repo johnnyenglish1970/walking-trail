@@ -221,47 +221,103 @@ select {
   margin: 0 auto;
 }
 
-/* Trail item card */
+/* ========== Trail Spot Cards ========== */
 .trail-item {
+  border-radius: 10px;
+  margin: 10px 0;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  background: #f5f5f5;
   display: flex;
   flex-direction: column;
-  background: #ffffff;
-  border-radius: 14px;
-  overflow: hidden;
-  margin: 12px 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
 .trail-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: scale(1.01);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-/* Title bar */
+/* Header Bar */
 .trail-header {
-  background: #777;
+  background: #bbb;
   color: #fff;
-  padding: 10px 14px;
-  font-weight: bold;
-  font-size: 1.05rem;
+  padding: 6px 12px;
+  font-weight: 600;
   text-align: left;
-  transition: background 0.3s ease;
 }
-
-/* Blue when visited */
-.visited .trail-header {
+.trail-header.visited {
   background: #0057b8;
 }
 
-/* Inner content layout */
-.trail-content {
+/* Body Content */
+.trail-body {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
-  padding: 12px 14px;
+  padding: 10px;
+}
+.trail-image img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.trail-text {
+  flex: 1;
+}
+.trail-snippet {
+  font-size: 0.9rem;
+  color: #333;
+  margin: 0 0 4px;
+}
+.trail-dist {
+  font-size: 0.85rem;
+  color: #666;
 }
 
+/* Buttons */
+.trail-buttons {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  background: #fafafa;
+}
+.trail-buttons button {
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.trail-buttons .read-more {
+  background: #0057b8;
+  color: white;
+}
+.trail-buttons .read-more:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+.trail-buttons .skip-btn {
+  background: #888;
+  color: #fff;
+}
+.trail-buttons .skip-btn:disabled {
+  background: #ccc;
+  color: #777;
+  cursor: not-allowed;
+}
+
+/* States */
+.trail-item.visited {
+  background: #e8f4ff;
+}
+.trail-item.skipped {
+  background: #eee;
+  opacity: 0.7;
+}
 /* Image and tick overlay */
 .img-wrap {
   position: relative;
