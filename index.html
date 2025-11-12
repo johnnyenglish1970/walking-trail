@@ -441,7 +441,11 @@ function setupCompassButton(){
   function handleOrientation(event){
     let heading;
     if (event.webkitCompassHeading !== undefined) heading = event.webkitCompassHeading;
-    else if (event.alpha !== null) heading = 360 - event.alpha;
+    else if (event.alpha !== null) {
+  // Android / Chrome: alpha=0 when facing East, so subtract 90° to make 0 = North
+  heading = 360 - event.alpha - 180;
+  if (heading < 0) heading += 360;
+}
     if (heading===undefined || isNaN(heading)) return;
     compassHeading = heading;
     document.getElementById("headingText").textContent = `Heading: ${heading.toFixed(1)}°`;
