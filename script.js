@@ -10,6 +10,12 @@ let currentSpotIndex = parseInt(localStorage.getItem("currentSpotIndex") || "0")
 let firstFitDone = false;
 let lastArrowRotation = 0;
 
+function saveState() {
+  localStorage.setItem("visitedSpots", JSON.stringify([...visited]));
+  localStorage.setItem("skippedSpots", JSON.stringify([...skipped]));
+  localStorage.setItem("lastUserPos", JSON.stringify(userPos));
+}
+
 /* ===================== HELPERS ===================== */
 const toKey = n => n.replace(/\s+/g, "_");
 
@@ -233,50 +239,68 @@ function aimCompassAtNearest() {
 function buildList() {
   const list = document.getElementById("trailList");
   list.innerHTML = "";
+
   spots.forEach((s, i) => {
-    const v = visited.has(s.name);
-    const btnLabel = v ? "Read more" : "Find spot to read more…";
-    const snippet = (s.info || "").split(".")[0] + "."; // first sentence only
+    const isVisited = visited.has(s.name);
+    const isSkipped = skipped.has(s.name);
+    const disabled = isVisited || isSkipped;
 
     const item = document.createElement("div");
-    item.className = "trail-item" + (v ? " visited" : "");
+    item.className = "trail-item" + (isVisited ? " visited" : isSkipped ? " skipped" : "");
+
     item.innerHTML = `
-      <div class="trail-header">${s.name}</div>
-      <div class="trail-content">
-        <div class="img-wrap">
+      <div class="spot-header">
+        <h3 class="trail-title">${s.name}</h3>
+      </div>
+      <div class="spot-body">
+        <div class="spot-content">
           <img src="${s.img}" alt="${s.name}">
-          <div class="tick-overlay">✔</div>
-        </div>
-        <div class="trail-text">
-          <p>${snippet}</p>
           <p class="trail-dist" id="dist-${toKey(s.name)}">–</p>
         </div>
-      </div>
-      <div class="trail-buttons">
-        <button class="read-more" data-spot="${s.name}" ${v ? "" : "disabled"}>${btnLabel}</button>
-        <button class="skip-btn" data-spot="${s.name}">Skip this spot</button>
+        <div class="spot-buttons">
+          <button class="read-more" data-spot="${s.name}" ${!isVisited ? "disabled" : ""}>Read More</button>
+          <button class="skip-btn" data-skip="${s.name}" ${disabled ? "disabled" : ""}>Skip This Spot</button>
+        </div>
       </div>
     `;
 
+    // Add event listeners
     item.querySelector(".read-more").onclick = () => openSpotModal(s.name);
-    item.querySelector(".skip-btn").onclick = () => skipSpot(s.name);
+    const skipBtn = item.querySelector(".skip-btn");
+    skipBtn.onclick = () => skipSpot(s.name);
 
     list.appendChild(item);
+
+    // Keep map marker color updated
     const m = spotMarkers[i];
-    if (m?.content) m.content.classList.toggle("visited", v);
+    if (m?.content) {
+      m.content.classList.toggle("visited", isVisited);
+      m.content.classList.toggle("skipped", isSkipped);
+    }
   });
 }
 
 function skipSpot(name) {
-  const index = spots.findIndex(s => s.name === name);
-  if (index !== -1) {
-    visited.add(name);
-    saveState();
-    buildList();
-    alert(`⏭️ You skipped "${name}". Moving to the next spot.`);
-  }
+  const spot = spots.find(s => s.name === name);
+  if (!spot) return;
+
+  skipped.add(spot.name);
+  saveState();
+  buildList();
+  refreshNextSpot();
+  alert(`⏭️ Skipped "${spot.name}". Moving to next spot.`);
 }
 
+function refreshNextSpot() {
+  // Find the next spot in sequence that isn't visited or skipped
+  const next = spots.find(s => !visited.has(s.name) && !skipped.has(s.name));
+  if (next) {
+    nearestCache = next;
+    document.getElementById("nearestName").textContent = `Next spot: ${next.name}`;
+  } else {
+    document.getElementById("nearestName").textContent = "🎉 Trail Complete!";
+  }
+}
 
 function openSpotModal(name) {
   const s = spots.find(x => x.name === name);
