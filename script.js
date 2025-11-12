@@ -306,12 +306,36 @@ function buildList() {
 function openSpotModal(name) {
   const s = spots.find(x => x.name === name);
   if (!s) return;
+
+  let audioHTML = "";
+  if (s.audio && s.audio.length) {
+    audioHTML = `
+      <div class="audio-section">
+        <h4>Audio</h4>
+        ${s.audio.map(a => `
+          <div class="audio-item">
+            <button class="audio-btn" onclick="playAudio('${a.src}')">▶</button>
+            <span>${a.label}</span>
+          </div>
+        `).join("")}
+      </div>
+    `;
+  }
+
   document.getElementById("spotTitle").textContent = s.name;
   document.getElementById("spotBody").innerHTML = `
     <img src="${s.img}" style="width:100%;border-radius:10px;margin-bottom:12px;">
     <p>${s.info}</p>
-    <p><strong>Location:</strong> ${s.lat.toFixed(6)}, ${s.lng.toFixed(6)}</p>`;
+    ${audioHTML}
+    <p><strong>Location:</strong> ${s.lat.toFixed(6)}, ${s.lng.toFixed(6)}</p>
+  `;
+
   document.getElementById("spotModal").showModal();
+}
+
+function playAudio(src) {
+  const audio = new Audio(src);
+  audio.play();
 }
 
 document.getElementById("closeModal").onclick = () =>
