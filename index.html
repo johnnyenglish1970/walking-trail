@@ -4,12 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Adastral Park Trail + Compass</title>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7l57TFhjYSpFeVY1FsiKxtogVV1QfmRM&libraries=maps,marker&v=beta"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AAAAAAAA&libraries=maps,marker&v=beta"></script>
 <style>
   body { margin:0; font-family:Arial, sans-serif; background:#f5f5f5; text-align:center; }
   #map { height:45vh; width:100%; }
-  #controls { padding:0.5rem; background:#fff; }
-  button { padding:10px 16px; border:none; background:#0057b8; color:white; border-radius:8px; font-size:16px; }
+  #controls { padding:0.5rem; background:#fff; display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
+  button { padding:10px 16px; border:none; background:#0057b8; color:white; border-radius:8px; font-size:16px; cursor:pointer; }
+  button:disabled { background:#aaa; cursor:not-allowed; }
   #nearest { padding:0.5rem; background:#fff; font-weight:bold; }
   #trailList { padding:0.5rem; text-align:left; }
   .trail-item {
@@ -29,9 +30,8 @@
     flex-direction:column; align-items:center; justify-content:center;
     border-top:1px solid #ddd; margin-top:5px;
   }
-  #arrow {
-    width:80px; height:80px; transition:transform 0.3s ease-out;
-  }
+  #arrow { width:80px; height:80px; transition:transform 0.3s ease-out; }
+  #compassStatus { font-size:14px; color:#444; margin-top:6px; }
   .user-dot, .next-dot { width:18px; height:18px; border-radius:50%; border:2px solid white; }
   .user-dot { background: radial-gradient(circle, yellow 40%, orange 80%);
     box-shadow:0 0 8px rgba(255,255,0,0.8); animation: flash 1s infinite alternate; }
@@ -43,15 +43,19 @@
 </head>
 <body>
 <div id="map"></div>
+
 <div id="controls">
   <button id="updateBtn">🔄 Update My Position</button>
+  <button id="startCompassBtn">🧭 Enable Compass</button>
 </div>
+
 <div id="nearest">Nearest point: <span id="nearestName">–</span></div>
 
 <!-- 🧭 Compass Section -->
 <div id="compass">
   <img id="arrow" src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Red_Arrow_Up.svg" alt="Compass Arrow">
   <p id="headingText">Heading: 0°</p>
+  <p id="compassStatus">Waiting for motion permission...</p>
 </div>
 
 <div id="trailList"></div>
@@ -105,7 +109,7 @@ function initMap(){
     map,position:userPos,content:Object.assign(document.createElement('div'),{className:'next-dot'})
   });
   buildList();
-  startCompass(); // 🧭 start compass here
+  setupCompassButton(); // 🧭 initialize compass button handler
 }
 
 function buildList(){
@@ -149,32 +153,50 @@ function updatePosition(){
   },err=>alert("GPS error: "+err.message));
 }
 
-// 🧭 COMPASS FUNCTION
-function startCompass(){
-  function handleOrientation(event){
-    let heading;
-    if(event.webkitCompassHeading!==undefined) heading=event.webkitCompassHeading;
-    else if(event.alpha!==null) heading=360-event.alpha;
-    if(heading===undefined||isNaN(heading)) return;
-    compassHeading=heading;
-    document.getElementById("arrow").style.transform=`rotate(${heading}deg)`;
-    document.getElementById("headingText").textContent=`Heading: ${heading.toFixed(1)}°`;
-  }
+function setupCompassButton(){
+  const btn = document.getElementById("startCompassBtn");
+  const arrow = document.getElementById("arrow");
+  const headingText = document.getElementById("headingText");
+  const status = document.getElementById("compassStatus");
 
-  if(typeof DeviceOrientationEvent!=="undefined" &&
-     typeof DeviceOrientationEvent.requestPermission==="function"){
-    DeviceOrientationEvent.requestPermission()
-      .then(res=>{
-        if(res==="granted"){
-          window.addEventListener("deviceorientation",handleOrientation,true);
-        }else{
-          alert("Compass permission denied");
-        }
-      })
-      .catch(()=>alert("Compass not supported"));
-  }else{
-    window.addEventListener("deviceorientationabsolute",handleOrientation,true);
-    window.addEventListener("deviceorientation",handleOrientation,true);
+  btn.addEventListener("click", () => {
+    status.textContent = "Requesting motion permission...";
+    if (typeof DeviceOrientationEvent !== "undefined" &&
+        typeof DeviceOrientationEvent.requestPermission === "function") {
+      // 🔒 iOS Safari requires a user gesture to request permission
+      DeviceOrientationEvent.requestPermission()
+        .then((res) => {
+          if (res === "granted") {
+            window.addEventListener("deviceorientation", handleOrientation, true);
+            btn.textContent = "🧭 Compass Active";
+            btn.disabled = true;
+            status.textContent = "Compass active ✓ Rotate your phone!";
+          } else {
+            status.textContent = "Permission denied for motion sensors.";
+          }
+        })
+        .catch((err) => status.textContent = "Compass not supported: " + err);
+    } else {
+      // Android / desktop
+      window.addEventListener("deviceorientationabsolute", handleOrientation, true);
+      window.addEventListener("deviceorientation", handleOrientation, true);
+      btn.textContent = "🧭 Compass Active";
+      btn.disabled = true;
+      status.textContent = "Compass active ✓ Rotate your device!";
+    }
+  });
+
+  function handleOrientation(event) {
+    let heading;
+    if (event.webkitCompassHeading !== undefined) {
+      heading = event.webkitCompassHeading;
+    } else if (event.alpha !== null) {
+      heading = 360 - event.alpha;
+    }
+    if (heading === undefined || isNaN(heading)) return;
+    compassHeading = heading;
+    arrow.style.transform = `rotate(${heading}deg)`;
+    headingText.textContent = `Heading: ${heading.toFixed(1)}°`;
   }
 }
 
