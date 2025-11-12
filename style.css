@@ -168,12 +168,14 @@ button:disabled {
   width: 90px;
   height: 90px;
   transition: transform 0.25s linear, filter 0.2s ease;
-  filter: grayscale(100%) brightness(0.6);
+  filter: grayscale(100%) brightness(0.5); /* <— this ensures grey default */
+  opacity: 0.8;
   margin-bottom: 10px;
 }
 
 #arrow.active {
   filter: none;
+  opacity: 1;
 }
 
 #arrow.arrived {
