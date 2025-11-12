@@ -147,7 +147,7 @@ function advanceToNextSpot() {
   if (currentSpotIndex < spots.length - 1) {
     currentSpotIndex++;
     localStorage.setItem("currentSpotIndex", currentSpotIndex);
-    alert(`Next spot: ${spots[currentSpotIndex].name}`);
+    //alert(`Next spot: ${spots[currentSpotIndex].name}`);
   } else {
     alert("🎉 You've completed the trail!");
   }
