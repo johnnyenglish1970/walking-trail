@@ -1,19 +1,23 @@
 /* ===================== CONFIG ===================== */
-const MAP_ID = "3fe9650f3654faf0bee8e2e2"; // ✅ Your Map ID
+const MAP_ID = "3fe9650f3654faf0bee8e2e2"; // ✅ Your Google Map ID
 
+/* ===================== STATE ===================== */
 let map, userMarker, nextMarker, spotMarkers = [];
 let watchId = null, testingMode = false;
 let visited = new Set(JSON.parse(localStorage.getItem("visitedSpots") || "[]"));
+let skipped = new Set(JSON.parse(localStorage.getItem("skippedSpots") || "[]"));
 let userPos = JSON.parse(localStorage.getItem("lastUserPos") || '{"lat":52.0579,"lng":1.2800}');
-let compassHeading = 0, nearestCache = null;
 let currentSpotIndex = parseInt(localStorage.getItem("currentSpotIndex") || "0");
+let compassHeading = 0, nearestCache = null;
 let firstFitDone = false;
 let lastArrowRotation = 0;
 
+/* ===================== SAVE STATE ===================== */
 function saveState() {
   localStorage.setItem("visitedSpots", JSON.stringify([...visited]));
   localStorage.setItem("skippedSpots", JSON.stringify([...skipped]));
   localStorage.setItem("lastUserPos", JSON.stringify(userPos));
+  localStorage.setItem("currentSpotIndex", currentSpotIndex);
 }
 
 /* ===================== HELPERS ===================== */
@@ -32,14 +36,9 @@ function bearing(lat1, lon1, lat2, lon2) {
   const toRad = Math.PI / 180, toDeg = 180 / Math.PI;
   const φ1 = lat1 * toRad, φ2 = lat2 * toRad, Δλ = (lon2 - lon1) * toRad;
   const y = Math.sin(Δλ) * Math.cos(φ2);
-  const x = Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+  const x = Math.cos(φ1) * Math.sin(φ2) -
+            Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
   return (Math.atan2(y, x) * toDeg + 360) % 360;
-}
-
-function saveState() {
-  localStorage.setItem("visitedSpots", JSON.stringify([...visited]));
-  localStorage.setItem("lastUserPos", JSON.stringify(userPos));
-  localStorage.setItem("currentSpotIndex", currentSpotIndex);
 }
 
 /* ===================== MAP ===================== */
@@ -57,9 +56,12 @@ function initMap() {
 
   const style = document.createElement("style");
   style.textContent = `
-    .next-dot{width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle,#00b2ff 30%,#0057b8 80%);}
-    .spot-dot{width:14px;height:14px;border-radius:50%;border:2px solid #fff;background:linear-gradient(#00b2ff,#0057b8);}
+    .next-dot{width:18px;height:18px;border-radius:50%;border:2px solid #fff;
+      background:radial-gradient(circle,#00b2ff 30%,#0057b8 80%);}
+    .spot-dot{width:14px;height:14px;border-radius:50%;border:2px solid #fff;
+      background:linear-gradient(#00b2ff,#0057b8);}
     .spot-dot.visited{background:linear-gradient(#4caf50,#2e7d32);}
+    .spot-dot.skipped{background:linear-gradient(#999,#555);}
   `;
   document.head.appendChild(style);
 
@@ -98,72 +100,85 @@ function onPositionUpdated() {
 function refreshNearestAndDistances() {
   if (!spots?.length || !userPos?.lat) return;
 
-  // Target = current spot in the sequence (not nearest)
   const current = spots[currentSpotIndex];
   if (!current) return;
 
-  // Distance to current target
   const dist = haversine(userPos.lat, userPos.lng, current.lat, current.lng);
-
-  // Keep compass aiming data in sync
   nearestCache = { ...current, dist };
 
-  // UI: “Next spot” label + move the blue "next" marker
   const nearestEl = document.getElementById("nearestName");
   if (nearestEl) nearestEl.textContent = `${current.name} (${dist.toFixed(0)} m)`;
 
   if (nextMarker?.setPosition) {
     nextMarker.setPosition({ lat: current.lat, lng: current.lng });
   } else if (nextMarker) {
-    nextMarker.position = { lat: current.lat, lng: current.lng }; // Advanced marker fallback
+    nextMarker.position = { lat: current.lat, lng: current.lng };
   }
 
-  // Update all distance badges in the list
   spots.forEach((s, i) => {
     const d = haversine(userPos.lat, userPos.lng, s.lat, s.lng);
-    const el = document.getElementById("dist-" + s.name.replace(/\s+/g, "_"));
+    const el = document.getElementById("dist-" + toKey(s.name));
     if (el) el.textContent = d < 1000 ? `${d.toFixed(0)} m` : `${(d / 1000).toFixed(2)} km`;
   });
 
-  // Arrived? Mark visited, open pop-up, advance to next in sequence
-  if (dist <= 10 && !visited.has(current.name)) {
+  // Arrival check (15m)
+  if (dist <= 15 && !visited.has(current.name)) {
     visited.add(current.name);
-
-    // Tint marker if using AdvancedMarkerElement
     const m = spotMarkers[currentSpotIndex];
     if (m?.content) m.content.classList.add("visited");
-
     saveState();
     buildList();
-
-    // Open the pop-up for the spot we just reached
     openSpotModal(current.name);
-
-    // Then move the trail to the next target
     advanceToNextSpot();
   }
 
-  // Progress text and compass direction
-  updateProgress();
   aimCompassAtNearest();
+  updateProgress();
 }
 
-
+/* ===================== SEQUENCE CONTROL ===================== */
 function advanceToNextSpot() {
   if (currentSpotIndex < spots.length - 1) {
     currentSpotIndex++;
-    localStorage.setItem("currentSpotIndex", currentSpotIndex);
-    //alert(`Next spot: ${spots[currentSpotIndex].name}`);
+    saveState();
+    refreshNearestAndDistances();
   } else {
-    alert("🎉 You've completed the trail!");
+    document.getElementById("nearestName").textContent = "🎉 Trail complete!";
   }
+}
+
+function skipSpot(name) {
+  const idx = spots.findIndex(s => s.name === name);
+  if (idx === -1) return;
+
+  skipped.add(name);
+
+  if (idx === currentSpotIndex && currentSpotIndex < spots.length - 1) {
+    currentSpotIndex++;
+  }
+
   saveState();
+  buildList();
+  refreshNextSpot();
   refreshNearestAndDistances();
 }
 
+function refreshNextSpot() {
+  const next = spots.find(s => !visited.has(s.name) && !skipped.has(s.name));
+  const el = document.getElementById("nearestName");
+  if (next) {
+    el.textContent = `${next.name}`;
+    nearestCache = { ...next, dist: haversine(userPos.lat, userPos.lng, next.lat, next.lng) };
+  } else {
+    el.textContent = "🎉 Trail complete!";
+  }
+}
+
+/* ===================== PROGRESS ===================== */
 function updateProgress() {
   const text = document.getElementById("progressText");
-  text.textContent = `Progress: ${Math.min(currentSpotIndex + 1, spots.length)} / ${spots.length}`;
+  if (text)
+    text.textContent = `Progress: ${Math.min(currentSpotIndex + 1, spots.length)} / ${spots.length}`;
 }
 
 /* ===================== COMPASS ===================== */
@@ -172,7 +187,6 @@ function setupCompassButton() {
   const arrow = document.getElementById("arrow");
   const status = document.getElementById("compassStatus");
 
-  // ensure the arrow starts greyed out
   arrow.classList.remove("active");
 
   btn.addEventListener("click", () => {
@@ -180,24 +194,19 @@ function setupCompassButton() {
     if (typeof DeviceOrientationEvent !== "undefined" &&
         typeof DeviceOrientationEvent.requestPermission === "function") {
       DeviceOrientationEvent.requestPermission().then(res => {
-        if (res === "granted") {
-          activateCompass();
-        } else {
-          status.textContent = "Permission denied.";
-        }
+        if (res === "granted") activateCompass();
+        else status.textContent = "Permission denied.";
       }).catch(() => {
-        status.textContent = "Permission request failed.";
+        status.textContent = "Compass not supported.";
       });
-    } else {
-      activateCompass();
-    }
+    } else activateCompass();
   });
 
   function activateCompass() {
     window.addEventListener("deviceorientation", handleOrientation, true);
     btn.textContent = "🧭 Compass active";
     btn.disabled = true;
-    arrow.classList.add("active"); // <— only now activates
+    arrow.classList.add("active");
     status.textContent = "Compass active ✓";
   }
 
@@ -221,15 +230,12 @@ function aimCompassAtNearest() {
   const arrow = document.getElementById("arrow");
   const brg = bearing(userPos.lat, userPos.lng, nearestCache.lat, nearestCache.lng);
   const rel = (brg - compassHeading + 360) % 360;
-
-  // Smooth rotation (no flicker near 0°)
   let diff = rel - lastArrowRotation;
   if (diff > 180) diff -= 360;
   else if (diff < -180) diff += 360;
   const smoothed = lastArrowRotation + diff * 0.25;
   lastArrowRotation = smoothed;
   arrow.style.transform = `rotate(${smoothed}deg)`;
-
   document.getElementById("headingText").textContent = `Heading: ${compassHeading.toFixed(1)}°`;
   document.getElementById("compassStatus").textContent =
     `Arrow → ${nearestCache.name} (${nearestCache.dist.toFixed(0)} m)`;
@@ -249,9 +255,7 @@ function buildList() {
     item.className = "trail-item" + (isVisited ? " visited" : isSkipped ? " skipped" : "");
 
     item.innerHTML = `
-      <div class="spot-header">
-        <h3 class="trail-title">${s.name}</h3>
-      </div>
+      <div class="spot-header"><h3 class="trail-title">${s.name}</h3></div>
       <div class="spot-body">
         <div class="spot-content">
           <img src="${s.img}" alt="${s.name}">
@@ -261,17 +265,12 @@ function buildList() {
           <button class="read-more" data-spot="${s.name}" ${!isVisited ? "disabled" : ""}>Read More</button>
           <button class="skip-btn" data-skip="${s.name}" ${disabled ? "disabled" : ""}>Skip This Spot</button>
         </div>
-      </div>
-    `;
+      </div>`;
 
-    // Add event listeners
     item.querySelector(".read-more").onclick = () => openSpotModal(s.name);
-    const skipBtn = item.querySelector(".skip-btn");
-    skipBtn.onclick = () => skipSpot(s.name);
-
+    item.querySelector(".skip-btn").onclick = () => skipSpot(s.name);
     list.appendChild(item);
 
-    // Keep map marker color updated
     const m = spotMarkers[i];
     if (m?.content) {
       m.content.classList.toggle("visited", isVisited);
@@ -280,28 +279,7 @@ function buildList() {
   });
 }
 
-function skipSpot(name) {
-  const spot = spots.find(s => s.name === name);
-  if (!spot) return;
-
-  skipped.add(spot.name);
-  saveState();
-  buildList();
-  refreshNextSpot();
-  alert(`⏭️ Skipped "${spot.name}". Moving to next spot.`);
-}
-
-function refreshNextSpot() {
-  // Find the next spot in sequence that isn't visited or skipped
-  const next = spots.find(s => !visited.has(s.name) && !skipped.has(s.name));
-  if (next) {
-    nearestCache = next;
-    document.getElementById("nearestName").textContent = `Next spot: ${next.name}`;
-  } else {
-    document.getElementById("nearestName").textContent = "🎉 Trail Complete!";
-  }
-}
-
+/* ===================== POPUP ===================== */
 function openSpotModal(name) {
   const s = spots.find(x => x.name === name);
   if (!s) return;
@@ -313,8 +291,8 @@ function openSpotModal(name) {
   document.getElementById("spotModal").showModal();
 }
 
-document.getElementById("closeModal").onclick =
-  () => document.getElementById("spotModal").close();
+document.getElementById("closeModal").onclick = () =>
+  document.getElementById("spotModal").close();
 
 /* ===================== CONTROLS ===================== */
 function attachHandlers() {
@@ -329,8 +307,10 @@ function attachHandlers() {
   document.getElementById("resetBtn").onclick = () => {
     if (confirm("Reset your trail progress?")) {
       visited.clear();
+      skipped.clear();
       currentSpotIndex = 0;
       localStorage.removeItem("visitedSpots");
+      localStorage.removeItem("skippedSpots");
       localStorage.removeItem("currentSpotIndex");
       buildList();
       refreshNearestAndDistances();
