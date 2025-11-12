@@ -361,13 +361,29 @@ function buildTestDropdown() {
 }
 
 function startWatchingPosition() {
-  if (!navigator.geolocation || testingMode) return;
+  // Stop any existing watcher first
   if (watchId) navigator.geolocation.clearWatch(watchId);
-  watchId = navigator.geolocation.watchPosition(pos => {
-    if (testingMode) return;
-    userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-    onPositionUpdated();
-  });
+
+  // Skip if we're in testing (spoof) mode
+  if (testingMode || !navigator.geolocation) return;
+
+  // Start GPS watcher with optimized settings
+  watchId = navigator.geolocation.watchPosition(
+    pos => {
+      userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      onPositionUpdated(); // refresh markers, distances, compass etc.
+    },
+    err => {
+      console.warn("Geolocation error:", err);
+      document.getElementById("compassStatus").textContent =
+        "⚠️ GPS unavailable or permission denied";
+    },
+    {
+      enableHighAccuracy: true,  // use GPS if available (accurate within a few meters)
+      maximumAge: 1000,          // accept cached position up to 1s old
+      timeout: 10000             // if no fix after 10s, try again automatically
+    }
+  );
 }
 
 /* ===================== BOOT ===================== */
