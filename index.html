@@ -1,282 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Adastral Park Trail + Compass</title>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7l57TFhjYSpFeVY1FsiKxtogVV1QfmRM&libraries=maps,marker&v=beta"></script>
-<style>
-  body { margin:0; font-family:Arial, sans-serif; background:#f5f5f5; text-align:center; }
-  #map { height:45vh; width:100%; }
-  #controls { padding:0.5rem; background:#fff; display:flex; justify-content:center; gap:10px; flex-wrap:wrap; align-items:center; }
-  button, select { padding:10px 14px; border:none; border-radius:8px; font-size:16px; }
-  button { background:#0057b8; color:white; cursor:pointer; }
-  button:disabled { background:#aaa; cursor:not-allowed; }
-  select { background:#eee; cursor:pointer; }
-  #nearest { padding:0.5rem; background:#fff; font-weight:bold; }
-  #trailList { padding:0.5rem; text-align:left; }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adastral Park Trail + Compass</title>
 
-  .trail-item {
-    display:flex; align-items:center; background:#fff; margin:6px 0;
-    padding:10px; border-radius:12px; box-shadow:0 1px 4px rgba(0,0,0,0.1);
-  }
-  .img-wrap { position:relative; width:70px; height:70px; margin-right:10px; }
-  .trail-item img { width:70px; height:70px; border-radius:8px; object-fit:cover; display:block; }
-  .tick-overlay {
-    position:absolute; inset:0; border-radius:8px;
-    display:flex; align-items:center; justify-content:center;
-    background:rgba(0,128,0,0.15); color:#0a0; font-size:28px; font-weight:700;
-    opacity:0; transition:opacity .2s ease;
-  }
-  .visited .tick-overlay { opacity:1; }
-  .trail-info { flex:1; }
-  .trail-name { font-weight:bold; color:#0057b8; margin:0; display:flex; align-items:center; gap:6px; }
-  .trail-dist { font-size:13px; color:#666; }
-  .tick { font-size:18px; color:green; visibility:hidden; }
-  .visited .tick { visibility:visible; }
-  .visited img { opacity:0.6; }
-  .read-more { background:#007bff; color:white; padding:6px 10px; border:none; border-radius:6px; }
+  <!-- Google Maps API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&libraries=maps,marker&v=beta" defer></script>
 
-  #compass {
-    width:100%; background:#fff; display:flex;
-    flex-direction:column; align-items:center; justify-content:center;
-    border-top:1px solid #ddd; margin-top:5px; padding:10px 0;
-  }
-  #arrow {
-    width:80px; height:80px; transition:transform 0.2s linear, filter 0.3s ease;
-    filter: grayscale(100%) brightness(0.6);
-  }
-  #arrow.active { filter:none; }
-  #arrow.arrived { filter:hue-rotate(90deg) brightness(1.1); }
-  #compassStatus { font-size:14px; color:#444; margin-top:6px; }
-</style>
+  <!-- CSS and JS -->
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
 </head>
 <body>
-<div id="map"></div>
+  <div id="map"></div>
 
-<div id="controls">
-  <button id="updateBtn">🔄 Update My Position</button>
-  <button id="startCompassBtn">🧭 Enable Compass</button>
-  <button id="resetBtn" title="Clear progress">♻️ Reset Trail</button>
-  <select id="testSelect"><option value="">🧪 Test location…</option></select>
-</div>
-
-<div id="nearest">Nearest point: <span id="nearestName">–</span></div>
-
-<div id="compass">
-  <img id="arrow" src="images/arrow.svg" alt="Compass Arrow">
-  <p id="headingText">Heading: 0°</p>
-  <p id="compassStatus">Waiting for motion permission...</p>
-</div>
-
-<div id="trailList"></div>
-
-<dialog id="spotModal" aria-labelledby="spotTitle">
-  <div class="modal-inner" style="padding:16px;text-align:left;max-width:700px;">
-    <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
-      <h3 id="spotTitle" style="margin:0;"></h3>
-      <button id="closeModal" class="btn-secondary" style="background:#eee;color:#333;border:none;border-radius:6px;padding:8px 12px;">✖ Close</button>
-    </div>
-    <div id="spotBody" class="modal-body" style="margin-top:12px;"></div>
+  <div id="controls">
+    <button id="updateBtn">🔄 Update My Position</button>
+    <button id="startCompassBtn">🧭 Enable Compass</button>
+    <button id="resetBtn" title="Clear progress">♻️ Reset Trail</button>
+    <select id="testSelect"><option value="">🧪 Test location…</option></select>
   </div>
-</dialog>
 
-<script>
-/* ===================== CONFIG ===================== */
-const MAP_ID = "";
-const IMAGE_EXT = "jpg";
-const IMAGE_PATH = "images/";
+  <div id="nearest">Nearest point: <span id="nearestName">–</span></div>
 
-/* ===================== SPOTS (shortened here; keep your full array) ===================== */
-const spots = [
-  { name:"Main Lab Block (Orion/Antares)", lat:52.05674493, lng:1.27986381, info:`Originally known as the Main Lab Block ...` },
-  { name:"Acoustic Block", lat:52.05671008, lng:1.28002642, info:`The Adastral Acoustic Block includes anechoic chambers...` },
-  { name:"Heritage Centre", lat:52.05891122, lng:1.27937062, info:`Congratulations! You have arrived at the last location...` }
-];
-const toFileName = n=>n.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')+'.'+IMAGE_EXT;
-spots.forEach(s=>s.img=IMAGE_PATH+toFileName(s.name));
+  <div id="compass">
+    <img id="arrow" src="images/arrow.svg" alt="Compass Arrow" />
+    <p id="headingText">Heading: 0°</p>
+    <p id="compassStatus">Waiting for motion permission...</p>
+  </div>
 
-/* ===================== HELPERS ===================== */
-const toKey=n=>n.replace(/\s+/g,'_');
-function haversine(a,b,c,d){const R=6371000,p=Math.PI/180;const x=(c-a)*p,y=(d-b)*p;const s=Math.sin(x/2)**2+Math.cos(a*p)*Math.cos(c*p)*Math.sin(y/2)**2;return 2*R*Math.atan2(Math.sqrt(s),Math.sqrt(1-s));}
-function bearing(a,b,c,d){const p=Math.PI/180,q=180/Math.PI;const f1=a*p,f2=c*p,dl=(d-b)*p;const y=Math.sin(dl)*Math.cos(f2);const x=Math.cos(f1)*Math.sin(f2)-Math.sin(f1)*Math.cos(f2)*Math.cos(dl);return (Math.atan2(y,x)*q+360)%360;}
-function findNearest(lat,lng){if(!spots?.length)return null;let min=Infinity,n=null;spots.forEach(s=>{const d=haversine(lat,lng,s.lat,s.lng);if(d<min){min=d;n={...s,dist:d};}});return n;}
-function saveState(){localStorage.setItem("visitedSpots",JSON.stringify([...visited]));localStorage.setItem("lastUserPos",JSON.stringify(userPos));}
+  <div id="trailList"></div>
 
-/* ===================== STATE ===================== */
-let map,userMarker,nextMarker,spotMarkers=[];let watchId=null,testingMode=false;
-let visited=new Set(JSON.parse(localStorage.getItem("visitedSpots")||"[]"));
-let userPos=JSON.parse(localStorage.getItem("lastUserPos")||'{"lat":52.0579,"lng":1.2800}');
-let compassHeading=0,nearestCache=null;
-
-/* ===================== MARKERS ===================== */
-function makeDotMarker({map,position,className,title}) {
-  if(google?.maps?.marker?.AdvancedMarkerElement){
-    const el=document.createElement('div');el.className=className;
-    if(!el.style.width){el.style.width='18px';el.style.height='18px';el.style.borderRadius='50%';el.style.border='2px solid #fff';el.style.background='#0057b8';}
-    return new google.maps.marker.AdvancedMarkerElement({map,position,content:el,title});
-  }
-  return new google.maps.Marker({map,position,title,
-    icon:{path:google.maps.SymbolPath.CIRCLE,scale:6,strokeColor:'#fff',strokeWeight:2,
-          fillColor:className.includes('user-dot')?'#ff9800':className.includes('next-dot')?'#0057b8':'#0057b8',fillOpacity:1}});
-}
-
-/* ===================== MAP INIT ===================== */
-function initMap(){
-  const opt={center:userPos,zoom:17};if(MAP_ID)opt.mapId=MAP_ID;
-  map=new google.maps.Map(document.getElementById("map"),opt);
-  const style=document.createElement('style');style.textContent=`
-    .user-dot{width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle,yellow 40%,orange 80%);}
-    .next-dot{width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle,#00b2ff 30%,#0057b8 80%);}
-    .spot-dot{width:14px;height:14px;border-radius:50%;border:2px solid #fff;background:linear-gradient(#00b2ff,#0057b8);}
-    .spot-dot.visited{background:linear-gradient(#4caf50,#2e7d32);}`;document.head.appendChild(style);
-
-  userMarker=makeDotMarker({map,position:userPos,className:'user-dot',title:'You'});
-  nextMarker=makeDotMarker({map,position:userPos,className:'next-dot',title:'Nearest'});
-  spotMarkers=spots.map(s=>{const m=makeDotMarker({map,position:{lat:s.lat,lng:s.lng},className:'spot-dot',title:s.name});
-    if(m.content)m.content.classList.toggle('visited',visited.has(s.name));return m;});
-
-  buildList();setupCompassButton();attachHandlers();buildTestDropdown();
-  startWatchingPosition();setTimeout(refreshNearestAndDistances,300);
-}
-
-/* ===================== REFRESH ===================== */
-function onPositionUpdated(){saveState();map.setCenter(userPos);
-  if(userMarker.setPosition)userMarker.setPosition(userPos);
-  if(userMarker.position!==undefined)userMarker.position=userPos;
-  refreshNearestAndDistances();}
-function refreshNearestAndDistances(){
-  if(!spots?.length||!userPos?.lat)return;
-  const nearest=findNearest(userPos.lat,userPos.lng);if(!nearest)return;
-  nearestCache=nearest;const nEl=document.getElementById("nearestName");
-  if(nEl)nEl.textContent=`${nearest.name} (${nearest.dist.toFixed(0)} m)`;
-  if(nextMarker.setPosition)nextMarker.setPosition({lat:nearest.lat,lng:nearest.lng});
-  if(nextMarker.position!==undefined)nextMarker.position={lat:nearest.lat,lng:nearest.lng};
-
-  let changed=false;
-  spots.forEach((s,i)=>{
-    const d=haversine(userPos.lat,userPos.lng,s.lat,s.lng);
-    const el=document.getElementById("dist-"+toKey(s.name));
-    if(el)el.textContent=d<1000?`${d.toFixed(0)} m`:`${(d/1000).toFixed(2)} km`;
-    if(d<=10&&!visited.has(s.name)){visited.add(s.name);changed=true;
-      const m=spotMarkers[i];if(m?.content)m.content.classList.add('visited');}});
-  if(changed){saveState();buildList();}
-  aimCompassAtNearest();
-}
-
-/* ===================== COMPASS ===================== */
-function setupCompassButton(){
-  const btn=document.getElementById("startCompassBtn");
-  const arrow=document.getElementById("arrow");
-  const status=document.getElementById("compassStatus");
-  btn.addEventListener("click",()=>{
-    status.textContent="Requesting motion permission...";
-    if(typeof DeviceOrientationEvent!=="undefined"&&typeof DeviceOrientationEvent.requestPermission==="function"){
-      DeviceOrientationEvent.requestPermission().then(res=>{
-        if(res==="granted"){window.addEventListener("deviceorientation",orient,true);
-          btn.textContent="🧭 Compass Active";btn.disabled=true;arrow.classList.add("active");
-          status.textContent="Compass active ✓ Rotate your phone!";}
-        else status.textContent="Permission denied.";})
-      .catch(e=>status.textContent="Compass not supported: "+e);
-    }else{
-      window.addEventListener("deviceorientationabsolute",orient,true);
-      window.addEventListener("deviceorientation",orient,true);
-      btn.textContent="🧭 Compass Active";btn.disabled=true;arrow.classList.add("active");
-      status.textContent="Compass active ✓ Rotate your device!";}
-  });
-  function orient(e){
-    let h;if(e.webkitCompassHeading!==undefined)h=e.webkitCompassHeading;
-      else if(e.alpha!==null){h=360-e.alpha-180;if(h<0)h+=360;}
-    if(h===undefined||isNaN(h))return;compassHeading=h;aimCompassAtNearest();}
-}
-function aimCompassAtNearest(){
-  if(!nearestCache)return;
-  const arrow=document.getElementById("arrow");
-  const brg=bearing(userPos.lat,userPos.lng,nearestCache.lat,nearestCache.lng);
-  const rel=(brg-compassHeading+360)%360;
-  arrow.style.transform=`rotate(${rel}deg)`;
-  if(nearestCache.dist<=10)arrow.classList.add('arrived');else arrow.classList.remove('arrived');
-  document.getElementById("headingText").textContent=`Heading: ${compassHeading.toFixed(1)}°`;
-  document.getElementById("compassStatus").textContent=`Arrow → ${nearestCache.name} (${nearestCache.dist.toFixed(0)} m)`;
-}
-
-/* ===================== UI ===================== */
-function buildList(){
-  const list=document.getElementById("trailList");list.innerHTML="";
-  spots.forEach((s,i)=>{
-    const v=visited.has(s.name);
-    const btnLabel=v?"Read more":"Find spot to read more…";
-    const item=document.createElement("div");item.className="trail-item"+(v?" visited":"");
-    item.innerHTML=`
-      <div class="img-wrap">
-        <img src="${s.img}" alt="${s.name}">
-        <div class="tick-overlay">✔</div>
+  <dialog id="spotModal" aria-labelledby="spotTitle">
+    <div class="modal-inner">
+      <div class="modal-header">
+        <h3 id="spotTitle"></h3>
+        <button id="closeModal" class="btn-secondary">✖ Close</button>
       </div>
-      <div class="trail-info">
-        <p class="trail-name">${s.name}<span class="tick">✔</span></p>
-        <p class="trail-dist" id="dist-${toKey(s.name)}">–</p>
-        <button class="read-more" data-spot="${s.name}" ${v?"":"disabled"}>${btnLabel}</button>
-      </div>`;
-    item.querySelector(".read-more").addEventListener("click",e=>openSpotModal(e.currentTarget.dataset.spot));
-    list.appendChild(item);
-    const m=spotMarkers[i];if(m?.content)m.content.classList.toggle('visited',v);
-  });
-}
-function openSpotModal(name){
-  const s=spots.find(x=>x.name===name);if(!s)return;
-  const info=`<p>${(s.info||"").trim().replace(/\n{2,}/g,'</p><p>').replace(/\n/g,'<br>')}</p>`;
-  document.getElementById("spotTitle").textContent=s.name;
-  document.getElementById("spotBody").innerHTML=`
-    <img src="${s.img}" alt="${s.name}" style="width:100%;border-radius:10px;margin-bottom:12px;">
-    ${info}<p><strong>Location:</strong> ${s.lat.toFixed(6)}, ${s.lng.toFixed(6)}</p>`;
-  document.getElementById("spotModal").showModal();
-}
-document.getElementById("closeModal").onclick=()=>document.getElementById("spotModal").close();
-
-/* ===================== CONTROLS ===================== */
-function attachHandlers(){
-  document.getElementById("updateBtn").onclick=()=>{
-    if(!navigator.geolocation){alert("No GPS support");return;}
-    navigator.geolocation.getCurrentPosition(pos=>{
-      userPos={lat:pos.coords.latitude,lng:pos.coords.longitude};onPositionUpdated();
-    },err=>alert("GPS error: "+err.message),{enableHighAccuracy:true,maximumAge:1000,timeout:8000});
-  };
-  document.getElementById("resetBtn").onclick=()=>{
-    if(!confirm("Reset your trail progress?"))return;
-    visited.clear();localStorage.removeItem("visitedSpots");
-    spotMarkers.forEach(m=>{if(m?.content)m.content.classList.remove('visited');});
-    buildList();
-  };
-}
-
-/* ===================== TEST DROPDOWN ===================== */
-function buildTestDropdown(){
-  const sel=document.getElementById("testSelect");
-  spots.forEach(s=>{const o=document.createElement("option");
-    o.value=JSON.stringify({lat:s.lat,lng:s.lng,name:s.name});
-    o.textContent=s.name;sel.appendChild(o);});
-  sel.addEventListener("change",e=>{
-    const val=e.target.value;
-    if(!val){testingMode=false;startWatchingPosition();alert("✅ Returned to live GPS mode.");return;}
-    testingMode=true;if(watchId)navigator.geolocation.clearWatch(watchId);
-    const loc=JSON.parse(val);userPos={lat:loc.lat,lng:loc.lng};
-    onPositionUpdated();alert(`🧪 Spoofed location set to "${loc.name}".`);
-  });
-}
-
-/* ===================== POSITION WATCH ===================== */
-function startWatchingPosition(){
-  if(!navigator.geolocation||testingMode)return;
-  if(watchId)navigator.geolocation.clearWatch(watchId);
-  watchId=navigator.geolocation.watchPosition(pos=>{
-    if(testingMode)return;
-    userPos={lat:pos.coords.latitude,lng:pos.coords.longitude};
-    onPositionUpdated();
-  },()=>{}, {enableHighAccuracy:true,maximumAge:1500,timeout:15000});
-}
-
-/* ===================== BOOT ===================== */
-window.addEventListener('load',()=>setTimeout(initMap,200));
-</script>
+      <div id="spotBody" class="modal-body"></div>
+    </div>
+  </dialog>
 </body>
 </html>
