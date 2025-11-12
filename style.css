@@ -164,28 +164,53 @@ button:disabled {
   margin-top: 5px;
 }
 
-#arrow {
+#compass {
+  width: 100%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 1px solid #ddd;
+  padding: 15px 0;
+  margin-top: 5px;
+}
+
+/* Arrow container to hold overlay */
+#arrow-container {
+  position: relative;
   width: 90px;
   height: 90px;
-  transition: transform 0.25s linear, filter 0.3s ease, opacity 0.3s ease;
   margin-bottom: 10px;
 }
 
-/* Default (disabled) state — much duller now */
-#arrow:not(.active) {
-  filter: grayscale(100%) brightness(0.25) contrast(0.6);
-  opacity: 0.4;
+#arrow {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.25s linear, filter 0.3s ease;
 }
 
-/* Active (live compass) state */
-#arrow.active {
-  filter: none;
+/* The red cross overlay */
+#cross-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 52px;
+  font-weight: bold;
+  color: rgba(255, 0, 0, 0.8);
+  pointer-events: none;
   opacity: 1;
+  transition: opacity 0.3s ease;
 }
 
-/* When user has arrived at a spot */
+/* When compass is active, hide the cross */
+#arrow.active + #cross-overlay {
+  opacity: 0;
+}
+
 #arrow.arrived {
-  filter: hue-rotate(90deg) brightness(1.2) saturate(1.2);
+  filter: hue-rotate(90deg) brightness(1.1);
 }
 
 #startCompassBtn {
@@ -202,6 +227,7 @@ button:disabled {
   background: #aaa;
   cursor: not-allowed;
 }
+
 
 #headingText {
   font-size: 15px;
