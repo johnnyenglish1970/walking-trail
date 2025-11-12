@@ -385,3 +385,20 @@ dialog#spotModal {
 #closeModal:hover {
   background: #ddd;
 }
+
+/* Skipped spot styling */
+.trail-item.skipped {
+  opacity: 0.6;
+  background: #eee;
+}
+
+.trail-item.skipped .trail-title {
+  color: #888;
+  text-decoration: line-through;
+}
+
+button.skip-btn:disabled {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
