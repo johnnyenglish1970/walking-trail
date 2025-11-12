@@ -197,16 +197,35 @@ function setupCompassButton() {
   }
 }
 
+let lastArrowRotation = 0; // store the last arrow rotation to smooth out flicker
+
 function aimCompassAtNearest() {
   if (!nearestCache) return;
+
   const arrow = document.getElementById("arrow");
   const brg = bearing(userPos.lat, userPos.lng, nearestCache.lat, nearestCache.lng);
   const rel = (brg - compassHeading + 360) % 360;
-  arrow.style.transform = `rotate(${rel}deg)`;
+
+  // ---- Smooth transition near 0°/360° ----
+  let diff = rel - lastArrowRotation;
+  if (diff > 180) diff -= 360;
+  else if (diff < -180) diff += 360;
+
+  // apply a smoothing factor (0.25 = gentle, 1 = instant)
+  const smoothed = lastArrowRotation + diff * 0.25;
+
+  lastArrowRotation = smoothed;
+  arrow.style.transform = `rotate(${smoothed}deg)`;
+
+  // ---- Visual + info ----
   document.getElementById("headingText").textContent =
     `Heading: ${compassHeading.toFixed(1)}°`;
   document.getElementById("compassStatus").textContent =
     `Arrow → ${nearestCache.name} (${nearestCache.dist.toFixed(0)} m)`;
+
+  // Optional: highlight arrow green when at destination
+  if (nearestCache.dist <= 10) arrow.classList.add("arrived");
+  else arrow.classList.remove("arrived");
 }
 
 /* ===================== UI ===================== */
