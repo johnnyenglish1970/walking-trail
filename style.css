@@ -25,7 +25,8 @@ button {
 #controls {
   width: 100%;
   max-width: 800px;
-  margin: 0 auto;
+  margin: 20px auto;
+  text-align: center;
 }
 
 /* Banner image */
