@@ -1,12 +1,12 @@
-/* ===================== CONFIG ===================== */
-const MAP_ID = "7ff992b63cb3134a409381f6"; // optional Google Map ID
-
-/* ===================== STATE ===================== */
+/* ===================== CONFIG & STATE ===================== */
 let map, userMarker, nextMarker, spotMarkers = [];
 let watchId = null, testingMode = false;
 let visited = new Set(JSON.parse(localStorage.getItem("visitedSpots") || "[]"));
 let userPos = JSON.parse(localStorage.getItem("lastUserPos") || '{"lat":52.0579,"lng":1.2800}');
 let compassHeading = 0, nearestCache = null;
+let currentSpotIndex = parseInt(localStorage.getItem("currentSpotIndex") || "0");
+let firstFitDone = false;
+let lastArrowRotation = 0;
 
 /* ===================== HELPERS ===================== */
 const toKey = n => n.replace(/\s+/g, "_");
@@ -24,37 +24,27 @@ function bearing(lat1, lon1, lat2, lon2) {
   const toRad = Math.PI / 180, toDeg = 180 / Math.PI;
   const φ1 = lat1 * toRad, φ2 = lat2 * toRad, Δλ = (lon2 - lon1) * toRad;
   const y = Math.sin(Δλ) * Math.cos(φ2);
-  const x = Math.cos(φ1) * Math.sin(φ2) -
-            Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+  const x = Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
   return (Math.atan2(y, x) * toDeg + 360) % 360;
-}
-
-function findNearest(lat, lng) {
-  if (!spots?.length) return null;
-  let min = Infinity, nearest = null;
-  spots.forEach(s => {
-    const d = haversine(lat, lng, s.lat, s.lng);
-    if (d < min) { min = d; nearest = { ...s, dist: d }; }
-  });
-  return nearest;
 }
 
 function saveState() {
   localStorage.setItem("visitedSpots", JSON.stringify([...visited]));
   localStorage.setItem("lastUserPos", JSON.stringify(userPos));
+  localStorage.setItem("currentSpotIndex", currentSpotIndex);
 }
 
-/* ===================== MAP INIT ===================== */
+/* ===================== MAP ===================== */
 function makeDotMarker({ map, position, className, title }) {
   if (google?.maps?.marker?.AdvancedMarkerElement) {
     const el = document.createElement("div");
     el.className = className;
-    return new google.maps.marker.AdvancedMarkerElement({
-      map, position, content: el, title
-    });
+    return new google.maps.marker.AdvancedMarkerElement({ map, position, content: el, title });
   }
   return new google.maps.Marker({
-    map, position, title,
+    map,
+    position,
+    title,
     icon: {
       path: google.maps.SymbolPath.CIRCLE,
       scale: 6,
@@ -66,92 +56,88 @@ function makeDotMarker({ map, position, className, title }) {
   });
 }
 
-let firstFitDone = false; // track whether we've zoomed to fit yet
-
 function initMap() {
   const mapOpts = { center: userPos, zoom: 17 };
-  if (MAP_ID) mapOpts.mapId = MAP_ID;
   map = new google.maps.Map(document.getElementById("map"), mapOpts);
 
-  // ---- Styles for Advanced Markers ----
   const style = document.createElement("style");
   style.textContent = `
-    .user-dot {width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle,yellow 40%,orange 80%);}
-    .next-dot {width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle,#00b2ff 30%,#0057b8 80%);}
-    .spot-dot {width:14px;height:14px;border-radius:50%;border:2px solid #fff;background:linear-gradient(#00b2ff,#0057b8);}
-    .spot-dot.visited {background:linear-gradient(#4caf50,#2e7d32);}
+    .user-dot{width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle,yellow 40%,orange 80%);}
+    .next-dot{width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle,#00b2ff 30%,#0057b8 80%);}
+    .spot-dot{width:14px;height:14px;border-radius:50%;border:2px solid #fff;background:linear-gradient(#00b2ff,#0057b8);}
+    .spot-dot.visited{background:linear-gradient(#4caf50,#2e7d32);}
   `;
   document.head.appendChild(style);
 
-  // ---- Create Markers ----
   userMarker = makeDotMarker({ map, position: userPos, className: "user-dot", title: "You" });
-  nextMarker = makeDotMarker({ map, position: userPos, className: "next-dot", title: "Nearest" });
-
+  nextMarker = makeDotMarker({ map, position: userPos, className: "next-dot", title: "Next spot" });
   spotMarkers = spots.map(s =>
     makeDotMarker({ map, position: { lat: s.lat, lng: s.lng }, className: "spot-dot", title: s.name })
   );
 
-  // ---- Fit map initially ----
   fitMapToAll();
-
-  // ---- Continue setup ----
   buildList();
   setupCompassButton();
   attachHandlers();
   buildTestDropdown();
   startWatchingPosition();
-
-  // Delay distance refresh slightly so map loads first
   setTimeout(refreshNearestAndDistances, 300);
 }
 
-/* ===================== LOCATION UPDATES ===================== */
-function onPositionUpdated() {
-  saveState();
-  if (userMarker.setPosition) userMarker.setPosition(userPos);
-  if (!firstFitDone) {
-    fitMapToAll();        // auto-fit only once on first GPS update
-    firstFitDone = true;
-  } else {
-    map.panTo(userPos);   // just recentre smoothly afterwards
-  }
-  refreshNearestAndDistances();
-}
-
-// ---- Helper to fit all spots + user position ----
 function fitMapToAll() {
   if (!map || !spots?.length) return;
   const bounds = new google.maps.LatLngBounds();
   spots.forEach(s => bounds.extend({ lat: s.lat, lng: s.lng }));
   if (userPos?.lat) bounds.extend(userPos);
-  map.fitBounds(bounds, 80); // 80px padding
+  map.fitBounds(bounds, 80);
+}
+
+/* ===================== POSITION UPDATES ===================== */
+function onPositionUpdated() {
+  saveState();
+  if (userMarker.setPosition) userMarker.setPosition(userPos);
+  if (!firstFitDone) { fitMapToAll(); firstFitDone = true; }
+  else map.panTo(userPos);
+  refreshNearestAndDistances();
 }
 
 function refreshNearestAndDistances() {
-  if (!spots?.length || !userPos?.lat) return;
-  const nearest = findNearest(userPos.lat, userPos.lng);
-  if (!nearest) return;
-  nearestCache = nearest;
+  const currentSpot = spots[currentSpotIndex];
+  if (!currentSpot) return;
+
+  const dist = haversine(userPos.lat, userPos.lng, currentSpot.lat, currentSpot.lng);
+  nearestCache = { ...currentSpot, dist };
 
   document.getElementById("nearestName").textContent =
-    `${nearest.name} (${nearest.dist.toFixed(0)} m)`;
-
+    `${currentSpot.name} (${dist.toFixed(0)} m)`;
   if (nextMarker.setPosition)
-    nextMarker.setPosition({ lat: nearest.lat, lng: nearest.lng });
+    nextMarker.setPosition({ lat: currentSpot.lat, lng: currentSpot.lng });
 
-  let changed = false;
-  spots.forEach((s, i) => {
-    const d = haversine(userPos.lat, userPos.lng, s.lat, s.lng);
-    const el = document.getElementById("dist-" + toKey(s.name));
-    if (el) el.textContent = d < 1000 ? `${d.toFixed(0)} m` : `${(d / 1000).toFixed(2)} km`;
-    if (d <= 10 && !visited.has(s.name)) {
-      visited.add(s.name);
-      changed = true;
-      if (spotMarkers[i]?.content) spotMarkers[i].content.classList.add("visited");
-    }
-  });
-  if (changed) { saveState(); buildList(); }
+  if (dist <= 10 && !visited.has(currentSpot.name)) {
+    visited.add(currentSpot.name);
+    advanceToNextSpot();
+  }
+
+  updateProgress();
   aimCompassAtNearest();
+  buildList();
+}
+
+function advanceToNextSpot() {
+  if (currentSpotIndex < spots.length - 1) {
+    currentSpotIndex++;
+    localStorage.setItem("currentSpotIndex", currentSpotIndex);
+    alert(`Next spot: ${spots[currentSpotIndex].name}`);
+  } else {
+    alert("🎉 You've completed the trail!");
+  }
+  saveState();
+  refreshNearestAndDistances();
+}
+
+function updateProgress() {
+  const text = document.getElementById("progressText");
+  text.textContent = `Progress: ${Math.min(currentSpotIndex + 1, spots.length)} / ${spots.length}`;
 }
 
 /* ===================== COMPASS ===================== */
@@ -167,91 +153,85 @@ function setupCompassButton() {
       DeviceOrientationEvent.requestPermission().then(res => {
         if (res === "granted") {
           window.addEventListener("deviceorientation", handleOrientation, true);
-          btn.textContent = "🧭 Compass Active";
-          btn.disabled = true;
-          arrow.classList.add("active");
+          btn.disabled = true; btn.textContent = "🧭 Compass Active"; arrow.classList.add("active");
           status.textContent = "Compass active ✓";
         } else status.textContent = "Permission denied.";
       });
     } else {
       window.addEventListener("deviceorientation", handleOrientation, true);
-      btn.textContent = "🧭 Compass Active";
-      btn.disabled = true;
-      arrow.classList.add("active");
+      btn.disabled = true; btn.textContent = "🧭 Compass Active"; arrow.classList.add("active");
       status.textContent = "Compass active ✓";
     }
   });
 
   function handleOrientation(e) {
     let heading;
-    if (e.webkitCompassHeading !== undefined) {
-      heading = e.webkitCompassHeading;
-    } else if (e.alpha !== null) {
+    if (e.webkitCompassHeading !== undefined) heading = e.webkitCompassHeading;
+    else if (e.alpha !== null) {
       heading = 360 - e.alpha - 180;
       if (heading < 0) heading += 360;
     }
-    if (!isNaN(heading)) {
-      compassHeading = heading;
-      aimCompassAtNearest();
-    }
+    if (!isNaN(heading)) { compassHeading = heading; aimCompassAtNearest(); }
   }
 }
 
-let lastArrowRotation = 0; // store the last arrow rotation to smooth out flicker
-
 function aimCompassAtNearest() {
   if (!nearestCache) return;
-
   const arrow = document.getElementById("arrow");
   const brg = bearing(userPos.lat, userPos.lng, nearestCache.lat, nearestCache.lng);
   const rel = (brg - compassHeading + 360) % 360;
 
-  // ---- Smooth transition near 0°/360° ----
+  // Smooth rotation (no flicker near 0°)
   let diff = rel - lastArrowRotation;
   if (diff > 180) diff -= 360;
   else if (diff < -180) diff += 360;
-
-  // apply a smoothing factor (0.25 = gentle, 1 = instant)
   const smoothed = lastArrowRotation + diff * 0.25;
-
   lastArrowRotation = smoothed;
   arrow.style.transform = `rotate(${smoothed}deg)`;
 
-  // ---- Visual + info ----
-  document.getElementById("headingText").textContent =
-    `Heading: ${compassHeading.toFixed(1)}°`;
+  document.getElementById("headingText").textContent = `Heading: ${compassHeading.toFixed(1)}°`;
   document.getElementById("compassStatus").textContent =
     `Arrow → ${nearestCache.name} (${nearestCache.dist.toFixed(0)} m)`;
-
-  // Optional: highlight arrow green when at destination
-  if (nearestCache.dist <= 10) arrow.classList.add("arrived");
-  else arrow.classList.remove("arrived");
 }
 
-/* ===================== UI ===================== */
+/* ===================== UI & CONTROLS ===================== */
 function buildList() {
   const list = document.getElementById("trailList");
   list.innerHTML = "";
+
   spots.forEach((s, i) => {
     const v = visited.has(s.name);
+    const isCurrent = i === currentSpotIndex;
     const btnLabel = v ? "Read more" : "Find spot to read more…";
+
     const item = document.createElement("div");
-    item.className = "trail-item" + (v ? " visited" : "");
+    item.className = "trail-item" + (v ? " visited" : "") + (isCurrent ? " current-spot" : "");
+
     item.innerHTML = `
       <div class="img-wrap">
         <img src="${s.img}" alt="${s.name}">
         <div class="tick-overlay">✔</div>
       </div>
       <div class="trail-info">
-        <p class="trail-name">${s.name}</p>
+        <p class="trail-name">${i + 1}. ${s.name}</p>
         <p class="trail-dist" id="dist-${toKey(s.name)}">–</p>
-        <button class="read-more" data-spot="${s.name}" ${v ? "" : "disabled"}>${btnLabel}</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="read-more" data-spot="${s.name}" ${v ? "" : "disabled"}>${btnLabel}</button>
+          ${isCurrent && !v ? `<button class="skip-btn" data-index="${i}">Skip this spot</button>` : ""}
+        </div>
       </div>`;
-    item.querySelector(".read-more").onclick = () => openSpotModal(s.name);
+
     list.appendChild(item);
-    const m = spotMarkers[i];
-    if (m?.content) m.content.classList.toggle("visited", v);
+    item.querySelector(".read-more").onclick = () => openSpotModal(s.name);
+    const skip = item.querySelector(".skip-btn");
+    if (skip) skip.onclick = () => {
+      visited.add(s.name);
+      advanceToNextSpot();
+      buildList();
+    };
   });
+
+  updateProgress();
 }
 
 function openSpotModal(name) {
@@ -264,6 +244,7 @@ function openSpotModal(name) {
     <p><strong>Location:</strong> ${s.lat.toFixed(6)}, ${s.lng.toFixed(6)}</p>`;
   document.getElementById("spotModal").showModal();
 }
+
 document.getElementById("closeModal").onclick =
   () => document.getElementById("spotModal").close();
 
@@ -280,8 +261,11 @@ function attachHandlers() {
   document.getElementById("resetBtn").onclick = () => {
     if (confirm("Reset your trail progress?")) {
       visited.clear();
+      currentSpotIndex = 0;
       localStorage.removeItem("visitedSpots");
+      localStorage.removeItem("currentSpotIndex");
       buildList();
+      refreshNearestAndDistances();
     }
   };
 }
