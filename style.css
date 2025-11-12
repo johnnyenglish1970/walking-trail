@@ -247,6 +247,9 @@ button {
   color: #666;
 }
 
+
+
+
 /* ---- Buttons ---- */
 .trail-buttons {
   display: flex;
@@ -276,10 +279,18 @@ button {
   background: #888;
   color: #fff;
 }
+
+
+/* Style tweaks for Found/Skipped buttons */
 .trail-buttons .skip-btn:disabled {
-  background: #ccc;
-  color: #777;
-  cursor: not-allowed;
+  background: #4caf50; /* green for found */
+  color: #fff;
+  cursor: default;
+}
+
+.trail-item.skipped .skip-btn:disabled {
+  background: #999;    /* greyed-out if skipped */
+  color: #fff;
 }
 
 /* ---- States ---- */
