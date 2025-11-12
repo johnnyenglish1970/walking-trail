@@ -283,6 +283,32 @@ dialog {
   margin-bottom: 8px;
 }
 
+/* Pulsing user location dot */
+.user-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: radial-gradient(circle, #fff700 30%, #ffcc00 80%);
+  box-shadow: 0 0 12px rgba(255, 230, 0, 0.8);
+  animation: pulse-user 1.8s infinite ease-in-out;
+}
+
+@keyframes pulse-user {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(255, 230, 0, 0.7);
+  }
+  50% {
+    transform: scale(1.25);
+    box-shadow: 0 0 25px rgba(255, 255, 0, 0.9);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(255, 230, 0, 0.7);
+  }
+}
+
 /* ========== SMALL SCREENS ========== */
 @media (max-width: 600px) {
   #controls {
