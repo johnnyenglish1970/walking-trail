@@ -1,198 +1,117 @@
-/* =====================
-   Global Layout
-===================== */
-/* =====================
-   Page Layout and Reset
-===================== */
+/* ===================== GLOBAL ===================== */
 body {
   margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
-  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background: #f0f2f5;
+  color: #222;
 }
 
-/* =====================
-   Shared Wrapper
-===================== */
-#top-section {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #fff;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* =====================
-   Title Bar Under Banner
-===================== */
-#title-bar {
-  width: 100%;
-  max-width: 800px;
-  background-color: #003366; /* dark BT blue */
-  color: #ffffff;
-  font-size: 1.6rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 12px 0;
-  text-align: center;
-  margin: 0 auto;
-  border-bottom: 3px solid #0057b8; /* lighter accent border */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* =====================
-   Top Banner Image
-===================== */
-#banner {
-  width: 100%;
-  max-width: 800px;           /* same width as map and trail list */
-  height: auto;
-  max-height: 180px;
-  object-fit: cover;
-  display: block;
+h1, h2, h3, p {
   margin: 0;
-  border-bottom: 3px solid #0057b8;
-}
-
-/* =====================
-   Map Layout
-===================== */
-#map {
-  width: 100%;
-  max-width: 800px;           /* exactly matches banner width */
-  height: 360px;              /* reduced height, proportionate to banner */
-  margin: 0;
-  border-bottom: 3px solid #0057b8;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-}
-
-
-/* =====================
-   Control Buttons
-===================== */
-#controls {
-  padding: 0.5rem;
-  background: #fff;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  align-items: center;
-  border-bottom: 1px solid #ddd;
-}
-
-button,
-select {
-  padding: 10px 14px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
 }
 
 button {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 5px;
+  font-family: inherit;
+}
+
+/* ===================== HEADER & LAYOUT ===================== */
+header {
+  position: relative;
+  text-align: center;
   background: #0057b8;
   color: white;
-  cursor: pointer;
-  transition: background 0.25s ease;
 }
 
-button:hover {
-  background: #004494;
-}
-
-button:disabled {
-  background: #aaa;
-  cursor: not-allowed;
-}
-
-select {
-  background: #eee;
-  cursor: pointer;
-}
-
-/* =====================
-   Nearest Point Info
-===================== */
-#nearest {
-  padding: 0.5rem;
-  background: #fff;
-  font-weight: bold;
-  border-bottom: 1px solid #ddd;
-}
-
-/* =====================
-   Compass Section
-===================== */
-#compass {
+header img {
+  display: block;
   width: 100%;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-top: 1px solid #ddd;
-  margin-top: 5px;
-  padding: 10px 0;
-  position: relative;
+  height: auto;
+  margin: 0 auto;
 }
 
-/* Arrow image */
+.title-bar {
+  background: #003c8f;
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding: 12px 0;
+  text-align: center;
+}
+
+/* ===================== MAP SECTION ===================== */
+#map {
+  width: 100%;
+  height: 300px;
+  border: none;
+  display: block;
+  margin: 0 auto;
+}
+
+/* ===================== COMPASS & CONTROLS ===================== */
+.compass-section {
+  text-align: center;
+  margin: 20px 0;
+}
+
 #arrow {
   width: 80px;
   height: 80px;
-  transition: transform 0.2s linear, filter 0.3s ease;
+  margin: 0 auto 10px;
+  background: url("images/arrow.png") no-repeat center/contain;
   position: relative;
+  transition: transform 0.25s linear;
+  opacity: 0.5;
+  filter: grayscale(100%);
 }
 
-/* Red cross overlay when inactive */
 #arrow::after {
   content: "✖";
   position: absolute;
+  color: red;
+  font-size: 2rem;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(1.5);
-  font-size: 42px;
-  color: rgba(220, 0, 0, 0.85);
+  transform: translate(-50%, -50%);
   opacity: 1;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
 }
 
-/* Active compass (remove red cross) */
+#arrow.active {
+  opacity: 1;
+  filter: none;
+}
+
 #arrow.active::after {
-  opacity: 0;
+  content: "";
 }
 
-/* When arrived (green tint) */
-#arrow.arrived {
-  filter: hue-rotate(90deg) brightness(1.1);
+#startCompassBtn {
+  background: #0057b8;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
-#headingText {
-  font-size: 14px;
-  color: #333;
-  margin-top: 6px;
-}
-
-#compassStatus {
-  font-size: 14px;
+#startCompassBtn:disabled {
+  background: #ccc;
   color: #555;
-  margin-top: 4px;
+  cursor: not-allowed;
 }
 
-/* =====================
-   Pulsing User Location
-===================== */
+/* ===================== USER DOT ===================== */
 .user-dot {
   width: 18px;
   height: 18px;
   border-radius: 50%;
   border: 2px solid #fff;
-  background: radial-gradient(circle, #fff700 30%, #ffcc00 80%);
-  box-shadow: 0 0 14px rgba(255, 230, 0, 0.9);
+  background: radial-gradient(circle, #fff700 40%, #ffcc00 80%);
+  box-shadow: 0 0 12px rgba(255, 230, 0, 0.8);
   animation: pulse-user 1.8s infinite ease-in-out;
 }
 
@@ -203,7 +122,7 @@ select {
   }
   50% {
     transform: scale(1.25);
-    box-shadow: 0 0 25px rgba(255, 255, 0, 1);
+    box-shadow: 0 0 25px rgba(255, 255, 0, 0.9);
   }
   100% {
     transform: scale(1);
@@ -211,17 +130,14 @@ select {
   }
 }
 
-/* =====================
-   Trail List Section Strips
-===================== */
+/* ===================== TRAIL LIST ===================== */
 #trailList {
-  padding: 0.5rem;
-  text-align: left;
   max-width: 800px;
   margin: 0 auto;
+  padding: 10px;
 }
 
-/* ========== Trail Spot Cards ========== */
+/* ---- Spot Card ---- */
 .trail-item {
   border-radius: 10px;
   margin: 10px 0;
@@ -237,7 +153,7 @@ select {
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-/* Header Bar */
+/* ---- Header ---- */
 .trail-header {
   background: #bbb;
   color: #fff;
@@ -249,21 +165,29 @@ select {
   background: #0057b8;
 }
 
-/* Body Content */
+/* ---- Body ---- */
 .trail-body {
   display: flex;
   align-items: center;
-  gap: 12px;
   padding: 10px;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+.trail-image {
+  margin-right: 12px;
 }
 .trail-image img {
   width: 80px;
   height: 80px;
   border-radius: 8px;
+  -webkit-border-radius: 8px;
   object-fit: cover;
+  display: block;
 }
 .trail-text {
   flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .trail-snippet {
   font-size: 0.9rem;
@@ -275,7 +199,7 @@ select {
   color: #666;
 }
 
-/* Buttons */
+/* ---- Buttons ---- */
 .trail-buttons {
   display: flex;
   justify-content: space-between;
@@ -310,7 +234,7 @@ select {
   cursor: not-allowed;
 }
 
-/* States */
+/* ---- State Styles ---- */
 .trail-item.visited {
   background: #e8f4ff;
 }
@@ -318,143 +242,82 @@ select {
   background: #eee;
   opacity: 0.7;
 }
-/* Image and tick overlay */
-.img-wrap {
-  position: relative;
-  width: 90px;
-  height: 90px;
-  flex-shrink: 0;
-}
 
-.trail-item img {
-  width: 90px;
-  height: 90px;
-  object-fit: cover;
-  border-radius: 8px;
-  display: block;
-}
-
-.tick-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 128, 0, 0.2);
-  color: #0a0;
-  font-size: 28px;
-  font-weight: bold;
-  border-radius: 8px;
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-
-.visited .tick-overlay {
-  opacity: 1;
-}
-
-/* Text snippet */
-.trail-text {
-  flex: 1;
-  color: #333;
-  font-size: 0.9rem;
-  line-height: 1.35;
-}
-
-/* Distance under text */
-.trail-dist {
-  margin-top: 8px;
-  font-size: 0.85rem;
-  color: #666;
-}
-
-/* Buttons row */
-.trail-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  padding: 10px 14px 14px;
-  border-top: 1px solid #eee;
-}
-
-/* Buttons */
-.trail-buttons button {
-  background: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background 0.2s ease;
-}
-
-.trail-buttons button:hover {
-  background: #005fa3;
-}
-
-.trail-buttons button:disabled {
-  background: #bbb;
-  cursor: not-allowed;
-}
-
-/* =====================
-   Modal Pop-up
-===================== */
+/* ===================== MODAL POPUP ===================== */
 dialog#spotModal {
   border: none;
   border-radius: 12px;
-  max-width: 700px;
-  width: 90%;
   padding: 0;
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.4);
 }
-
-.modal-inner {
-  padding: 16px;
-  text-align: left;
+#spotTitle {
+  background: #0057b8;
+  color: white;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 12px 12px 0 0;
 }
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-}
-
-.modal-body img {
-  width: 100%;
-  border-radius: 10px;
-  margin-bottom: 12px;
-}
-
-#closeModal {
-  background: #eee;
+#spotBody {
+  padding: 14px;
+  background: #fff;
+  font-size: 0.95rem;
   color: #333;
+}
+#closeModal {
+  background: #888;
+  color: white;
   border: none;
-  border-radius: 6px;
   padding: 8px 12px;
+  margin: 10px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: bold;
 }
-
 #closeModal:hover {
-  background: #ddd;
+  background: #555;
 }
 
-/* Skipped spot styling */
-.trail-item.skipped {
-  opacity: 0.6;
-  background: #eee;
+/* ===================== FOOTER / RESET ===================== */
+#resetBtn {
+  display: block;
+  margin: 20px auto;
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#resetBtn:hover {
+  background: #b71c1c;
 }
 
-.trail-item.skipped .trail-title {
-  color: #888;
-  text-decoration: line-through;
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 600px) {
+  .trail-body {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .trail-image {
+    margin: 0 0 8px 0;
+  }
+  .trail-image img {
+    width: 100%;
+    height: auto;
+  }
+  .trail-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .trail-buttons button {
+    width: 100%;
+  }
 }
 
-button.skip-btn:disabled {
-  background: #ccc;
-  color: #666;
-  cursor: not-allowed;
+/* ===================== iOS Safari tweaks ===================== */
+@supports (-webkit-touch-callout: none) {
+  .trail-item {
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  }
 }
