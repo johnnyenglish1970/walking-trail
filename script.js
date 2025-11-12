@@ -66,6 +66,8 @@ function makeDotMarker({ map, position, className, title }) {
   });
 }
 
+let firstFitDone = false; // track whether we've zoomed to fit yet
+
 function initMap() {
   const mapOpts = { center: userPos, zoom: 17 };
   if (MAP_ID) mapOpts.mapId = MAP_ID;
@@ -89,11 +91,8 @@ function initMap() {
     makeDotMarker({ map, position: { lat: s.lat, lng: s.lng }, className: "spot-dot", title: s.name })
   );
 
-  // ---- Fit map to show all spots + your location ----
-  const bounds = new google.maps.LatLngBounds();
-  spots.forEach(s => bounds.extend({ lat: s.lat, lng: s.lng }));
-  bounds.extend(userPos); // include your last known position
-  map.fitBounds(bounds, 80); // 80px padding around edges
+  // ---- Fit map initially ----
+  fitMapToAll();
 
   // ---- Continue setup ----
   buildList();
@@ -109,9 +108,23 @@ function initMap() {
 /* ===================== LOCATION UPDATES ===================== */
 function onPositionUpdated() {
   saveState();
-  map.setCenter(userPos);
   if (userMarker.setPosition) userMarker.setPosition(userPos);
+  if (!firstFitDone) {
+    fitMapToAll();        // auto-fit only once on first GPS update
+    firstFitDone = true;
+  } else {
+    map.panTo(userPos);   // just recentre smoothly afterwards
+  }
   refreshNearestAndDistances();
+}
+
+// ---- Helper to fit all spots + user position ----
+function fitMapToAll() {
+  if (!map || !spots?.length) return;
+  const bounds = new google.maps.LatLngBounds();
+  spots.forEach(s => bounds.extend({ lat: s.lat, lng: s.lng }));
+  if (userPos?.lat) bounds.extend(userPos);
+  map.fitBounds(bounds, 80); // 80px padding
 }
 
 function refreshNearestAndDistances() {
