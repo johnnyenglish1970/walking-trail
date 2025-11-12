@@ -1,32 +1,9 @@
 /* =====================
    Global Layout
 ===================== */
-#banner {
-  display: block;
-  width: 100%;
-  max-width: 800px;           /* align with trail list */
-  height: auto;
-  max-height: 180px;
-  object-fit: cover;
-  margin: 0 auto;             /* center horizontally */
-  border-bottom: 3px solid #0057b8;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-}
-
 /* =====================
-   Map Layout
+   Page Layout and Reset
 ===================== */
-#map {
-  width: 100%;
-  max-width: 800px;           /* align with banner and trail list */
-  height: 400px;              /* fixed height for consistent layout */
-  margin: 0 auto;             /* center it */
-  border-bottom: 2px solid #ddd;
-  border-top: 2px solid #ddd;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Reset body spacing so banner touches top of page */
 body {
   margin: 0;
   padding: 0;
@@ -34,6 +11,45 @@ body {
   background: #f5f5f5;
   text-align: center;
 }
+
+/* =====================
+   Shared Wrapper
+===================== */
+#top-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* =====================
+   Top Banner Image
+===================== */
+#banner {
+  width: 100%;
+  max-width: 800px;           /* same width as map and trail list */
+  height: auto;
+  max-height: 180px;
+  object-fit: cover;
+  display: block;
+  margin: 0;
+  border-bottom: 3px solid #0057b8;
+}
+
+/* =====================
+   Map Layout
+===================== */
+#map {
+  width: 100%;
+  max-width: 800px;           /* exactly matches banner width */
+  height: 360px;              /* reduced height, proportionate to banner */
+  margin: 0;
+  border-bottom: 3px solid #0057b8;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
 
 /* =====================
    Control Buttons
