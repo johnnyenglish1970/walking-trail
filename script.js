@@ -51,7 +51,6 @@ function initMap() {
 
   const style = document.createElement("style");
   style.textContent = `
-    .user-dot{width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle,yellow 40%,orange 80%);}
     .next-dot{width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle,#00b2ff 30%,#0057b8 80%);}
     .spot-dot{width:14px;height:14px;border-radius:50%;border:2px solid #fff;background:linear-gradient(#00b2ff,#0057b8);}
     .spot-dot.visited{background:linear-gradient(#4caf50,#2e7d32);}
