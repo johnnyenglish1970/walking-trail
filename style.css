@@ -331,32 +331,42 @@ button {
 }
 
 /* ===================== MODAL POPUP ===================== */
+
+/* ===================== MODAL POPUP ===================== */
 dialog#spotModal {
   border: none;
   border-radius: 12px;
   padding: 0;
   max-width: 420px;
   width: 90%;
+  max-height: 85vh;             /* limit popup height to 85% of screen */
+  overflow: hidden;             /* prevent outer scrollbars */
   box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-  overflow: hidden;
 }
 
-#spotHeader {
+/* Scrollable inner body */
+#spotBody {
+  max-height: 65vh;             /* leave room for title and button */
+  overflow-y: auto;             /* enable internal scroll if needed */
+  padding: 14px;
+  background: #fff;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Title bar with close button on the right */
+#spotTitle {
   background: #0057b8;
   color: white;
   font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 12px 12px 0 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 14px;
 }
 
-#spotTitle {
-  font-size: 1.1rem;
-  margin: 0;
-  flex: 1;
-}
-
+/* Close button inside title bar */
 #closeModal {
   background: transparent;
   color: white;
