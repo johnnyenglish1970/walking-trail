@@ -236,12 +236,15 @@ function refreshNextSpot() {
 
 /* ===================== PROGRESS ===================== */
 function updateProgress() {
-  const t = document.getElementById("progressText");
-  if (t)
-    t.textContent = `Progress: ${Math.min(
-      currentSpotIndex + 1,
-      spots.length
-    )} / ${spots.length}`;
+  const completed = visited.size + skipped.size;
+  const total = spots.length;
+
+  const percent = Math.round((completed / total) * 100);
+
+  document.getElementById("progressText").textContent =
+    `Progress: ${completed} / ${total}`;
+
+  document.getElementById("progressBarFill").style.width = percent + "%";
 }
 
 /* ===================== COMPASS ===================== */
