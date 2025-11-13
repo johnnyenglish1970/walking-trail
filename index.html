@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -17,53 +18,51 @@
   
 </head>
 <body>
-<!-- Header wrapper (same width as trail list) -->
-<div id="top-wrap">
-  <img id="banner" src="images/bt_tt.jpg" alt="Adastral Park Trail Banner">
-  <div id="title-bar">Heritage Walking Trail</div>
-</div>
-
-<div id="map"></div>
-
- <div id="controls">
-  <button id="updateBtn">🔄 Update My Position</button>
-  <button id="resetBtn">♻️ Reset Trail</button>
-  <select id="testSelect"><option value="">🧪 Test location…</option></select>
-</div>
-  
-
-  <div id="compass-controls">
-  <!-- LEFT: Compass -->
-  <div id="compass-section">
-    <div id="arrow-container">
-      <img id="arrow" src="images/arrow.svg" alt="Compass Arrow">
-      <div id="cross-overlay">✖</div>
+  <div id="page-wrap">
+    <!-- Header wrapper (same width as trail list) -->
+    <div id="top-wrap">
+      <img id="banner" src="images/bt_tt.jpg" alt="Adastral Park Trail Banner">
+      <div id="title-bar">Heritage Walking Trail</div>
     </div>
-    <p id="headingText">Heading: 0°</p>
-    <button id="startCompassBtn">🧭 Enable compass for direction</button>
+
+    <div id="map"></div>
+
+    <div id="controls">
+      <button id="updateBtn">🔄 Update My Position</button>
+      <button id="resetBtn">♻️ Reset Trail</button>
+      <select id="testSelect"><option value="">🧪 Test location…</option></select>
+    </div>
+
+    <div id="compass-controls">
+      <!-- LEFT: Compass -->
+      <div id="compass-section">
+        <div id="arrow-container">
+          <img id="arrow" src="images/arrow.svg" alt="Compass Arrow">
+          <div id="cross-overlay">✖</div>
+        </div>
+        <p id="headingText">Heading: 0°</p>
+        <button id="startCompassBtn">🧭 Enable compass for direction</button>
+      </div>
+
+      <!-- RIGHT: Progress + next spot -->
+      <div id="status-section">
+        <p id="progressText">Progress: 0 / 0</p>
+        <p id="nearestName">Next Spot: —</p>
+      </div>
+    </div>
+
+    <div id="trailList"></div>
   </div>
 
-  <!-- RIGHT: Progress + next spot -->
-  <div id="status-section">
-    <p id="progressText">Progress: 0 / 0</p>
-    <p id="nearestName">Next Spot: —</p>
-  </div>
-</div>
-
-  
-  
-
-  <div id="trailList"></div>
-
+  <!-- Modal -->
   <dialog id="spotModal">
-  <div id="spotTitle">
-    <span id="spotTitleText"></span>
-    <button id="closeModal" title="Close">&times;</button>
-  </div>
-  <div id="spotBody"></div>
-</dialog>
-  
-
+    <div id="spotTitle">
+      <span id="spotTitleText"></span>
+      <button id="closeModal" title="Close">&times;</button>
+    </div>
+    <div id="spotBody"></div>
+  </dialog>
 </body>
 </html>
+
 
