@@ -322,7 +322,7 @@ function openSpotModal(name) {
     `;
   }
 
-  document.getElementById("spotTitle").textContent = s.name;
+ document.getElementById("spotTitleText").textContent = s.name;
   document.getElementById("spotBody").innerHTML = `
     <img src="${s.img}" style="width:100%;border-radius:10px;margin-bottom:12px;">
     <p>${s.info}</p>
