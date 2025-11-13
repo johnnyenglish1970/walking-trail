@@ -401,7 +401,7 @@ Listen to Mike Warden recall the day that the Queen formally opened the site in 
     <div class="audio-section">
       <h4>Audio</h4>
       <div class="audio-item">
-        <button class="audio-btn" onclick="playAudio('audio/welcome.mp3')">▶</button>
+        <button class="audio-btn" onclick="playAudio('audio/welcome.mp3', this)">▶</button>
         <span>Welcome Message</span>
       </div>
     </div>
@@ -487,7 +487,7 @@ function openSpotModal(name) {
           .map(
             a => `
           <div class="audio-item">
-            <button class="audio-btn" onclick="playAudio('${a.src}')">▶</button>
+             <button class="audio-btn" onclick="playAudio('${a.src}', this)">▶</button>
             <span>${a.label}</span>
           </div>
         `
