@@ -288,6 +288,37 @@ function aimCompassAtNearest() {
   status.textContent = `Arrow → ${nearestCache.name} (${nearestCache.dist.toFixed(0)} m)`;
 }
 
+/* ===================== WELCOME CARD ===================== */
+function createWelcomeCard() {
+  const w = welcomeSpot;
+
+  const card = document.createElement("div");
+  card.className = "trail-item welcome-item";
+
+  card.innerHTML = `
+    <div class="trail-header" style="background:#0057b8;">
+      ${w.name}
+    </div>
+
+    <div class="trail-body">
+      <div class="trail-image"><img src="${w.img}" alt="Welcome"></div>
+
+      <div class="trail-text">
+        <p class="trail-snippet">Tap to read more about your trail.</p>
+      </div>
+    </div>
+
+    <div class="trail-buttons">
+      <button class="read-more" data-welcome="1">Read More</button>
+    </div>
+  `;
+
+  card.querySelector(".read-more").onclick = () => openWelcomeModal();
+
+  return card;
+}
+
+
 /* ===================== UI & CONTROLS ===================== */
 function buildList() {
   const list = document.getElementById("trailList");
