@@ -5,10 +5,22 @@ const welcomeSpot = {
   name: "Welcome to the Adastral Park Heritage Trail",
   img: "images/welcome.jpg",   // supply any image you like
   info: `
-    <p>Welcome to the Adastral Park Heritage Walking Trail!</p>
-    <p>This short guided walk will take you around some of the most important and historic locations on site.</p>
-    <p>Each point on the trail includes information, photos, audio memories and directions.</p>
-    <p>When you're ready, start exploring by heading to the first landmark on the list below.</p>
+    Welcome to the Adastral Park Walking Trail.
+
+    <p>There are 15 spots on the trail which will guide you around key locations of the site. The trail will take approximately 1 hour.</p>
+
+    <p>To use the app, just follow the direction finder to discover each location in turn. When you get close to a location, the content will be unlocked for you to view. The content is a mix of text, images and audio.
+Please be aware of your surroundings at all times and please use the pedestrian paths around the site. Take care when crossing roads.</p>
+
+    <p>Introduction to the Site</p>
+
+    <p>Adastral Park was built as the Post Office Research Centre in the early 1970s, to replace the original research station at Dollis Hill in North London. During the first half of the 1970s purpose built buildings gradually replaced legacy buildings left from the days when the site was part of RAF Martlesham Heath. A large part of the accommodation was built to house specialist and general laboratories and workshops, reflecting that the whole site was dedicated to (mostly hardware) research and development. The initial building work was the main building complex, consisting of the Antares building, the Orion building, the two towers and the Research Services Block with the loading bays. Many other (differently designed) buildings followed though.
+The telecommunications part of the Post Office became BT in the early 1980s and the name of the site changed to BT Laboratories. More name changes followed, until in 1999 the site was renamed Adastral Park (a nod to RAF Martlesham Heath's R&D purpose; the RAF motto is "per ardua ad astra" = through adversity to the stars [roughly]). It also became the first and only BT site to house independent companies, under the Innovation Martlesham banner.</p>
+
+     <p>Listen to Lisa Perkins talk about the impact of the Park:</p>
+
+     <p>Listen to Mike Warden recall the day that the Queen formally opened the site in 1975:</p>
+
   `,
   isWelcome: true              // special behaviour flag
 };
