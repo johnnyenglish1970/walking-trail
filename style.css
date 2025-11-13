@@ -291,6 +291,24 @@ button {
   }
 }
 
+/* ===================== PROGRESS BAR ===================== */
+#progressContainer {
+  width: 100%;
+  max-width: 800px;
+  height: 14px;
+  background: #ddd;
+  border-radius: 8px;
+  margin: 10px auto 5px auto;
+  overflow: hidden;
+}
+
+#progressBarFill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #0057b8, #00b2ff);
+  transition: width 0.4s ease;
+}
+
 /* ===================== USER DOT ===================== */
 .user-dot {
   width: 18px;
