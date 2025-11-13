@@ -1,6 +1,18 @@
 const IMAGE_PATH = "images/";
 const IMAGE_EXT = "jpg";
 
+const welcomeSpot = {
+  name: "Welcome to the Adastral Park Heritage Trail",
+  img: "images/welcome.jpg",   // supply any image you like
+  info: `
+    <p>Welcome to the Adastral Park Heritage Walking Trail!</p>
+    <p>This short guided walk will take you around some of the most important and historic locations on site.</p>
+    <p>Each point on the trail includes information, photos, audio memories and directions.</p>
+    <p>When you're ready, start exploring by heading to the first landmark on the list below.</p>
+  `,
+  isWelcome: true              // special behaviour flag
+};
+
 const spots = [
  {
   name: "Main Lab Block (Orion/Antares)",
