@@ -461,7 +461,22 @@ button {
   opacity: 0.7;
 }
 
-/* ===================== MODAL POPUP ===================== */
+/* ===================== RESET WRAPPER ===================== */
+#reset-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: 25px auto;
+  text-align: center;
+}
+
+#resetBtn {
+  background: #b00020;
+  color: #fff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
 /* ===================== MODAL POPUP ===================== */
 dialog#spotModal {
