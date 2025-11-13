@@ -191,60 +191,101 @@ function updateProgress() {
 function setupCompassButton() {
   const btn = document.getElementById("startCompassBtn");
   const arrow = document.getElementById("arrow");
+  const cross = document.getElementById("cross-overlay");
   const status = document.getElementById("compassStatus");
 
-  arrow.classList.remove("active");
+  if (!btn || !arrow || !cross || !status) {
+    console.error("Compass UI elements missing");
+    return;
+  }
 
-  btn.addEventListener("click", () => {
-    status.textContent = "Requesting motion permission...";
-    if (typeof DeviceOrientationEvent !== "undefined" &&
-        typeof DeviceOrientationEvent.requestPermission === "function") {
-      DeviceOrientationEvent.requestPermission().then(res => {
-        if (res === "granted") activateCompass();
-        else status.textContent = "Permission denied.";
-      }).catch(() => {
-        status.textContent = "Compass not supported.";
-      });
-    } else activateCompass();
-  });
+  // Reset to inactive state
+  arrow.classList.remove("active");
+  cross.style.opacity = 1;
+  status.textContent = "Compass inactive";
+
+  btn.onclick = async () => {
+    status.textContent = "Requesting permission…";
+
+    try {
+      // iOS 13+ requires user permission
+      if (typeof DeviceOrientationEvent !== "undefined" &&
+          typeof DeviceOrientationEvent.requestPermission === "function") {
+
+        const permission = await DeviceOrientationEvent.requestPermission();
+
+        if (permission !== "granted") {
+          status.textContent = "Compass permission denied.";
+          return;
+        }
+      }
+
+      activateCompass();
+
+    } catch (err) {
+      console.error(err);
+      status.textContent = "Compass not supported.";
+    }
+  };
 
   function activateCompass() {
     window.addEventListener("deviceorientation", handleOrientation, true);
+
+    arrow.classList.add("active");
+    cross.style.opacity = 0;
+
     btn.textContent = "🧭 Compass active";
     btn.disabled = true;
-    arrow.classList.add("active");
+
     status.textContent = "Compass active ✓";
   }
 
   function handleOrientation(e) {
     let heading;
+
+    // iOS Safari
     if (e.webkitCompassHeading !== undefined) {
       heading = e.webkitCompassHeading;
+
+    // Android Chrome
     } else if (e.alpha !== null) {
-      heading = 360 - e.alpha - 180;
-      if (heading < 0) heading += 360;
+      heading = 360 - e.alpha; // corrected (do NOT subtract 180)
     }
-    if (!isNaN(heading)) {
-      compassHeading = heading;
-      aimCompassAtNearest();
-    }
+
+    if (heading == null || isNaN(heading)) return;
+
+    compassHeading = (heading + 360) % 360;
+
+    aimCompassAtNearest();
   }
 }
 
+
 function aimCompassAtNearest() {
   if (!nearestCache) return;
+
   const arrow = document.getElementById("arrow");
+  const headingText = document.getElementById("headingText");
+  const status = document.getElementById("compassStatus");
+
+  // Bearing to target
   const brg = bearing(userPos.lat, userPos.lng, nearestCache.lat, nearestCache.lng);
+
+  // Relative rotation
   const rel = (brg - compassHeading + 360) % 360;
+
+  // Smooth the rotation
   let diff = rel - lastArrowRotation;
   if (diff > 180) diff -= 360;
   else if (diff < -180) diff += 360;
-  const smoothed = lastArrowRotation + diff * 0.25;
-  lastArrowRotation = smoothed;
-  arrow.style.transform = `rotate(${smoothed}deg)`;
-  document.getElementById("headingText").textContent = `Heading: ${compassHeading.toFixed(1)}°`;
-  document.getElementById("compassStatus").textContent =
-    `Arrow → ${nearestCache.name} (${nearestCache.dist.toFixed(0)} m)`;
+
+  lastArrowRotation += diff * 0.25;
+
+  arrow.style.transform = `rotate(${lastArrowRotation}deg)`;
+
+  // UI updates
+  headingText.textContent = `Heading: ${compassHeading.toFixed(1)}°`;
+  status.textContent = `Arrow → ${nearestCache.name} (${nearestCache.dist.toFixed(0)} m)`;
 }
 
 /* ===================== UI & CONTROLS ===================== */
