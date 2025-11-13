@@ -663,10 +663,12 @@ dialog#spotModal {
   }
 
   .trail-body {
-    gap: 8px;
-    flex-wrap: nowrap;
-  }
-
+  flex-direction: row !important;
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+  
   .trail-image img {
     width: 70px;
     height: 70px;
