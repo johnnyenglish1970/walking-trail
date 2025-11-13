@@ -8,7 +8,7 @@ const spots = [
     lng: 1.27986381,
     radius: 10,
     info: <p>Originally known as the Main Lab Block or B62. This building housed a significant proportion of the labs and offices on site when it was built. It was built to a very high specification and took a long time to complete – it was started in 1971 and was not officially opened (by the Queen) until late 1975. ...</p>
-<p><p>Listen to Mike Warden talk about his memories of the Hurricane damage in 1987.</p></p>
+<p>Listen to Mike Warden talk about his memories of the Hurricane damage in 1987.</p>
 <p>Listen to Pete Cochrane recall some unusual incidents with low flying aircraft.</p>,
     audio: [
     { label: "Mike Warden – Hurricane 1987", src: "audio/hurricane.mp3" },
