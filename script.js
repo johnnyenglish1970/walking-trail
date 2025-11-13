@@ -412,7 +412,7 @@ function buildList() {
       </div>
     `;
 
-    // Button actions
+  // Button actions
     item.querySelector(".read-more").onclick = () => openSpotModal(s.name);
     item.querySelector(".skip-btn").onclick = () => skipSpot(s.name);
 
@@ -430,25 +430,6 @@ function buildList() {
   });
 }
 
-
-    // Events
-    item.querySelector(".read-more").onclick = () => openSpotModal(s.name);
-    item.querySelector(".skip-btn").onclick = () => skipSpot(s.name);
-
-    const skipBtn = item.querySelector(".skip-btn");
-            if (isVisited || isSkipped) {
-          skipBtn.disabled = true;
-        }
-    
-    list.appendChild(item);
-
-    const m = spotMarkers[i];
-    if (m?.content) {
-      m.content.classList.toggle("visited", isVisited);
-      m.content.classList.toggle("skipped", isSkipped);
-    }
-  });
-}
 
 /* ===================== POPUP ===================== */
 function openSpotModal(name) {
