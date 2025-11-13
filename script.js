@@ -324,20 +324,73 @@ function buildList() {
   const list = document.getElementById("trailList");
   list.innerHTML = "";
 
+  /* -------------------------------------------------------
+     FIRST: Add the Welcome Card
+  -------------------------------------------------------- */
+  const welcome = document.createElement("div");
+  welcome.className = "trail-item welcome-card";
+
+  welcome.innerHTML = `
+    <div class="trail-header">
+      <h3>Welcome to the Heritage Walking Trail</h3>
+    </div>
+
+    <div class="trail-body">
+      <div class="trail-image">
+        <img src="images/bt_tt.jpg" alt="Welcome">
+      </div>
+      <div class="trail-text">
+        <p class="trail-snippet">
+          Start your journey around Adastral Park. Follow the trail points,
+          learn about the site's rich history, and discover hidden stories along the way.
+        </p>
+        <p style="font-size:0.85rem;color:#666;">
+          This introductory point does not require GPS and is always available.
+        </p>
+      </div>
+    </div>
+
+    <div class="trail-buttons">
+      <button class="read-more" data-spot="WELCOME">Read More</button>
+    </div>
+  `;
+
+  // Clicking shows a simple modal
+  welcome.querySelector(".read-more").onclick = () => {
+    document.getElementById("spotTitleText").textContent = "Welcome";
+    document.getElementById("spotBody").innerHTML = `
+      <p>Welcome to the Adastral Park Heritage Trail!</p>
+      <p>
+        This walking trail will guide you around significant historic and modern
+        locations around the park. As you reach each point, you'll unlock its story,
+        listen to personal recollections, and view archival images.
+      </p>
+      <p>Enjoy your walk and explore at your own pace.</p>
+    `;
+    document.getElementById("spotModal").showModal();
+  };
+
+  list.appendChild(welcome);
+
+  /* -------------------------------------------------------
+     NEXT: Build the real trail spots
+  -------------------------------------------------------- */
   spots.forEach((s, i) => {
     const isVisited = visited.has(s.name);
     const isSkipped = skipped.has(s.name);
     const disabled = isVisited || isSkipped;
 
-    const snippet = (s.info || "").split(".")[0] + "."; // short preview
+    const snippet = (s.info || "").split(".")[0] + ".";
 
     const item = document.createElement("div");
-    item.className = "trail-item" + (isVisited ? " visited" : isSkipped ? " skipped" : "");
+    item.className =
+      "trail-item" + (isVisited ? " visited" : isSkipped ? " skipped" : "");
 
     item.innerHTML = `
       <div class="trail-header ${isVisited ? "visited" : ""}">
         <h3>${s.name}</h3>
       </div>
+
       <div class="trail-body">
         <div class="trail-image">
           <img src="${s.img}" alt="${s.name}">
@@ -347,13 +400,36 @@ function buildList() {
           <p class="trail-dist" id="dist-${toKey(s.name)}">–</p>
         </div>
       </div>
+
       <div class="trail-buttons">
-        <button class="read-more" data-spot="${s.name}" ${!isVisited ? "disabled" : ""}>Read More</button>
+        <button class="read-more" data-spot="${s.name}" ${!isVisited ? "disabled" : ""}>
+          Read More
+        </button>
+
         <button class="skip-btn" data-skip="${s.name}">
-            ${isVisited ? "✅ Found!" : isSkipped ? "⏭️ Skipped" : "Skip This Spot"}
-          </button>
+          ${isVisited ? "✅ Found!" : isSkipped ? "⏭️ Skipped" : "Skip This Spot"}
+        </button>
       </div>
     `;
+
+    // Button actions
+    item.querySelector(".read-more").onclick = () => openSpotModal(s.name);
+    item.querySelector(".skip-btn").onclick = () => skipSpot(s.name);
+
+    const skipBtn = item.querySelector(".skip-btn");
+    if (disabled) skipBtn.disabled = true;
+
+    list.appendChild(item);
+
+    // Update marker styles
+    const m = spotMarkers[i];
+    if (m?.content) {
+      m.content.classList.toggle("visited", isVisited);
+      m.content.classList.toggle("skipped", isSkipped);
+    }
+  });
+}
+
 
     // Events
     item.querySelector(".read-more").onclick = () => openSpotModal(s.name);
