@@ -125,20 +125,24 @@ button {
 }
 
 /* ===================== MAP ===================== */
+
 #map {
-  height: 360px;
-  border-bottom: 2px solid #ddd;
-  background: #e9eef5;
+  display: block;
+  width: 100%;
+  max-width: 800px;          /* keeps same width as banner and trail list */
+  height: 380px;             /* consistent height */
+  margin: 0 auto 10px auto;  /* centers map and adds small spacing below */
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;          /* hides any map overflow */
+  background: #e9eef5;       /* fallback background color */
 }
 
+/* Adjust height for mobile devices */
 @media (max-width: 480px) {
-  .trail-body {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .trail-image img {
-    width: 100%;
-    height: auto;
+  #map {
+    height: 300px;
+    max-width: 95%;          /* small padding on edges for mobile view */
   }
 }
 
@@ -397,6 +401,17 @@ button {
   color: #fff;
 }
 
+/* Responsive trail list adjustments */
+@media (max-width: 480px) {
+  .trail-body {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .trail-image img {
+    width: 100%;
+    height: auto;
+  }
+}
 
 /* Style tweaks for Found/Skipped buttons */
 .trail-buttons .skip-btn:disabled {
