@@ -34,16 +34,24 @@
   <div id="progressBar"><span id="progressText">Progress: 0 / 0</span></div>
   <div id="nearest">Next spot: <span id="nearestName">–</span></div>
 
-  <div id="compass">
-  <div id="arrow-container">
-    <img id="arrow" src="images/arrow.svg" alt="Compass Arrow">
-    <div id="cross-overlay">✖</div>
+  <div id="compass-controls">
+  <!-- Left: Compass + heading -->
+  <div id="compass-section">
+    <div id="arrow-container">
+      <img id="arrow" src="images/arrow.svg" alt="Compass Arrow">
+      <div id="cross-overlay">✖</div>
+    </div>
+    <p id="headingText">Heading: 0°</p>
+    <button id="startCompassBtn">🧭 Enable compass for direction</button>
   </div>
-  <button id="startCompassBtn">🧭 Enable compass for direction</button>
-  <p id="headingText">Heading: 0°</p>
-  <p id="compassStatus">Compass inactive</p>
-  
+
+  <!-- Right: Progress + next spot -->
+  <div id="status-section">
+    <p id="progressText">Progress: 0 / 0</p>
+    <p id="nearestName">Next Spot: —</p>
+  </div>
 </div>
+
   
   
 
