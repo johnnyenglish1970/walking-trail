@@ -57,6 +57,7 @@ const spots = [
       <p>The Adastral Acoustic Block includes anechoic chambers and a reverberation room and is an important facility for the site to allow audio experimentation and measurement – a key part of telecommunications.
 Listen to Chris Adams describe how an anechoic chamber and reverberation room works and how they are used. </p>
        <br> <audio controls src="audio/accoustic1.mp3"></audio>
+    `,
   },
   {
     name: "Old Post Room",
@@ -75,7 +76,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 <br> <audio controls src="audio/redevelopment.mp3"></audio>
         In this recording, Bruce talks about the specific changes that were made as part of the redevelopment:</p>
 <br> <audio controls src="audio/redevelopment2.mp3"></audio>
-       
+       `,
   },
   {
     name: "B1",
@@ -89,6 +90,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 
 <p><strong>Listen to Bernie Fenn talk about trying to spot the ghost:</strong><br>
 <audio controls src="audio/b1ghost.mp3"></audio></p>
+`,
   },
   {
     name: "Waveguide",
@@ -105,6 +107,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 <p>BT became a world leader in fibre-optic technology during the late 1970s and 1980s.</p>
 
 <p>Scroll the slider images below to see installation of the waveguide project.</p>
+`,
   },
   {
     name: "Submarine, Robotics and Drones",
@@ -119,6 +122,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 
 <p><strong>Listen to Bruce Boxall discuss his silicon work in the submarine network:</strong><br>
 <audio controls src="audio/silicon.mp3"></audio></p>
+`,
   },
   {
     name: "The Digitech Centre",
@@ -133,6 +137,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 
 <p><strong>Listen to Meral Bence describe how the centre was created:</strong><br>
 <audio controls src="audio/digitech.mp3"></audio></p>
+`,
   },
   {
     name: "Martlesham Teleport",
@@ -143,6 +148,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 
 <p><strong>Listen to Jon Wakeling discuss the teleport’s history:</strong><br>
 <audio controls src="audio/teleport.mp3"></audio></p>
+          `,
   },
   {
     name: "ROMES",
@@ -154,6 +160,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 
 <p><strong>Listen to Jon Wakeling talk about the area:</strong><br>
 <audio controls src="audio/romes.mp3"></audio></p>
+          `,
   },
   {
     name: "Smart Home",
@@ -165,6 +172,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 
 <p><strong>Listen to Meral Bence describe this new facility:</strong><br>
 <audio controls src="audio/smarthome.mp3"></audio></p>
+          `,
   },
   {
     name: "Sports Hall",
@@ -176,6 +184,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 
 <p><strong>Listen to Bernie Fenn talk about sport at Adastral Park:</strong><br>
 <audio controls src="audio/sports.mp3"></audio></p>
+          `,
   },
   {
     name: "Gaming",
@@ -187,6 +196,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 
 <p><strong>Listen to Chris Adams talk about the development of Wireplay:</strong><br>
 <audio controls src="audio/wireplay.mp3"></audio></p>
+          `,
   },
   {
     name: "Emergency Services",
@@ -207,6 +217,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 
 <p><strong>Bernie Fenn talks about a worrying power incident:</strong><br>
 <audio controls src="audio/power.mp3"></audio></p>
+          `,
 
   },
   {
@@ -222,6 +233,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 
 <p><strong>Listen to Andy outline situations where the NoC resolves network issues:</strong><br>
 <audio controls src="audio/nocscenarios.mp3"></audio></p>
+          `,
   },
   {
     name: "Innovation Martlesham",
@@ -233,6 +245,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 
 <p><strong>Listen to Nicky Daniels discuss Innovation Martlesham:</strong><br>
 <audio controls src="audio/placeholder24.mp3"></audio></p>
+          `,
   },
   {
     name: "Heritage Centre",
@@ -244,6 +257,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 
 <p><strong>Listen to Terry Henshall talk about the new centre:</strong><br>
 <audio controls src="audio/heritage.mp3"></audio></p>
+          `,
   }
 ];
 
