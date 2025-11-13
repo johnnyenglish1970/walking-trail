@@ -53,7 +53,7 @@ const spots = [
     lat: 52.05671008,
     lng: 1.28002642,
     radius: 10,
-    info: 
+     info: `
       <p>The Adastral Acoustic Block includes anechoic chambers and a reverberation room and is an important facility for the site to allow audio experimentation and measurement – a key part of telecommunications.
 Listen to Chris Adams describe how an anechoic chamber and reverberation room works and how they are used. </p>
        <br> <audio controls src="audio/accoustic1.mp3"></audio>
@@ -95,7 +95,8 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
     lat: 52.06077374,
     lng: 1.28135277,
     radius: 15,
-    info: <p>Beneath these slabs lies one of the first microwave waveguides installed by the Post Office Research Centre. One of the first research divisions to move from Dollis Hill was the waveguide transmission division.</p>
+     info: ` 
+       <p>Beneath these slabs lies one of the first microwave waveguides installed by the Post Office Research Centre. One of the first research divisions to move from Dollis Hill was the waveguide transmission division.</p>
 
 <p>Microwave signals were transmitted through precision-engineered piping, with a wire helix wrapped around the outside to contain the energy. These buried waveguides were seen as more reliable and faster than transmitting through the air.</p>
 
@@ -110,7 +111,8 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
     lat: 52.0593466,
     lng: 1.28245784,
     radius: 18,
-    info: <p>This facility originally housed subsea cable testing, which is why the 12.5-tonne gantry crane still remains. Today the building supports robotics and drone R&D and contains indoor testbeds that simulate real-world civil engineering environments such as ducts, poles, and underground chambers.</p>
+     info: `
+     <p>This facility originally housed subsea cable testing, which is why the 12.5-tonne gantry crane still remains. Today the building supports robotics and drone R&D and contains indoor testbeds that simulate real-world civil engineering environments such as ducts, poles, and underground chambers.</p>
 
 <p><strong>Listen to Jon Wakeling talk about current research:</strong><br>
 <audio controls src="audio/robotics.mp3"></audio></p>
@@ -123,7 +125,8 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
     lat: 52.05925789,
     lng: 1.28514944,
     radius: 15,
-    info: <p>The Digitech Centre, opened in 2021, is a partnership between BT and the University of Suffolk. It provides undergraduate and postgraduate teaching across a wide range of digital technology disciplines.</p>
+    info: `
+      <p>The Digitech Centre, opened in 2021, is a partnership between BT and the University of Suffolk. It provides undergraduate and postgraduate teaching across a wide range of digital technology disciplines.</p>
 
 <p><strong>Listen to Tim Whitley discuss the new centre:</strong><br>
 <audio controls src="audio/digitech2.mp3"></audio></p>
@@ -146,7 +149,8 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
     lat: 52.05926545,
     lng: 1.2858495,
     radius: 15,
-    info: <p>This area was once used to store emergency exchange hardware for rural areas — equipment that could be deployed following fire, flood, or major outages. Technology has since moved on, and the area now supports research into space communications.</p>
+     info: `
+     <p>This area was once used to store emergency exchange hardware for rural areas — equipment that could be deployed following fire, flood, or major outages. Technology has since moved on, and the area now supports research into space communications.</p>
 
 <p><strong>Listen to Jon Wakeling talk about the area:</strong><br>
 <audio controls src="audio/romes.mp3"></audio></p>
@@ -156,7 +160,8 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
     lat: 52.0592116,
     lng: 1.28462507,
     radius: 15,
-    info: <p>This experimental Smart Home is being developed by BT and the University of Suffolk as part of the Digitech Project. It enables research and testing into future building technologies, sustainable living, and digital construction.</p>
+     info: `
+       <p>This experimental Smart Home is being developed by BT and the University of Suffolk as part of the Digitech Project. It enables research and testing into future building technologies, sustainable living, and digital construction.</p>
 
 <p><strong>Listen to Meral Bence describe this new facility:</strong><br>
 <audio controls src="audio/smarthome.mp3"></audio></p>
@@ -166,7 +171,8 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
     lat: 52.05920839,
     lng: 1.28417848,
     radius: 20,
-    info: <p>The Sports Hall supports health and wellbeing through fitness and team activities. It contains facilities for basketball, netball, badminton, fitness classes, judo, and even indoor model aeroplane flying. Famous sporting visitors have included Austin Healey, Lawrence Dallaglio, Sam Quek, Daley Thompson, and the GB Archery Team.</p>
+     info: `
+     <p>The Sports Hall supports health and wellbeing through fitness and team activities. It contains facilities for basketball, netball, badminton, fitness classes, judo, and even indoor model aeroplane flying. Famous sporting visitors have included Austin Healey, Lawrence Dallaglio, Sam Quek, Daley Thompson, and the GB Archery Team.</p>
 
 <p><strong>Listen to Bernie Fenn talk about sport at Adastral Park:</strong><br>
 <audio controls src="audio/sports.mp3"></audio></p>
@@ -176,7 +182,8 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
     lat: 52.05886422,
     lng: 1.28180741,
     radius: 15,
-    info: <p>Wireplay was an online multiplayer gaming network developed by BT in the 1990s. It allowed PC gamers to play against each other remotely using a dial-up internet connection — a pioneering service at the time.</p>
+    info: `
+       <p>Wireplay was an online multiplayer gaming network developed by BT in the 1990s. It allowed PC gamers to play against each other remotely using a dial-up internet connection — a pioneering service at the time.</p>
 
 <p><strong>Listen to Chris Adams talk about the development of Wireplay:</strong><br>
 <audio controls src="audio/wireplay.mp3"></audio></p>
@@ -186,7 +193,8 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
     lat: 52.05734862,
     lng: 1.28259329,
     radius: 20,
-    info: <p>Adastral Park has its own emergency services team, including fire and ambulance capabilities.</p>
+     info: `
+     <p>Adastral Park has its own emergency services team, including fire and ambulance capabilities.</p>
 
 <p><strong>Listen to Mike Warden talk about the formation of the BT Emergency Team in 1977:</strong><br>
 <audio controls src="audio/formation.mp3"></audio></p>
@@ -206,7 +214,8 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
     lat: 52.05718534,
     lng: 1.2811905,
     radius: 15,
-    info: <p>The Network Operations Centre (NoC) manages BT’s national network — including broadband, leased lines, Ethernet circuits, and mobile backhaul for millions of customers.</p>
+     info: `
+       <p>The Network Operations Centre (NoC) manages BT’s national network — including broadband, leased lines, Ethernet circuits, and mobile backhaul for millions of customers.</p>
 
 <p><strong>Listen to Andy Skingley discuss the history of the NoC:</strong><br>
 <audio controls src="audio/nocintro.mp3"></audio></p>
@@ -219,7 +228,8 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
     lat: 52.05744922,
     lng: 1.2811905,
     radius: 18,
-    info: <p>Innovation Martlesham is a thriving ecosystem of ICT and digital companies, launched in 2011. It was created to support collaboration, creativity, and the development of pioneering digital technologies.</p>
+     info: `
+     <p>Innovation Martlesham is a thriving ecosystem of ICT and digital companies, launched in 2011. It was created to support collaboration, creativity, and the development of pioneering digital technologies.</p>
 
 <p><strong>Listen to Nicky Daniels discuss Innovation Martlesham:</strong><br>
 <audio controls src="audio/placeholder24.mp3"></audio></p>
@@ -229,7 +239,8 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
     lat: 52.05891122,
     lng: 1.27937062,
     radius: 20,
-    info: <p>This is the last spot on the trail. Congratulations — you have reached the final spot on the trail! The new Adastral Park Heritage Centre showcases the history of the site and the groundbreaking work carried out here over the decades. Take your time exploring this unique facility.</p>
+     info: `
+       <p>This is the last spot on the trail. Congratulations — you have reached the final spot on the trail! The new Adastral Park Heritage Centre showcases the history of the site and the groundbreaking work carried out here over the decades. Take your time exploring this unique facility.</p>
 
 <p><strong>Listen to Terry Henshall talk about the new centre:</strong><br>
 <audio controls src="audio/heritage.mp3"></audio></p>
