@@ -509,9 +509,45 @@ function openSpotModal(name) {
   document.getElementById("spotModal").showModal();
 }
 
-function playAudio(src) {
-  new Audio(src).play();
+/* ===================== AUDIO PLAYER (GLOBAL) ===================== */
+let currentAudio = null;
+let currentButton = null;
+
+function playAudio(src, btn) {
+
+  // If clicking the same audio → toggle pause/play
+  if (currentAudio && currentAudio.src.includes(src)) {
+    if (currentAudio.paused) {
+      currentAudio.play();
+      btn.textContent = "⏸";
+    } else {
+      currentAudio.pause();
+      btn.textContent = "▶";
+    }
+    return;
+  }
+
+  // Stop previously playing audio
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    if (currentButton) currentButton.textContent = "▶";
+  }
+
+  // Create new audio
+  currentAudio = new Audio(src);
+  currentButton = btn;
+  btn.textContent = "⏸";
+  currentAudio.play();
+
+  // When finished, reset button
+  currentAudio.onended = () => {
+    if (currentButton) currentButton.textContent = "▶";
+    currentAudio = null;
+    currentButton = null;
+  };
 }
+
 
 document.getElementById("closeModal").onclick = () =>
   document.getElementById("spotModal").close();
