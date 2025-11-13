@@ -316,7 +316,13 @@ button {
     box-shadow: 0 0 10px rgba(255, 230, 0, 0.7);
   }
 }
-
+/* =====================WELCOME CARD ====================*/
+.welcome-card {
+  background: #e8f0ff;
+}
+.welcome-card .trail-header {
+  background: #0057b8;
+}
 /* ===================== TRAIL LIST ===================== */
 #trailList {
   max-width: 800px;
