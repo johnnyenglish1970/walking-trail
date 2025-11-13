@@ -40,14 +40,11 @@ const spots = [
 <br><br> 
     <p>Listen to Mike Warden talk about his memories of the Hurricane damage in 1987.</p>
     
-  <audio controls src="audio/hurricane.mp3"></audio>
-  <br><br>
+       <br> <audio controls src="audio/hurricane.mp3"></audio>
+      <br><br>
     <p>Listen to Pete Cochrane recall some unusual incidents with low flying aircraft.</p>
+    <br> <audio controls src="audio/aircraft.mp3"></audio>
   `,
-  audio: [
-    { label: "Mike Warden – Hurricane 1987", src: "audio/hurricane.mp3" },
-    { label: "Pete Cochrane – Low Flying Aircraft", src: "audio/aircraft.mp3" }
-  ]
 },
 
   {
