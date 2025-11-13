@@ -455,23 +455,40 @@ button {
   gap: 12px;
 }
 
-/* On portrait phones, stack vertically */
+/* ===== Trail List — Portrait Mode (Two-column fixed layout) ===== */
 @media (max-width: 480px) {
+
   .trail-body {
-    flex-direction: column;
-    align-items: center;  /* centers image & text nicely */
-    text-align: left;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+
+    /* Prevent text dropping under the image */
+    flex-wrap: nowrap;
+  }
+
+  .trail-image {
+    flex-shrink: 0;      /* Image keeps width */
   }
 
   .trail-image img {
-    width: 100%;
-    max-width: 280px;   /* keeps images tidy */
-    height: auto;
+    width: 70px;         /* small thumbnail */
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
     display: block;
   }
 
   .trail-text {
-    width: 100%;
+    flex: 1;             /* Text uses the remaining width */
+    min-width: 0;        /* <-- prevents overflow */
+  }
+
+  .trail-snippet,
+  .trail-dist {
+    white-space: normal;
+    overflow-wrap: break-word;
   }
 }
 
