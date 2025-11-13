@@ -548,8 +548,23 @@ function playAudio(src, btn = null) {
 }
 
 
-document.getElementById("closeModal").onclick = () =>
+document.getElementById("closeModal").onclick = () => {
+  // Close modal
   document.getElementById("spotModal").close();
+
+  // Stop standalone audio
+  if (activeAudio) {
+    activeAudio.pause();
+    activeAudio.currentTime = 0;
+    activeAudio = null;
+  }
+
+  // Stop any inline <audio> tags
+  document.querySelectorAll("#spotBody audio").forEach(a => {
+    a.pause();
+    a.currentTime = 0;
+  });
+};
 
 /* ===================== CONTROLS ===================== */
 function attachHandlers() {
