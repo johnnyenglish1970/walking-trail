@@ -174,7 +174,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 
 <p><strong>Listen to Meral Bence describe this new facility:</strong><br>
 <audio controls src="audio/smarthome.mp3"></audio></p>
-       `,    `,
+       `,   
   },
   {
     name: "Sports Hall",
