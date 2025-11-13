@@ -357,14 +357,13 @@ function buildList() {
 
     <div class="trail-body">
       <div class="trail-image">
-        <img src="images/bt_tt.jpg" alt="Welcome">
+        <img src="images/welcome.jpg" alt="Welcome">
       </div>
       <div class="trail-text">
         <p class="trail-snippet">
-          Start your journey around Adastral Park. Follow the trail points,
-          learn about the site's rich history, and discover hidden stories along the way.
+          Enjoy this trail around Adastral Park to uncover points of interest.  Approx 1.5 miles.
         </p>
-        <p style="font-size:0.85rem;color:#666;">
+        <p style="font-size:0.75rem;color:#666;">
           This introductory point does not require GPS and is always available.
         </p>
       </div>
