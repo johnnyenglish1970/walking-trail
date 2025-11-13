@@ -64,7 +64,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
     lat: 52.05734795,
     lng: 1.27954631,
     radius: 20,
-    info: 
+    info: ` 
       <p>At one time, a former WW2 building stood in this location. The building was the old hospital for the RAF Martlesham Heath airfield. When the GPO took over the site, the building became the post room until it was demolished.
 
         Listen to Bernie Fenn talk about his memories of working in the building:
@@ -83,7 +83,8 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
     lat: 52.06050806,
     lng: 1.27999692,
     radius: 25,
-    info: <p>Building B1, visible to the west, is one of the former RAF Martlesham Heath buildings from WW2 and is now part of Innovation Martlesham. The building is rumoured to be haunted.</p>
+    info: `
+    <p>Building B1, visible to the west, is one of the former RAF Martlesham Heath buildings from WW2 and is now part of Innovation Martlesham. The building is rumoured to be haunted.</p>
 
 <p><strong>Listen to Mike Warden talk about sightings of the ghost of B1:</strong><br>
 <audio controls src="audio/b1haunted.mp3"></audio></p>
@@ -144,7 +145,8 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
     lat: 52.05930828,
     lng: 1.28618477,
     radius: 25,
-    info: <p>Through the trees ahead are the satellite dishes of Martlesham Teleport. Once operated by BT and now by Arqiva, the Teleport is used by broadcasters worldwide to route content between locations. The funeral of Diana, Princess of Wales, was relayed globally from here in 1997. It remains the UK’s most easterly satellite earth station.</p>
+    info: `
+    <p>Through the trees ahead are the satellite dishes of Martlesham Teleport. Once operated by BT and now by Arqiva, the Teleport is used by broadcasters worldwide to route content between locations. The funeral of Diana, Princess of Wales, was relayed globally from here in 1997. It remains the UK’s most easterly satellite earth station.</p>
 
 <p><strong>Listen to Jon Wakeling discuss the teleport’s history:</strong><br>
 <audio controls src="audio/teleport.mp3"></audio></p>
@@ -172,7 +174,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
 
 <p><strong>Listen to Meral Bence describe this new facility:</strong><br>
 <audio controls src="audio/smarthome.mp3"></audio></p>
-          `,
+       `,    `,
   },
   {
     name: "Sports Hall",
