@@ -12,7 +12,7 @@ html {
 }
 
 body {
-  margin: 0;                     /* no auto margins */
+  margin: 0;
   padding: 0;
   width: 100%;
   max-width: 100%;
@@ -22,10 +22,15 @@ body {
   color: #222;
 }
 
-/* Make sure nothing inside body can overflow horizontally */
-body * {
+/* Restrict horizontal overflow but allow vertical scrolling inside specific elements */
+body > * {
   max-width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;   /* ✅ prevents horizontal bleed but doesn't break maps */
+}
+
+/* Restore normal behaviour for map & compass */
+#map, #compass, #arrow-container, #arrow {
+  overflow: visible !important;  /* ✅ prevents hidden map & scrollbars */
 }
 
 h1, h2, h3, p {
