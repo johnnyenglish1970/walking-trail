@@ -525,38 +525,25 @@ function openSpotModal(name) {
 let currentAudio = null;
 let currentButton = null;
 
-function playAudio(src, btn) {
+let activeAudio = null;
 
-  // If clicking the same audio → toggle pause/play
-  if (currentAudio && currentAudio.src.includes(src)) {
-    if (currentAudio.paused) {
-      currentAudio.play();
-      btn.textContent = "⏸";
-    } else {
-      currentAudio.pause();
-      btn.textContent = "▶";
-    }
-    return;
+function playAudio(src, btn = null) {
+  // Stop any currently playing audio
+  if (activeAudio) {
+    activeAudio.pause();
+    activeAudio.currentTime = 0;
   }
 
-  // Stop previously playing audio
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio.currentTime = 0;
-    if (currentButton) currentButton.textContent = "▶";
-  }
+  // Create a new one
+  activeAudio = new Audio(src);
+  activeAudio.play();
 
-  // Create new audio
-  currentAudio = new Audio(src);
-  currentButton = btn;
-  btn.textContent = "⏸";
-  currentAudio.play();
+  // Optional: update button state
+  if (btn) btn.textContent = "⏸";
 
-  // When finished, reset button
-  currentAudio.onended = () => {
-    if (currentButton) currentButton.textContent = "▶";
-    currentAudio = null;
-    currentButton = null;
+  activeAudio.onended = () => {
+    if (btn) btn.textContent = "▶";
+    activeAudio = null;
   };
 }
 
