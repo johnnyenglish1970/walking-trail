@@ -1,22 +1,32 @@
 /* ===================== GLOBAL ===================== */
-
-/* Prevent horizontal overflow on mobile Safari */
-html, body {
+/* ====== Universal Layout & Overflow Fix ====== */
+html {
+  box-sizing: border-box;
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
 }
 
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
 body {
-  margin: 0 auto;          /* ✅ centers content properly */
+  margin: 0;                     /* no auto margins */
   padding: 0;
+  width: 100%;
   max-width: 100%;
-  box-sizing: border-box;
+  overflow-x: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   background: #f0f2f5;
   color: #222;
 }
 
+/* Make sure nothing inside body can overflow horizontally */
+body * {
+  max-width: 100%;
+  overflow-x: hidden;
+}
 
 h1, h2, h3, p {
   margin: 0;
