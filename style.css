@@ -125,36 +125,42 @@ button {
   border-radius: 0 0 6px 6px;
 }
 
-/* ===================== MAP (Aligned & Responsive) ===================== */
+/* ===================== MAP (Aligned & Responsive – Final Fixed Version) ===================== */
+
+/* Wrapper to keep the map perfectly aligned with banner/title width */
+#map-wrap {
+  width: 100%;
+  max-width: 800px;              /* ✅ match banner/title/trail width */
+  margin: 0 auto 10px auto;      /* center on page */
+  box-sizing: border-box;
+  overflow: hidden;              /* prevent map tile overflow */
+  transition: none !important;   /* stop “slide” after layout settles */
+}
+
+/* Actual map fills its wrapper */
 #map {
   display: block;
   width: 100%;
-  max-width: 800px;          /* ✅ same width as banner/title/trail list */
   height: 380px;
-  margin: 0 auto 10px auto;
   border: 2px solid #ddd;
   border-radius: 6px;
-  overflow: hidden;
-  background: #e9eef5;
+  background: #e9eef5;           /* fallback before tiles load */
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: none !important;
 }
 
 /* Responsive adjustments for mobile */
 @media (max-width: 480px) {
-  #banner,
-  #title-bar,
-  #map {
-    max-width: 95%;
+  #map-wrap {
+    max-width: 95%;              /* small edge padding on mobile */
   }
-
+  #map {
+    height: 300px;               /* lower height for small screens */
+  }
   #banner {
     max-height: 120px;
   }
-
-  #map {
-    height: 300px;
-  }
-
   #title-bar {
     font-size: 1.1rem;
     padding: 10px;
