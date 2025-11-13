@@ -447,14 +447,31 @@ button {
 }
 
 /* Responsive trail list adjustments */
+/* ===================== TRAIL LIST RESPONSIVE FIX ===================== */
+
+/* Default (desktop + landscape) stays as-is */
+.trail-body {
+  display: flex;
+  gap: 12px;
+}
+
+/* On portrait phones, stack vertically */
 @media (max-width: 480px) {
   .trail-body {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;  /* centers image & text nicely */
+    text-align: left;
   }
+
   .trail-image img {
     width: 100%;
+    max-width: 280px;   /* keeps images tidy */
     height: auto;
+    display: block;
+  }
+
+  .trail-text {
+    width: 100%;
   }
 }
 
