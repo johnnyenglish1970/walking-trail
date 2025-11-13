@@ -481,6 +481,7 @@ function openSpotModal(name) {
   const s = spots.find(x => x.name === name);
   if (!s) return;
 
+  /* ===== Build OPTIONAL audio section (your current system) ===== */
   let audioHTML = "";
   if (s.audio && s.audio.length) {
     audioHTML = `
@@ -490,7 +491,7 @@ function openSpotModal(name) {
           .map(
             a => `
           <div class="audio-item">
-             <button class="audio-btn" onclick="playAudio('${a.src}', this)">▶</button>
+            <button class="audio-btn" onclick="playAudio('${a.src}', this)">▶</button>
             <span>${a.label}</span>
           </div>
         `
@@ -500,13 +501,21 @@ function openSpotModal(name) {
     `;
   }
 
+  /* ===== Allow inline HTML inside the info text ===== */
   document.getElementById("spotTitleText").textContent = s.name;
 
   document.getElementById("spotBody").innerHTML = `
     <img src="${s.img}" style="width:100%;border-radius:10px;margin-bottom:12px;">
-    <p>${s.info}</p>
+
+    <div class="spot-info-block">
+      ${s.info}
+    </div>
+
     ${audioHTML}
-    <p><strong>Location:</strong> ${s.lat.toFixed(6)}, ${s.lng.toFixed(6)}</p>
+
+    <p style="margin-top:10px;">
+      <strong>Location:</strong> ${s.lat.toFixed(6)}, ${s.lng.toFixed(6)}
+    </p>
   `;
 
   document.getElementById("spotModal").showModal();
