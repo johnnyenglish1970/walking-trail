@@ -37,7 +37,11 @@ const spots = [
     took a long time to complete – it was started in 1971 and was not officially opened (by the Queen)
     until late 1975. ...</p>
 
+<br><br> 
     <p>Listen to Mike Warden talk about his memories of the Hurricane damage in 1987.</p>
+    
+  <audio controls src="audio/hurricane.mp3"></audio>
+  <br><br>
     <p>Listen to Pete Cochrane recall some unusual incidents with low flying aircraft.</p>
   `,
   audio: [
