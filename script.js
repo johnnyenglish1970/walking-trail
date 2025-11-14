@@ -405,7 +405,7 @@ function buildList() {
 
     </p>
     <br><p>We hope you enjoy your walk. Please explore at your own pace.</p>
-    <br><br><p>The Queen's official opening of the sie in 1975:</p>
+    <br><p>The Queen's official opening of the sie in 1975:</p>
     <br><img src="images/welcome2.jpg" class="info-img">
     
   `;
