@@ -82,7 +82,7 @@ const spots = [
        <br><p> The building was demolished as part of a major redevelopment of the site in the 1990’s. </p>
 
        <br><p>Listen to Bruce Boxall talk about the background to this redevelopment:</p>
-<br> <audio controls src="audio/redevelopment.mp3"></audio>
+<br><audio controls src="audio/redevelopment.mp3"></audio>
         <br><p>In this recording, Bruce talks about the specific changes that were made as part of the redevelopment:</p>
 <br> <audio controls src="audio/redevelopment2.mp3"></audio>
        `,
