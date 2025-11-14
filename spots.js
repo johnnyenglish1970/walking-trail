@@ -71,7 +71,7 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
       <p>At one time, a former WW2 building stood in this location. The building was the old hospital for the RAF Martlesham Heath airfield. When the GPO took over the site, the building became the post room until it was demolished.
 
         Listen to Bernie Fenn talk about his memories of working in the building:
-<br> <audio controls src="audio/postroom1.mp3"></audio>
+<br> <audio controls src="audio/postroom2.mp3"></audio>
 
         The building was demolished as part of a major redevelopment of the site in the 1990’s. 
 
