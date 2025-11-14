@@ -45,6 +45,9 @@ const spots = [
       <br><br>
     <p>Listen to Pete Cochrane recall some unusual incidents with low flying aircraft.</p>
     <br> <audio controls src="audio/aircraft.mp3"></audio>
+    <br><br>
+    <img src="images/1 - GPO Research.jpg" class="info-img">
+    <br><br><img src="images/1 - hurricane2.jpg" class="info-img">
   `,
 },
 
