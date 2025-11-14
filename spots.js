@@ -100,8 +100,8 @@ const spots = [
 
 <br><p><strong>Listen to Bernie Fenn talk about trying to spot the ghost:</strong><br>
 <br><audio controls src="audio/b1haunted.mp3"></audio></p>
-<br><br><img src="images/1-b1-old.jpg" class="info-img">
-<br><br><img src="images/1-b1-today.jpg" class="info-img">
+<br><br><img src="images/4-b1-old.jpg" class="info-img">
+<br><br><img src="images/4-b1-today.jpg" class="info-img">
 
 `,
   },
