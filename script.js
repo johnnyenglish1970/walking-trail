@@ -382,32 +382,30 @@ function buildList() {
   document.getElementById("spotBody").innerHTML = `
     <p>Welcome to the Adastral Park Heritage Trail!</p>
     <p>
-      Welcome to the Adastral Park Walking Trail.
+     <p>There are 15 spots on the trail which will guide you around key locations of the site. The trail will take approximately 1 hour.</p>
 
-There are 15 spots on the trail which will guide you around key locations of the site. The trail will take approximately 1 hour.
+    <br><p>To use the app, just follow the direction finder to discover each location in turn. When you get close to a location, the content will be unlocked for you to view. The content is a mix of text, images and audio.
+Please be aware of your surroundings at all times and please use the pedestrian paths around the site. Take care when crossing roads.</p>
 
-To use the app, just follow the direction finder to discover each location in turn. When you get close to a location, the content will be unlocked for you to view. The content is a mix of text, images and audio.
-Please be aware of your surroundings at all times and please use the pedestrian paths around the site. Take care when crossing roads.
+<br><br><p>Please listen to this introduction to the trail from Dr Peter Bell, MD of Fixed Network and Adastral Park, BT:</p>
+<br> <audio controls src="audio/welcome.mp3"></audio>
 
-Introduction to the Site
+    <br><p>Introduction to the Site</p>
 
-Adastral Park was built as the Post Office Research Centre in the early 1970s, to replace the original research station at Dollis Hill in North London. During the first half of the 1970s purpose built buildings gradually replaced legacy buildings left from the days when the site was part of RAF Martlesham Heath. A large part of the accommodation was built to house specialist and general laboratories and workshops, reflecting that the whole site was dedicated to (mostly hardware) research and development. The initial building work was the main building complex, consisting of the Antares building, the Orion building, the two towers and the Research Services Block with the loading bays. Many other (differently designed) buildings followed though.
-The telecommunications part of the Post Office became BT in the early 1980s and the name of the site changed to BT Laboratories. More name changes followed, until in 1999 the site was renamed Adastral Park (a nod to RAF Martlesham Heath's R&D purpose; the RAF motto is "per ardua ad astra" = through adversity to the stars [roughly]). It also became the first and only BT site to house independent companies, under the Innovation Martlesham banner.
+    <br><p>Adastral Park was built as the Post Office Research Centre in the early 1970s, to replace the original research station at Dollis Hill in North London. During the first half of the 1970s purpose built buildings gradually replaced legacy buildings left from the days when the site was part of RAF Martlesham Heath. A large part of the accommodation was built to house specialist and general laboratories and workshops, reflecting that the whole site was dedicated to (mostly hardware) research and development. The initial building work was the main building complex, consisting of the Antares building, the Orion building, the two towers and the Research Services Block with the loading bays. Many other (differently designed) buildings followed though.
+The telecommunications part of the Post Office became BT in the early 1980s and the name of the site changed to BT Laboratories. More name changes followed, until in 1999 the site was renamed Adastral Park (a nod to RAF Martlesham Heath's R&D purpose; the RAF motto is "per ardua ad astra" = through adversity to the stars [roughly]). It also became the first and only BT site to house independent companies, under the Innovation Martlesham banner.</p>
 
-Listen to Lisa Perkins talk about the impact of the Park:
+     <p>Listen to Lisa Perkins talk about the impact of the Park:</p>
+<br> <audio controls src="audio/impact.mp3"></audio>
 
-Listen to Mike Warden recall the day that the Queen formally opened the site in 1975:
+     <p>Listen to Mike Warden recall the day that the Queen formally opened the site in 1975:</p>
+<br> <audio controls src="audio/queen.mp3"></audio>
+
 
     </p>
     <p>Enjoy your walk and explore at your own pace.</p>
 
-    <div class="audio-section">
-      <h4>Audio</h4>
-      <div class="audio-item">
-        <button class="audio-btn" onclick="playAudio('audio/welcome.mp3', this)">▶</button>
-        <span>Welcome Message</span>
-      </div>
-    </div>
+    
   `;
   document.getElementById("spotModal").showModal();
 };
