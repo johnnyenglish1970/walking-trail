@@ -271,7 +271,7 @@ const spots = [
     name: "Innovation Martlesham",
     lat: 52.05744922,
     lng: 1.2811905,
-    radius: 18,
+    radius: 16,
      info: `
      <p>Innovation Martlesham is a thriving ecosystem of ICT and digital companies, launched in 2011. It was created to support collaboration, creativity, and the development of pioneering digital technologies.</p>
 
