@@ -414,7 +414,7 @@ modal.showModal();
 
 // Trigger fireworks ONLY for the final spot
 if (name === "Heritage Centre") {
-  launchFireworks();
+  startFireworks();
 } else {
   clearFireworks();
 }
@@ -667,26 +667,25 @@ function startWatchingPosition() {
   );
 }
 
-function launchFireworks() {
+function startFireworks() {
   const overlay = document.getElementById("fireworksOverlay");
   overlay.style.display = "block";
 
-  // Create several fireworks
-  for (let i = 0; i < 7; i++) {
-    const fw = document.createElement("div");
-    fw.className = "firework";
+  for (let i = 0; i < 18; i++) {
+    const f = document.createElement("div");
+    f.className = "firework";
 
-    fw.style.left = Math.random() * 90 + "%";
-    fw.style.top = Math.random() * 60 + "%";
+    f.style.left = Math.random() * 100 + "%";
+    f.style.top = Math.random() * 100 + "%";
 
-    overlay.appendChild(fw);
+    overlay.appendChild(f);
 
-    // Remove after animation
-    setTimeout(() => fw.remove(), 1000);
+    setTimeout(() => f.remove(), 900);
   }
 
-  // Stop after 2 seconds
-  setTimeout(() => overlay.style.display = "none", 2000);
+  setTimeout(() => {
+    overlay.style.display = "none";
+  }, 1200);
 }
 
 function clearFireworks() {
