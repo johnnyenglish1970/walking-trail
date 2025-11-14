@@ -782,3 +782,8 @@ dialog#spotModal {
     font-size: 0.85rem;
   }
 }
+
+/* ===================== REMOVE THIS FOR TESTING ===================== */
+#testSelect {
+  display: none !important;
+}
