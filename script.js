@@ -390,7 +390,7 @@ Please be aware of your surroundings at all times and please use the pedestrian 
 <br><br><p>Please listen to this introduction to the trail from Dr Peter Bell, MD of Fixed Network and Adastral Park, BT:</p>
 <br> <audio controls src="audio/welcome.mp3"></audio>
 
-    <br><br><br><p><srong>Introduction to the Site</strong></p>
+    <br><br><br><p><strong>Introduction to the Site</strong></p>
 
     <br><p>Adastral Park was built as the Post Office Research Centre in the early 1970s, to replace the original research station at Dollis Hill in North London.</p> 
     <br><p>During the first half of the 1970s purpose built buildings gradually replaced legacy buildings left from the days when the site was part of RAF Martlesham Heath. A large part of the accommodation was built to house specialist and general laboratories and workshops, reflecting that the whole site was dedicated to (mostly hardware) research and development. The initial building work was the main building complex, consisting of the Antares building, the Orion building, the two towers and the Research Services Block with the loading bays. Many other (differently designed) buildings followed though.</p>
