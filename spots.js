@@ -61,8 +61,8 @@ const spots = [
 <br><p>Listen to Chris Adams describe how an anechoic chamber and reverberation room works and how they are used. </p>
        <br> <audio controls src="audio/accoustic1.mp3"></audio>
         <br><br>
-    <img src="images/2-anechoic -chamber.jpg" class="info-img">
-    <br><br><img src="images/2-anechoic -chamber.jpg" class="info-img">
+    <img src="images/2-anechoic-chamber.jpg" class="info-img">
+    <br><br><img src="images/2-anechoic-chamber2.jpg" class="info-img">
        
     `,
   },
@@ -138,7 +138,7 @@ const spots = [
 <br><audio controls src="audio/robotics.mp3"></audio></p>
 
 <br><p><strong>Listen to Bruce Boxall discuss his silicon work in the submarine network:</strong><br>
-<audio controls src="audio/silicon.mp3"></audio></p>
+<br><audio controls src="audio/silicon.mp3"></audio></p>
 `,
   },
   {
