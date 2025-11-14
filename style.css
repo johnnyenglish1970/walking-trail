@@ -416,16 +416,19 @@ button {
 
 
 
-/* ---- Buttons ---- */
+/* ---- Buttons (UPDATED) ---- */
 .trail-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;   /* RIGHT-JUSTIFY buttons */
+  align-items: center;
+  gap: 10px;                    /* spacing between buttons */
   padding: 10px;
   border-top: 1px solid #ddd;
   background: #fafafa;
 }
+
 .trail-buttons button {
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: 5px;
   border: none;
   cursor: pointer;
@@ -433,22 +436,22 @@ button {
   font-weight: 500;
   transition: all 0.2s ease;
 }
-.trail-buttons .read-more {
-  background: #0057b8;
-  color: white;
-}
-.trail-buttons .read-more:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
+
+/* Skip button (unchanged) */
 .trail-buttons .skip-btn {
   background: #888;
   color: #fff;
 }
+.trail-buttons .skip-btn:hover {
+  background: #666;
+}
+
+/* NEW unified Found – Read More button (green) */
+
 
 /* New unified “Found – Read More” button */
 .found-readmore {
-  background: #0057b8;
+  background: #4caf50;
   color: #fff;
   border: none;
   padding: 6px 12px;
@@ -460,7 +463,7 @@ button {
 }
 
 .found-readmore:hover {
-  background: #003f80;
+  background: #3d8f42;;
 }
 
 /* Responsive trail list adjustments */
