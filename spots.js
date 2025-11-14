@@ -57,8 +57,8 @@ const spots = [
     lng: 1.28002642,
     radius: 10,
      info: `
-      <p>The Adastral Acoustic Block includes anechoic chambers and a reverberation room and is an important facility for the site to allow audio experimentation and measurement – a key part of telecommunications.
-<br><p>Listen to Chris Adams describe how an anechoic chamber and reverberation room works and how they are used. </p></p>
+      <p>The Adastral Acoustic Block includes anechoic chambers and a reverberation room and is an important facility for the site to allow audio experimentation and measurement – a key part of telecommunications.</p>
+<br><p>Listen to Chris Adams describe how an anechoic chamber and reverberation room works and how they are used. </p>
        <br> <audio controls src="audio/accoustic1.mp3"></audio>
     `,
   },
@@ -68,14 +68,14 @@ const spots = [
     lng: 1.27954631,
     radius: 20,
     info: ` 
-      <p>At one time, a former WW2 building stood in this location. The building was the old hospital for the RAF Martlesham Heath airfield. When the GPO took over the site, the building became the post room until it was demolished.
+      <p>At one time, a former WW2 building stood in this location. The building was the old hospital for the RAF Martlesham Heath airfield. When the GPO took over the site, the building became the post room until it was demolished.</p>
 
-        Listen to Bernie Fenn talk about his memories of working in the building:
+        <br>Listen to Bernie Fenn talk about his memories of working in the building:
 <br> <audio controls src="audio/postroom2.mp3"></audio>
 
-        The building was demolished as part of a major redevelopment of the site in the 1990’s. 
+       <p> The building was demolished as part of a major redevelopment of the site in the 1990’s. </p>
 
-        Listen to Bruce Boxall talk about the background to this redevelopment:
+       <br> Listen to Bruce Boxall talk about the background to this redevelopment:
 <br> <audio controls src="audio/redevelopment.mp3"></audio>
         In this recording, Bruce talks about the specific changes that were made as part of the redevelopment:</p>
 <br> <audio controls src="audio/redevelopment2.mp3"></audio>
