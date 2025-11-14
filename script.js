@@ -339,9 +339,7 @@ function aimCompassAtNearest() {
   arrow.style.transform = `rotate(${lastArrowRotation}deg)`;
 
   headingText.textContent = `Heading: ${compassHeading.toFixed(1)}°`;
-  status.textContent = `Arrow → ${nearestCache.name} (${nearestCache.dist.toFixed(
-    0
-  )} m)`;
+  status.textContent = "";
 }
 
 /* ===================== UI & CONTROLS ===================== */
