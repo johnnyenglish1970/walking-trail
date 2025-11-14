@@ -206,7 +206,7 @@ const spots = [
     name: "Sports Hall",
     lat: 52.05920839,
     lng: 1.28417848,
-    radius: 20,
+    radius: 16,
      info: `
      <p>The Sports Hall supports health and wellbeing through fitness and team activities. It contains facilities for basketball, netball, badminton, fitness classes, judo, and even indoor model aeroplane flying.</p>
      <br></p>Famous sporting visitors have included Austin Healey, Lawrence Dallaglio, Sam Quek, Daley Thompson, and the GB Archery Team.</p>
