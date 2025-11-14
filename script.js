@@ -156,8 +156,8 @@ function refreshNearestAndDistances() {
 
   nearestCache = { ...current, dist };
 
-  const nearestEl = document.getElementById("nearestName");
-  if (nearestEl) nearestEl.textContent = `${current.name} (${dist.toFixed(0)} m)`;
+ const nearestEl = document.getElementById("nearestName");
+if (nearestEl) nearestEl.textContent = `Next Spot: ${current.name} (${dist.toFixed(0)} m)`;
 
   // update next-marker
   if (nextMarker?.setPosition) {
@@ -224,7 +224,7 @@ function refreshNextSpot() {
   const el = document.getElementById("nearestName");
 
   if (next) {
-    el.textContent = next.name;
+    el.textContent = `Next Spot: ${next.name} (${nearestCache.dist.toFixed(0)} m)`;
     nearestCache = {
       ...next,
       dist: haversine(userPos.lat, userPos.lng, next.lat, next.lng)
