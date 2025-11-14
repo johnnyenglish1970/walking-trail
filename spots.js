@@ -111,13 +111,16 @@ const spots = [
     lng: 1.28135277,
     radius: 15,
      info: ` 
-       <p>Beneath these slabs lies one of the first microwave waveguides installed by the Post Office Research Centre. One of the first research divisions to move from Dollis Hill was the waveguide transmission division.</p>
+       <p>One the other side of the road underneath the slabs is where a waveguide was installed.</p>
+<p><br>One of the first research divisions to move up from Dollis Hill to the new Post Office Research Centre was the microwave waveguide transmission division.</p>
+<p>Microwave radio transmissions could be sent along these waveguides - basically precision engineered piping, with a helix of wire wound around the outside, to keep the signal inside the waveguide. Waveguides were seen as a faster and more reliable way to send microwave radio signals than broadcasting into the air.</p>
+<p>The waveguides installed underneath these slabs were the first serious attempt at waveguide transmission by the Post Office.</p>
+<p>A trial waveguide system was built between Building 16 at Martlesham and the exchange in Wickham Market.
+This carried live telephone calls for a number of years in the 1970s and 80s.</p>
+<p>However by the mid-1970s it was obvious that a better waveguide had been found - fibre optic cables. These acted as waveguides for infrared laser light. They could carry much more information microwave waveguides ever could, they were smaller and also cheaper and easier to produce.</p>
 
-<br><p>Microwave signals were transmitted through precision-engineered piping, with a wire helix wrapped around the outside to contain the energy. These buried waveguides were seen as more reliable and faster than transmitting through the air.</p>
+<p>The Post Office and later BT became world leaders in fibre-optic communication in the late 1970s and in the 1980s.</p>
 
-<br><p>A later system connected Portman Road exchange in Ipswich with Wickham Market, carrying live calls through the 1970s and 80s. But by the mid-1970s, fibre-optic cable — another form of waveguide — proved superior: higher capacity, smaller, cheaper, and easier to install.</p>
-
-<br><p>BT became a world leader in fibre-optic technology during the late 1970s and 1980s.</p>
 <br><p>Here is a photo of a waveguide:</p>
 <br><img src="images/5-waveguide.jpg" class="info-img">
 
