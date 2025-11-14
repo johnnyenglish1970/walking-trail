@@ -364,10 +364,10 @@ function buildList() {
       </div>
       <div class="trail-text">
         <p class="trail-snippet">
-          Enjoy this trail around Adastral Park to uncover points of interest.  Approx 1.5 miles.
+          Enjoy this trail around Adastral Park to uncover points of interest about the site
         </p>
         <p style="font-size:0.75rem;color:#666;">
-          This introductory point does not require GPS and is always available.
+          Approx: 1.5 miles.
         </p>
       </div>
     </div>
