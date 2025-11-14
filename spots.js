@@ -58,7 +58,7 @@ const spots = [
     radius: 10,
      info: `
       <p>The Adastral Acoustic Block includes anechoic chambers and a reverberation room and is an important facility for the site to allow audio experimentation and measurement – a key part of telecommunications.
-Listen to Chris Adams describe how an anechoic chamber and reverberation room works and how they are used. </p>
+<br><p>Listen to Chris Adams describe how an anechoic chamber and reverberation room works and how they are used. </p></p>
        <br> <audio controls src="audio/accoustic1.mp3"></audio>
     `,
   },
