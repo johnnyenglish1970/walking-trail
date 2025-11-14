@@ -91,7 +91,7 @@ const spots = [
     name: "B1",
     lat: 52.06050806,
     lng: 1.27999692,
-    radius: 25,
+    radius: 15,
     info: `
     <p>Building B1, visible to the west, is one of the former RAF Martlesham Heath buildings from WW2 and is now part of Innovation Martlesham. The building is rumoured to be haunted.</p>
 
@@ -166,9 +166,9 @@ const spots = [
   },
   {
     name: "Martlesham Teleport",
-    lat: 52.05930828,
-    lng: 1.28618477,
-    radius: 25,
+    lat: 52.05929207,
+    lng: 1.28631234,
+    radius: 15,
     info: `
     <p>Through the trees ahead are the satellite dishes of Martlesham Teleport. Once operated by BT and now by Arqiva, the Teleport is used by broadcasters worldwide to route content between locations. The funeral of Diana, Princess of Wales, was relayed globally from here in 1997. It remains the UK’s most easterly satellite earth station.</p>
 
