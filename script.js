@@ -364,67 +364,31 @@ function buildList() {
         <p class="trail-snippet">
           Enjoy this trail around Adastral Park to uncover points of interest about the site
         </p>
-        <p style="font-size:0.75rem;color:#666;">
-          Approx: 1.5 miles.
-        </p>
+        <p style="font-size:0.75rem;color:#666;">Approx: 1.5 miles.</p>
       </div>
     </div>
 
     <div class="trail-buttons">
-      <button class="read-more" data-spot="WELCOME">Read More</button>
+      <button class="welcome-readmore">Read More</button>
     </div>
   `;
 
- welcome.querySelector(".read-more").onclick = () => {
-  document.getElementById("spotTitleText").textContent = "Welcome";
-  document.getElementById("spotBody").innerHTML = `
-    <p>Welcome to the Adastral Park Heritage Trail!</p>
-    <p>
-     <p>There are 16 spots on the trail which will guide you around key locations of the site. The trail will take approximately 1 hour.</p>
+  // Welcome modal open
+  welcome.querySelector(".welcome-readmore").onclick = () => {
+    document.getElementById("spotTitleText").textContent = "Welcome";
+    document.getElementById("spotBody").innerHTML = `... your welcome content ...`;
 
-    <br><p>To use the app, just follow the direction finder to discover each location in turn. When you get close to a location, the content will be unlocked for you to view. The content is a mix of text, images and audio.
-<br><br><p><strong>Please be aware of your surroundings at all times and please use the pedestrian paths around the site. Take care when crossing roads.</strong></p>
-
-<br><br><p>Please listen to this introduction to the trail from Dr Peter Bell, MD of Fixed Network and Adastral Park, BT:</p>
-<br> <audio controls src="audio/welcome.mp3"></audio>
-
-    <br><br><br><p><strong>Introduction to the Site</strong></p>
-
-    <br><p>Adastral Park was built as the Post Office Research Centre in the early 1970s, to replace the original research station at Dollis Hill in North London.</p> 
-    <br><p>During the first half of the 1970s purpose built buildings gradually replaced legacy buildings left from the days when the site was part of RAF Martlesham Heath. A large part of the accommodation was built to house specialist and general laboratories and workshops, reflecting that the whole site was dedicated to (mostly hardware) research and development. The initial building work was the main building complex, consisting of the Antares building, the Orion building, the two towers and the Research Services Block with the loading bays. Many other (differently designed) buildings followed though.</p>
-<br><p>The telecommunications part of the Post Office became BT in the early 1980s and the name of the site changed to BT Laboratories. More name changes followed, until in 1999 the site was renamed Adastral Park (a nod to RAF Martlesham Heath's R&D purpose; the RAF motto is "per ardua ad astra" = through adversity to the stars [roughly]). It also became the first and only BT site to house independent companies, under the Innovation Martlesham banner.</p>
-
-    <br><br> <p>Listen to Lisa Perkins talk about the impact of the Park:</p>
-<br> <audio controls src="audio/impact.mp3"></audio>
-
-   <br><br>  <p>Listen to Mike Warden recall the day that the Queen formally opened the site in 1975:</p>
-<br> <audio controls src="audio/queen.mp3"></audio>
-
-
-    </p>
-    <br><p>We hope you enjoy your walk. Please explore at your own pace.</p>
-    <br><p>The Queen's official opening of the sie in 1975:</p>
-    <br><img src="images/welcome2.jpg" class="info-img">
-    
-  `;
- const modal = document.getElementById("spotModal");
-modal.showModal();
-
-// Trigger fireworks ONLY for the final spot
-if (name === "Heritage Centre") {
-  startFireworks();
-} else {
-  clearFireworks();
-}
-};
+    const modal = document.getElementById("spotModal");
+    modal.showModal();
+    clearFireworks();
+  };
 
   list.appendChild(welcome);
 
-  /* ---- Real Trail Spots ---- */
+  /* ---- Trail Spots ---- */
   spots.forEach((s, i) => {
     const isVisited = visited.has(s.name);
     const isSkipped = skipped.has(s.name);
-    const disabled = isVisited || isSkipped;
 
     const snippet = (s.info || "").split(".")[0] + ".";
 
@@ -449,31 +413,39 @@ if (name === "Heritage Centre") {
       </div>
 
       <div class="trail-buttons">
-        <button class="read-more" data-spot="${s.name}" ${
-      !isVisited ? "disabled" : ""
-    }>Read More</button>
-
-        <button class="skip-btn" data-skip="${s.name}">
-          ${
-            isVisited
-              ? "✅ Found!"
-              : isSkipped
-              ? "⏭️ Skipped"
-              : "Skip This Spot"
-          }
-        </button>
+        ${
+          isVisited
+            ? `
+              <button class="found-readmore" data-spot="${s.name}">
+                ✅ Found – Read More →
+              </button>
+            `
+            : `
+              <button class="skip-btn" data-skip="${s.name}">
+                ${isSkipped ? "⏭️ Skipped" : "Skip This Spot"}
+              </button>
+            `
+        }
       </div>
     `;
 
-    item.querySelector(".read-more").onclick = () =>
-      openSpotModal(s.name);
+    /* ---- Event handlers ---- */
 
+    // Skip button (only shown if not visited)
     const skipBtn = item.querySelector(".skip-btn");
-    skipBtn.onclick = () => skipSpot(s.name);
-    if (disabled) skipBtn.disabled = true;
+    if (skipBtn) {
+      skipBtn.onclick = () => skipSpot(s.name);
+    }
+
+    // Found – Read More button (only shown if visited)
+    const foundBtn = item.querySelector(".found-readmore");
+    if (foundBtn) {
+      foundBtn.onclick = () => openSpotModal(s.name);
+    }
 
     list.appendChild(item);
 
+    // Marker styles
     const m = spotMarkers[i];
     if (m?.content) {
       m.content.classList.toggle("visited", isVisited);
