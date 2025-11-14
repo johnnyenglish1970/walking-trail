@@ -47,7 +47,7 @@ const spots = [
     <br> <audio controls src="audio/aircraft.mp3"></audio>
     <br><br>
     <p>Early photo of the site under construction:</p>
-    <img src="images/1-gpo-research.jpg" class="info-img">
+    <br><img src="images/1-gpo-research.jpg" class="info-img">
     <br><br><p>Photo of the hurricane damage in 1987:</p>
     <br><img src="images/1-hurricane2.jpg" class="info-img">
   `,
@@ -76,14 +76,14 @@ const spots = [
     info: ` 
       <p>At one time, a former WW2 building stood in this location. The building was the old hospital for the RAF Martlesham Heath airfield. When the GPO took over the site, the building became the post room until it was demolished.</p>
 
-        <br>Listen to Bernie Fenn talk about his memories of working in the building:
-<br> <audio controls src="audio/postroom2.mp3"></audio>
+        <br><p>Listen to Bernie Fenn talk about his memories of working in the building:</p>
+        <br><audio controls src="audio/postroom2.mp3"></audio>
 
-       <p> The building was demolished as part of a major redevelopment of the site in the 1990’s. </p>
+       <br><p> The building was demolished as part of a major redevelopment of the site in the 1990’s. </p>
 
-       <br> Listen to Bruce Boxall talk about the background to this redevelopment:
+       <br><p>Listen to Bruce Boxall talk about the background to this redevelopment:</p>
 <br> <audio controls src="audio/redevelopment.mp3"></audio>
-        In this recording, Bruce talks about the specific changes that were made as part of the redevelopment:</p>
+        <br><p>In this recording, Bruce talks about the specific changes that were made as part of the redevelopment:</p>
 <br> <audio controls src="audio/redevelopment2.mp3"></audio>
        `,
   },
@@ -118,9 +118,11 @@ const spots = [
 <br><p>A later system connected Portman Road exchange in Ipswich with Wickham Market, carrying live calls through the 1970s and 80s. But by the mid-1970s, fibre-optic cable — another form of waveguide — proved superior: higher capacity, smaller, cheaper, and easier to install.</p>
 
 <br><p>BT became a world leader in fibre-optic technology during the late 1970s and 1980s.</p>
+<br><p>Here is a photo of a waveguide:</p>
+<br><img src="images/5-waveguide.jpg" class="info-img">
 
-<br><p>Scroll the slider images below to see installation of the waveguide project.</p>
-<br><br><img src="images/5-waveguide.jpg" class="info-img">
+<br><br><p>View the images below to see installation of the waveguide project.</p>
+<br><img src="images/5-waveguide.jpg" class="info-img">
 <br><br><img src="images/5-waveguide2.jpg" class="info-img">
 <br><br><img src="images/5-waveguide3.jpg" class="info-img">
 <br><br><img src="images/5-waveguide4.jpg" class="info-img">
@@ -207,7 +209,8 @@ const spots = [
     lng: 1.28417848,
     radius: 20,
      info: `
-     <p>The Sports Hall supports health and wellbeing through fitness and team activities. It contains facilities for basketball, netball, badminton, fitness classes, judo, and even indoor model aeroplane flying. Famous sporting visitors have included Austin Healey, Lawrence Dallaglio, Sam Quek, Daley Thompson, and the GB Archery Team.</p>
+     <p>The Sports Hall supports health and wellbeing through fitness and team activities. It contains facilities for basketball, netball, badminton, fitness classes, judo, and even indoor model aeroplane flying.</p>
+     <br></p>Famous sporting visitors have included Austin Healey, Lawrence Dallaglio, Sam Quek, Daley Thompson, and the GB Archery Team.</p>
 
 <br><p><strong>Listen to Bernie Fenn talk about sport at Adastral Park:</strong><br>
 <br><audio controls src="audio/sports.mp3"></audio></p>
@@ -285,8 +288,10 @@ const spots = [
 
 <br><p><strong>Listen to Terry Henshall talk about the new centre:</strong><br>
 <br><audio controls src="audio/heritage.mp3"></audio></p>
-    <br><br><img src="images/heritage1.jpg" class="info-img">
-    <br><br><img src="images/heritage2.jpg" class="info-img">
+<br><p>Photo of switching parts from a mechanical switch from a Strowger Echange:</p>
+    <br><br><img src="images/16-heritage1.jpg" class="info-img">
+    <br><p>Photo of an old switchboard:</p>
+    <br><br><img src="images/16-heritage2.jpg" class="info-img">
     `,
   }
 ];
