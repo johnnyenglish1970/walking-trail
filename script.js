@@ -409,7 +409,15 @@ Please be aware of your surroundings at all times and please use the pedestrian 
     <br><br><img src="images/welcome2.jpg" class="info-img">
     
   `;
-  document.getElementById("spotModal").showModal();
+ const modal = document.getElementById("spotModal");
+modal.showModal();
+
+// Trigger fireworks ONLY for the final spot
+if (name === "Heritage Centre") {
+  launchFireworks();
+} else {
+  clearFireworks();
+}
 };
 
   list.appendChild(welcome);
@@ -658,6 +666,35 @@ function startWatchingPosition() {
     }
   );
 }
+
+function launchFireworks() {
+  const overlay = document.getElementById("fireworksOverlay");
+  overlay.style.display = "block";
+
+  // Create several fireworks
+  for (let i = 0; i < 7; i++) {
+    const fw = document.createElement("div");
+    fw.className = "firework";
+
+    fw.style.left = Math.random() * 90 + "%";
+    fw.style.top = Math.random() * 60 + "%";
+
+    overlay.appendChild(fw);
+
+    // Remove after animation
+    setTimeout(() => fw.remove(), 1000);
+  }
+
+  // Stop after 2 seconds
+  setTimeout(() => overlay.style.display = "none", 2000);
+}
+
+function clearFireworks() {
+  const overlay = document.getElementById("fireworksOverlay");
+  overlay.innerHTML = "";
+  overlay.style.display = "none";
+}
+
 
 /* ===================== BOOT ===================== */
 window.addEventListener("load", () => setTimeout(initMap, 200));
