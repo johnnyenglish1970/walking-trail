@@ -404,10 +404,10 @@ Please be aware of your surroundings at all times and please use the pedestrian 
 
 
     </p>
-    <p>Enjoy your walk and explore at your own pace.</p>
-
+    <p>Please enjoy your walk and explore at your own pace.</p>
+    <p>The Queen's official opening of the sie in 1975:</p>
     <br><br><img src="images/welcome2.jpg" class="info-img">
-    <p>The Queen's official opening of the sie in 1975</p>
+    
   `;
   document.getElementById("spotModal").showModal();
 };
