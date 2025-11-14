@@ -29,8 +29,8 @@ The telecommunications part of the Post Office became BT in the early 1980s and 
 const spots = [
  {
   name: "Main Lab Block (Orion/Antares)",
-  lat: 52.05674493,
-  lng: 1.27986381,
+  lat: 52.05682488,
+  lng: 1.27972215,
   radius: 10,
   info: `
     <p>Originally known as the Main Lab Block or B62. This building housed a significant proportion
