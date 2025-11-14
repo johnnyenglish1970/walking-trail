@@ -552,6 +552,14 @@ dialog#spotModal {
   color: #333;
 }
 
+/* Images inside spot descriptions */
+.info-img {
+  width: 100%;
+  border-radius: 10px;
+  margin: 12px 0;
+  display: block;
+}
+
 /* Title bar with close button on the right */
 #spotTitle {
   background: #0057b8;
