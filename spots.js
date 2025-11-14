@@ -31,7 +31,7 @@ const spots = [
   name: "Main Lab Block (Orion/Antares)",
   lat: 52.05682488,
   lng: 1.27972215,
-  radius: 10,
+  radius: 14,
   info: `
     <p>Originally known as the Main Lab Block or B62. This building housed a significant proportion
     of the labs and offices on site when it was built. It was built to a very high specification and
