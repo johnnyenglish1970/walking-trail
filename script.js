@@ -385,7 +385,7 @@ function buildList() {
      <p>There are 16 spots on the trail which will guide you around key locations of the site. The trail will take approximately 1 hour.</p>
 
     <br><p>To use the app, just follow the direction finder to discover each location in turn. When you get close to a location, the content will be unlocked for you to view. The content is a mix of text, images and audio.
-<br><p><strong>Please be aware of your surroundings at all times and please use the pedestrian paths around the site. Take care when crossing roads.</strong></p>
+<br><br><p><strong>Please be aware of your surroundings at all times and please use the pedestrian paths around the site. Take care when crossing roads.</strong></p>
 
 <br><br><p>Please listen to this introduction to the trail from Dr Peter Bell, MD of Fixed Network and Adastral Park, BT:</p>
 <br> <audio controls src="audio/welcome.mp3"></audio>
@@ -404,7 +404,7 @@ function buildList() {
 
 
     </p>
-    <p>Please enjoy your walk and explore at your own pace.</p>
+    <br><p>We hope you enjoy your walk. Please explore at your own pace.</p>
     <br><br><p>The Queen's official opening of the sie in 1975:</p>
     <br><img src="images/welcome2.jpg" class="info-img">
     
