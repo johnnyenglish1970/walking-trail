@@ -638,6 +638,31 @@ dialog#spotModal {
   background: #003f80;
 }
 
+/* ===================== FIREWORK OVERLAY ===================== */
+#fireworksOverlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  display: none; /* Hidden until triggered */
+  z-index: 50;
+}
+
+.firework {
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #fff, rgba(255,255,255,0));
+  border-radius: 50%;
+  position: absolute;
+  animation: explode 900ms ease-out forwards;
+}
+
+@keyframes explode {
+  0% { transform: scale(0.2); opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: scale(12); opacity: 0; }
+}
+
 /* ===================== FOOTER ===================== */
 #resetBtn {
   display: block;
