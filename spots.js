@@ -90,10 +90,10 @@ Listen to Chris Adams describe how an anechoic chamber and reverberation room wo
     <p>Building B1, visible to the west, is one of the former RAF Martlesham Heath buildings from WW2 and is now part of Innovation Martlesham. The building is rumoured to be haunted.</p>
 
 <p><strong>Listen to Mike Warden talk about sightings of the ghost of B1:</strong><br>
-<audio controls src="audio/b1haunted.mp3"></audio></p>
+<audio controls src="audio/b1ghost.mp3"></audio></p>
 
 <p><strong>Listen to Bernie Fenn talk about trying to spot the ghost:</strong><br>
-<audio controls src="audio/b1ghost.mp3"></audio></p>
+<audio controls src="audio/b1haunted.mp3"></audio></p>
 `,
   },
   {
