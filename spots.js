@@ -122,8 +122,7 @@ const spots = [
 <br><img src="images/5-waveguide.jpg" class="info-img">
 
 <br><br><p>View the images below to see installation of the waveguide project.</p>
-<br><img src="images/5-waveguide.jpg" class="info-img">
-<br><br><img src="images/5-waveguide2.jpg" class="info-img">
+<br><img src="images/5-waveguide2.jpg" class="info-img">
 <br><br><img src="images/5-waveguide3.jpg" class="info-img">
 <br><br><img src="images/5-waveguide4.jpg" class="info-img">
 <br><br><img src="images/5-waveguide5.jpg" class="info-img">
