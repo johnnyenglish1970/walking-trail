@@ -681,16 +681,22 @@ dialog#spotModal {
 #trailFooter {
   width: 100%;
   max-width: 800px;
-  margin: 25px auto 50px auto;
-  text-align: center;
-  font-size: 0.75rem;     /* smaller, subtle text */
+  margin: 30px auto 50px auto;
+
+  display: flex;             /* NEW — forces content centering */
+  justify-content: center;   /* center horizontally */
+  align-items: center;        /* center vertically (for single line) */
+  text-align: center;         /* center text inside the p */
+
+  font-size: 0.75rem;
   color: #555;
   padding: 0 20px;
   line-height: 1.4;
 }
 
 #trailFooter p {
-  margin: 0;
+  margin: 0 auto;            /* ensure p doesn't override centering */
+  max-width: 90%;
 }
 
 #trailFooter a {
@@ -702,6 +708,7 @@ dialog#spotModal {
 #trailFooter a:hover {
   text-decoration: underline;
 }
+
 
 
 @media (max-width: 600px) {
