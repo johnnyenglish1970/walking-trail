@@ -678,25 +678,28 @@ dialog#spotModal {
   background: #b71c1c;
 }
 
+/* ===================== FOOTER (bullet-proof mobile centering) ===================== */
 #trailFooter {
   width: 100%;
   max-width: 800px;
   margin: 30px auto 50px auto;
 
-  display: flex;             /* NEW — forces content centering */
-  justify-content: center;   /* center horizontally */
-  align-items: center;        /* center vertically (for single line) */
-  text-align: center;         /* center text inside the p */
+  display: block !important;     /* override parent flex rules */
+  text-align: center !important; /* enforce centering on all devices */
 
   font-size: 0.75rem;
   color: #555;
   padding: 0 20px;
   line-height: 1.4;
+
+  flex: none !important;         /* stop flex parents affecting it */
+  align-self: center !important; /* centre it inside flex parents */
 }
 
 #trailFooter p {
-  margin: 0 auto;            /* ensure p doesn't override centering */
-  max-width: 90%;
+  margin: 0 auto;
+  max-width: 95%;
+  display: block;
 }
 
 #trailFooter a {
@@ -708,8 +711,6 @@ dialog#spotModal {
 #trailFooter a:hover {
   text-decoration: underline;
 }
-
-
 
 @media (max-width: 600px) {
   #top-wrap, #map, #trailList, #nearest, #controls, #compass {
