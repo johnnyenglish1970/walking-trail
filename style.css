@@ -466,6 +466,23 @@ button {
   background: #3d8f42;;
 }
 
+/* Welcome modal read-more button */
+.welcome-readmore {
+  background: #0057b8;     /* Blue */
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.welcome-readmore:hover {
+  background: #003f80;      /* Darker blue on hover */
+}
+
 /* Responsive trail list adjustments */
 /* ===================== TRAIL LIST RESPONSIVE FIX ===================== */
 
