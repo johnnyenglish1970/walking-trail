@@ -678,6 +678,27 @@ dialog#spotModal {
   background: #b71c1c;
 }
 
+#trailFooter {
+  width: 100%;
+  max-width: 800px;
+  margin: 30px auto 60px auto;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #444;
+  padding: 10px 20px;
+  line-height: 1.5;
+}
+
+#trailFooter a {
+  color: #0057b8;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+#trailFooter a:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 600px) {
   #top-wrap, #map, #trailList, #nearest, #controls, #compass {
     width: 95%;
