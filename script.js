@@ -393,7 +393,7 @@ welcome.querySelector(".welcome-readmore").onclick = () => {
     <p><strong>Please be aware of your surroundings at all times and please use the pedestrian paths around the site. Take care when crossing roads.</strong></p>
 <br>
     <p>Please listen to this introduction to the trail from Dr Peter Bell, MD of Fixed Network and Adastral Park, BT:</p>
-    <audio controls src="audio/welcome.mp3"></audio>
+    <br><audio controls src="audio/welcome.mp3"></audio>
     <br><br>
     <p><strong>Introduction to the Site</strong></p>
 <br>
