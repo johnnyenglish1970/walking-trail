@@ -110,7 +110,7 @@ function initMap() {
   );
 
   // Boot sequence
-  fitMapToAll();
+ setTimeout(() => fitMapToAll(), 250);
   buildList();
   setupCompassButton();
   attachHandlers();
@@ -127,7 +127,14 @@ function fitMapToAll() {
   spots.forEach(s => bounds.extend({ lat: s.lat, lng: s.lng }));
   if (userPos?.lat) bounds.extend(userPos);
 
-  map.fitBounds(bounds, 80);
+  map.fitBounds(bounds);                // 1) fit normally
+map.panToBounds?.(bounds, {           // 2) padding, modern API
+  top: 80,
+  bottom: 80,
+  left: 80,
+  right: 80
+});
+  
 }
 
 /* ===================== POSITION UPDATES ===================== */
