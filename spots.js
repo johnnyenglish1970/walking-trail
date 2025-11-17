@@ -50,6 +50,7 @@ const spots = [
     <br><img src="images/1-gpo-research.jpg" class="info-img">
     <br><br><p>Photo of the hurricane damage in 1987:</p>
     <br><img src="images/1-hurricane2.jpg" class="info-img">
+    <p><br><br>Hint: Look out for a "Did you know?" at the end of these descriptions for each location for a chance to get a free commemorative pin!</p>
   `,
 },
 
@@ -65,7 +66,7 @@ const spots = [
         <br><br>
         <img src="images/2-anechoic-chamber.jpg" class="info-img">
         <br><br><img src="images/2-anechoic-chamber2.jpg" class="info-img">
-       
+        <p><br><br>Did you know? The Queen opened Adastral park in 1975 (Add 1975)</p>
     `,
   },
   {
@@ -85,6 +86,7 @@ const spots = [
 <br><audio controls src="audio/redevelopment.mp3"></audio>
         <br><p>In this recording, Bruce talks about the specific changes that were made as part of the redevelopment:</p>
 <br> <audio controls src="audio/redevelopment2.mp3"></audio>
+<p><br><br>Did you know? Adastral Park is 100 acres. (Add 100) </p>
        `,
   },
   {
@@ -102,7 +104,7 @@ const spots = [
 <br><audio controls src="audio/b1haunted.mp3"></audio></p>
 <br><br><img src="images/4-b1-old.jpg" class="info-img">
 <br><br><img src="images/4-b1-today.jpg" class="info-img">
-
+<p><br><br>Quiz:  Did you know? B1 is the only original RAF building still standing from the war. (Add 1)</p>
 `,
   },
   {
@@ -130,6 +132,8 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 <br><br><img src="images/5-waveguide4.jpg" class="info-img">
 <br><br><img src="images/5-waveguide5.jpg" class="info-img">
 <br><br><img src="images/5-waveguide6.jpg" class="info-img">
+<p><br><br>Quiz:  Did you know? Waveguide was initially tested from Adastral to Wickham market which is approximately 9 miles. (Add 9)</p>
+
 `,
   },
   {
@@ -145,6 +149,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 
 <br><p><strong>Listen to Bruce Boxall discuss his silicon work in the submarine network:</strong><br>
 <br><audio controls src="audio/silicon.mp3"></audio></p>
+<p><br><br>Quiz:  Did you know? The depth of the subsea cable chamber in the robotics lab is just over 5 metres. (Add 5)</p>
 `,
   },
   {
@@ -163,7 +168,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 <br><br><img src="images/7-digitech1.jpg" class="info-img">
 <br><br><img src="images/7-digitech2.jpg" class="info-img">
 <br><br><img src="images/7-digitech3.jpg" class="info-img">
-
+<p><br><br>Quiz:  Did you know? The Digitech centre was officially opened by Princess Anne in 2019. (Subtract 2019)</p>
 
 `,
   },
@@ -177,6 +182,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 
 <br><p><strong>Listen to Jon Wakeling discuss the teleport’s history:</strong><br>
 <br><audio controls src="audio/teleport.mp3"></audio></p>
+<p><br><br>Quiz:  Did you know? Princess Diana's funeral was relayed around the world from our Teleport in 1997. (Add 97)</p>
           `,
   },
   {
@@ -190,6 +196,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 <br><p><strong>Listen to Jon Wakeling talk about the area:</strong><br>
 <br><audio controls src="audio/romes.mp3"></audio></p>
 <br><br><img src="images/9-romes.jpg" class="info-img">
+<p><br><br>Quiz:  Did you know? The radio tower is 212 ft high. (Add 212)</p>
           `,
   },
   {
@@ -202,6 +209,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 
 <br><p><strong>Listen to Meral Bence describe this new facility:</strong><br>
 <br><audio controls src="audio/smarthome.mp3"></audio></p>
+<p><br><br>Quiz:  Did you know? Adastral has over 60 buildings on site. (Add 60)</p>
 
        `,   
   },
@@ -219,6 +227,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 <br><br><img src="images/11-sports1.jpg" class="info-img">          
 <br><br><img src="images/11-sports2.jpg" class="info-img">
 <br><br><img src="images/11-sports3.jpg" class="info-img">
+<p><br><br>Quiz:  Did you know? Our onsite sports facility AtLAS has 12 clubs. (Add 12)</p>
 `,
   },
   {
@@ -231,6 +240,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 
 <br><p><strong>Listen to Chris Adams talk about the development of Wireplay:</strong><br>
 <br><audio controls src="audio/wireplay.mp3"></audio></p>
+<p><br><br>Quiz:  Did you know? Our Adastral Arcade showcased Wireplay this week in B80 the Hub. (Add 80)</p>
           `,
   },
   {
@@ -252,6 +262,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 
 <br><p><strong>Bernie Fenn talks about a worrying power incident:</strong><br>
 <br><audio controls src="audio/power.mp3"></audio></p>
+<p><br><br>Quiz:  Did you know? We have over 30 employees volunteering as part of our Ambulance and fire team on site. (Add 30)</p>
           `,
 
   },
@@ -268,6 +279,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 
 <br><p><strong>Listen to Andy outline situations where the NoC resolves network issues:</strong><br>
 <br><audio controls src="audio/nocscenarios.mp3"></audio></p>
+<p><br><br>Did you know? Our network operations centre operates 24 hours a day, 7 days a week. (Add 24)</p>
           `,
   },
   {
@@ -277,7 +289,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
     radius: 16,
      info: `
      <p>Innovation Martlesham is a thriving ecosystem of ICT and digital companies, launched in 2011. It was created to support collaboration, creativity, and the development of pioneering digital technologies.</p>
-
+     <p><br><br>Did you know? Innovation Martlesham was officially opened in 2000. (Add 2)</p>
           `,
   },
   {
@@ -290,10 +302,15 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 
 <br><p><strong>Listen to Terry Henshall talk about the new centre:</strong><br>
 <br><audio controls src="audio/heritage.mp3"></audio></p>
+<p><br><br><strong>Collect a free commemorative pin badge</strong></p>
+<p><br>If you have visited all of the locations on the trail, you'll notice there is a "Did you know?" question at the end of each location with an associated number.  Simply add or subtract the numbers as indicated to 
+calculate a 3-digit number which you can dial in our commemorative golden phone box outside the Hub to hear a secret message with the location to collect your commemorative special edition pin badge.</p>
+
 <br><p>Photo of switching parts from a mechanical switch from a Strowger Echange:</p>
     <br><br><img src="images/16-heritage1.jpg" class="info-img">
     <br><p>Photo of an old switchboard:</p>
     <br><br><img src="images/16-heritage2.jpg" class="info-img">
+     <p>We hope you enjoyed the heritage trail. Please now enjoy looking around our very own heritage centre.</p>
     `,
   }
 ];
