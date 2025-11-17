@@ -3,7 +3,7 @@ const MAP_ID = "3fe9650f3654faf0bee8e2e2";
 
 /* ===================== STATE ===================== */
 let map, userMarker, nextMarker, spotMarkers = [];
-let watchId = null, testingMode = true;
+let watchId = null, testingMode = false;
 
 let visited = new Set(JSON.parse(localStorage.getItem("visitedSpots") || "[]"));
 let skipped = new Set(JSON.parse(localStorage.getItem("skippedSpots") || "[]"));
