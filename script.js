@@ -185,6 +185,9 @@ if (nearestEl) nearestEl.textContent = `Next Spot: ${current.name} (${dist.toFix
   if (dist <= proximity && !visited.has(current.name)) {
     visited.add(current.name);
 
+     // 🔔 Play arrival bell
+    playBell();
+    
     // Tint marker
     const m = spotMarkers[currentSpotIndex];
     if (m?.content) m.content.classList.add("visited");
@@ -582,6 +585,12 @@ document.getElementById("closeModal").onclick = () => {
     a.currentTime = 0;
   });
 };
+
+function playBell() {
+  const bell = new Audio("audio/bell.mp3");
+  bell.volume = 0.7; // optional
+  bell.play().catch(() => {}); // prevent browser errors
+}
 
 /* ===================== CONTROLS ===================== */
 function attachHandlers() {
