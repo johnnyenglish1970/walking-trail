@@ -50,7 +50,7 @@ const spots = [
     <br><img src="images/1-gpo-research.jpg" class="info-img">
     <br><br><p>Photo of the hurricane damage in 1987:</p>
     <br><img src="images/1-hurricane2.jpg" class="info-img">
-    <p><br><br>Hint: Look out for a "Did you know?" at the end of these descriptions for each location for a chance to get a free commemorative pin!</p>
+    <p><br><br>Hint: Look out for each "Did you know?" at the end of these descriptions for each location for a chance to get a free commemorative pin!</p>
   `,
 },
 
@@ -104,7 +104,7 @@ const spots = [
 <br><audio controls src="audio/b1haunted.mp3"></audio></p>
 <br><br><img src="images/4-b1-old.jpg" class="info-img">
 <br><br><img src="images/4-b1-today.jpg" class="info-img">
-<p><br><br>Quiz:  Did you know? B1 is the only original RAF building still standing from the war. (Add 1)</p>
+<p><br><br>Did you know? B1 is the only original RAF building still standing from the war. (Add 1)</p>
 `,
   },
   {
@@ -132,7 +132,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 <br><br><img src="images/5-waveguide4.jpg" class="info-img">
 <br><br><img src="images/5-waveguide5.jpg" class="info-img">
 <br><br><img src="images/5-waveguide6.jpg" class="info-img">
-<p><br><br>Quiz:  Did you know? Waveguide was initially tested from Adastral to Wickham market which is approximately 9 miles. (Add 9)</p>
+<p><br><br>Did you know? Waveguide was initially tested from Adastral to Wickham market which is approximately 9 miles. (Add 9)</p>
 
 `,
   },
@@ -149,7 +149,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 
 <br><p><strong>Listen to Bruce Boxall discuss his silicon work in the submarine network:</strong><br>
 <br><audio controls src="audio/silicon.mp3"></audio></p>
-<p><br><br>Quiz:  Did you know? The depth of the subsea cable chamber in the robotics lab is just over 5 metres. (Add 5)</p>
+<p><br><br>Did you know? The depth of the subsea cable chamber in the robotics lab is just over 5 metres. (Add 5)</p>
 `,
   },
   {
@@ -168,7 +168,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 <br><br><img src="images/7-digitech1.jpg" class="info-img">
 <br><br><img src="images/7-digitech2.jpg" class="info-img">
 <br><br><img src="images/7-digitech3.jpg" class="info-img">
-<p><br><br>Quiz:  Did you know? The Digitech centre was officially opened by Princess Anne in 2019. (Subtract 2019)</p>
+<p><br><br>Did you know? The Digitech centre was officially opened by Princess Anne in 2019. (Subtract 2019)</p>
 
 `,
   },
@@ -182,7 +182,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 
 <br><p><strong>Listen to Jon Wakeling discuss the teleport’s history:</strong><br>
 <br><audio controls src="audio/teleport.mp3"></audio></p>
-<p><br><br>Quiz:  Did you know? Princess Diana's funeral was relayed around the world from our Teleport in 1997. (Add 97)</p>
+<p><br><br>Did you know? Princess Diana's funeral was relayed around the world from our Teleport in 1997. (Add 97)</p>
           `,
   },
   {
@@ -196,7 +196,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 <br><p><strong>Listen to Jon Wakeling talk about the area:</strong><br>
 <br><audio controls src="audio/romes.mp3"></audio></p>
 <br><br><img src="images/9-romes.jpg" class="info-img">
-<p><br><br>Quiz:  Did you know? The radio tower is 212 ft high. (Add 212)</p>
+<p><br><br>Did you know? The radio tower is 212 ft high. (Add 212)</p>
           `,
   },
   {
@@ -209,7 +209,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 
 <br><p><strong>Listen to Meral Bence describe this new facility:</strong><br>
 <br><audio controls src="audio/smarthome.mp3"></audio></p>
-<p><br><br>Quiz:  Did you know? Adastral has over 60 buildings on site. (Add 60)</p>
+<p><br><br>Did you know? Adastral has over 60 buildings on site. (Add 60)</p>
 
        `,   
   },
@@ -227,7 +227,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 <br><br><img src="images/11-sports1.jpg" class="info-img">          
 <br><br><img src="images/11-sports2.jpg" class="info-img">
 <br><br><img src="images/11-sports3.jpg" class="info-img">
-<p><br><br>Quiz:  Did you know? Our onsite sports facility AtLAS has 12 clubs. (Add 12)</p>
+<p><br><br>Did you know? Our onsite sports facility AtLAS has 12 clubs. (Add 12)</p>
 `,
   },
   {
@@ -240,7 +240,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 
 <br><p><strong>Listen to Chris Adams talk about the development of Wireplay:</strong><br>
 <br><audio controls src="audio/wireplay.mp3"></audio></p>
-<p><br><br>Quiz:  Did you know? Our Adastral Arcade showcased Wireplay this week in B80 the Hub. (Add 80)</p>
+<p><br><br>Did you know? Our Adastral Arcade showcased Wireplay this week in B80 the Hub. (Add 80)</p>
           `,
   },
   {
@@ -262,7 +262,7 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 
 <br><p><strong>Bernie Fenn talks about a worrying power incident:</strong><br>
 <br><audio controls src="audio/power.mp3"></audio></p>
-<p><br><br>Quiz:  Did you know? We have over 30 employees volunteering as part of our Ambulance and fire team on site. (Add 30)</p>
+<p><br><br>Did you know? We have over 30 employees volunteering as part of our Ambulance and fire team on site. (Add 30)</p>
           `,
 
   },
