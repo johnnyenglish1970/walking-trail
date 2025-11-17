@@ -307,9 +307,9 @@ This carried live telephone calls for a number of years in the 1970s and 80s.</p
 calculate a 3-digit number which you can dial in our commemorative golden phone box outside the Hub to hear a secret message with the location to collect your commemorative special edition pin badge.</p>
 
 <br><p>Photo of switching parts from a mechanical switch from a Strowger Echange:</p>
-    <br><br><img src="images/16-heritage1.jpg" class="info-img">
+    <br><img src="images/16-heritage1.jpg" class="info-img">
     <br><p>Photo of an old switchboard:</p>
-    <br><br><img src="images/16-heritage2.jpg" class="info-img">
+    <br><img src="images/16-heritage2.jpg" class="info-img">
      <p>We hope you enjoyed the heritage trail. Please now enjoy looking around our very own heritage centre.</p>
     `,
   }
