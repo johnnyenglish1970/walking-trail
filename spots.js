@@ -50,7 +50,7 @@ const spots = [
     <br><img src="images/1-gpo-research.jpg" class="info-img">
     <br><br><p>Photo of the hurricane damage in 1987:</p>
     <br><img src="images/1-hurricane2.jpg" class="info-img">
-    <p><br><br>Hint: Look out for each "Did you know?" at the end of these descriptions for each location for a chance to get a free commemorative pin!</p>
+    <p><br><br><strong>Hint:</strong> Look out for each "Did you know?" at the end of these descriptions for each location for a chance to get a free commemorative pin!</p><br>
   `,
 },
 
