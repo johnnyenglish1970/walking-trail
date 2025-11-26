@@ -27,291 +27,178 @@ The telecommunications part of the Post Office became BT in the early 1980s and 
 };
 
 const spots = [
- {
-  name: "Main Lab Block (Orion/Antares)",
-  lat: 52.05682488,
-  lng: 1.27972215,
-  radius: 14,
-  info: `
-    <p>Originally known as the Main Lab Block or B62. This building housed a significant proportion
-    of the labs and offices on site when it was built. It was built to a very high specification and
-    took a long time to complete – it was started in 1971 and was not officially opened (by the Queen)
-    until late 1975. ...</p>
-
-<br><br> 
-    <p>Listen to Mike Warden talk about his memories of the Hurricane damage in 1987.</p>
-    
-       <br> <audio controls src="audio/hurricane.mp3"></audio>
-      <br><br>
-    <p>Listen to Pete Cochrane recall some unusual incidents with low flying aircraft.</p>
-    <br> <audio controls src="audio/aircraft.mp3"></audio>
-    <br><br>
-    <p>Early photo of the site under construction:</p>
-    <br><img src="images/1-gpo-research.jpg" class="info-img">
-    <br><br><p>Photo of the hurricane damage in 1987:</p>
-    <br><img src="images/1-hurricane2.jpg" class="info-img">
-    <p><br><br><strong>Hint:</strong> Look out for each "Did you know?" at the end of these descriptions for each location for a chance to get a free commemorative pin!</p><br>
-  `,
-},
-
   {
-    name: "Acoustic Block",
-    lat: 52.05671008,
-    lng: 1.28002642,
-    radius: 10,
-     info: `
-       <p>The Adastral Acoustic Block includes anechoic chambers and a reverberation room and is an important facility for the site to allow audio experimentation and measurement – a key part of telecommunications.</p>
-       <br><p>Listen to Chris Adams describe how an anechoic chamber and reverberation room works and how they are used. </p>
-       <br> <audio controls src="audio/accoustic1.mp3"></audio>
-        <br><br>
-        <img src="images/2-anechoic-chamber.jpg" class="info-img">
-        <br><br><img src="images/2-anechoic-chamber2.jpg" class="info-img">
-        <p><br><br>Did you know? The Queen opened Adastral park in 1975 (Add 1975)</p>
-    `,
-  },
-  {
-    name: "Old Post Room",
-    lat: 52.05734795,
-    lng: 1.27954631,
-    radius: 20,
-    info: ` 
-      <p>At one time, a former WW2 building stood in this location. The building was the old hospital for the RAF Martlesham Heath airfield. When the GPO took over the site, the building became the post room until it was demolished.</p>
-
-        <br><p>Listen to Bernie Fenn talk about his memories of working in the building:</p>
-        <br><audio controls src="audio/postroom2.mp3"></audio>
-
-       <br><p> The building was demolished as part of a major redevelopment of the site in the 1990’s. </p>
-
-       <br><p>Listen to Bruce Boxall talk about the background to this redevelopment:</p>
-<br><audio controls src="audio/redevelopment.mp3"></audio>
-        <br><p>In this recording, Bruce talks about the specific changes that were made as part of the redevelopment:</p>
-<br> <audio controls src="audio/redevelopment2.mp3"></audio>
-<p><br><br>Did you know? Adastral Park is 100 acres. (Add 100) </p>
-       `,
-  },
-  {
-    name: "B1",
-    lat: 52.06050806,
-    lng: 1.27999692,
-    radius: 15,
+    name: "The Village Hall",
+    lat: LAT_PLACEHOLDER,
+    lng: LNG_PLACEHOLDER,
+    radius: 12,
     info: `
-    <p>Building B1, visible to the west, is one of the former RAF Martlesham Heath buildings from WW2 and is now part of Innovation Martlesham. The building is rumoured to be haunted.</p>
+      <p>Did you know where Playford got its name? One theory is that it originated from “Plega Forda,” meaning “battle,” referring to a local encounter between the Danes and Saxons. In early times the River Fynn was large enough for boats to travel along it, and artefacts—including a Saxon sword now in the British Museum—support this theory.</p>
 
-<br><p><strong>Listen to Mike Warden talk about sightings of the ghost of B1:</strong><br>
-<br><audio controls src="audio/b1ghost.mp3"></audio></p>
-
-<br><p><strong>Listen to Bernie Fenn talk about trying to spot the ghost:</strong><br>
-<br><audio controls src="audio/b1haunted.mp3"></audio></p>
-<br><br><img src="images/4-b1-old.jpg" class="info-img">
-<br><br><img src="images/4-b1-today.jpg" class="info-img">
-<p><br><br>Did you know? B1 is the only original RAF building still standing from the war. (Add 1)</p>
-`,
+      <p>Playford appears in the Domesday Book of 1086, where a manor house, watermill, and church are all recorded. Historically a farming community, Playford is now known for its peaceful setting and rural charm.</p>
+    `
   },
+
   {
-    name: "Waveguide",
-    lat: 52.06077374,
-    lng: 1.28135277,
-    radius: 15,
-     info: ` 
-       <p>One the other side of the road underneath the slabs is where a waveguide was installed.</p>
-<p><br>One of the first research divisions to move up from Dollis Hill to the new Post Office Research Centre was the microwave waveguide transmission division.</p>
-<p>Microwave radio transmissions could be sent along these waveguides - basically precision engineered piping, with a helix of wire wound around the outside, to keep the signal inside the waveguide. Waveguides were seen as a faster and more reliable way to send microwave radio signals than broadcasting into the air.</p>
-<p>The waveguides installed underneath these slabs were the first serious attempt at waveguide transmission by the Post Office.</p>
-<p>A trial waveguide system was built between Building 16 at Martlesham and the exchange in Wickham Market.
-This carried live telephone calls for a number of years in the 1970s and 80s.</p>
-<p>However by the mid-1970s it was obvious that a better waveguide had been found - fibre optic cables. These acted as waveguides for infrared laser light. They could carry much more information microwave waveguides ever could, they were smaller and also cheaper and easier to produce.</p>
-
-<p>The Post Office and later BT became world leaders in fibre-optic communication in the late 1970s and in the 1980s.</p>
-
-<br><p>Here is a photo of a waveguide:</p>
-<br><img src="images/5-waveguide.jpg" class="info-img">
-
-<br><br><p>View the images below to see installation of the waveguide project.</p>
-<br><img src="images/5-waveguide2.jpg" class="info-img">
-<br><br><img src="images/5-waveguide3.jpg" class="info-img">
-<br><br><img src="images/5-waveguide4.jpg" class="info-img">
-<br><br><img src="images/5-waveguide5.jpg" class="info-img">
-<br><br><img src="images/5-waveguide6.jpg" class="info-img">
-<p><br><br>Did you know? Waveguide was initially tested from Adastral to Wickham market which is approximately 9 miles. (Add 9)</p>
-
-`,
-  },
-  {
-    name: "Submarine, Robotics and Drones",
-    lat: 52.0593466,
-    lng: 1.28245784,
-    radius: 18,
-     info: `
-     <p>This facility originally housed subsea cable testing, which is why the 12.5-tonne gantry crane still remains. Today the building supports robotics and drone R&D and contains indoor testbeds that simulate real-world civil engineering environments such as ducts, poles, and underground chambers.</p>
-
-<br><p><strong>Listen to Jon Wakeling talk about current research:</strong><br>
-<br><audio controls src="audio/robotics.mp3"></audio></p>
-
-<br><p><strong>Listen to Bruce Boxall discuss his silicon work in the submarine network:</strong><br>
-<br><audio controls src="audio/silicon.mp3"></audio></p>
-<p><br><br>Did you know? The depth of the subsea cable chamber in the robotics lab is just over 5 metres. (Add 5)</p>
-`,
-  },
-  {
-    name: "The Digitech Centre",
-    lat: 52.05925789,
-    lng: 1.28514944,
-    radius: 15,
+    name: "Hurricane Crash Site",
+    lat: LAT_PLACEHOLDER,
+    lng: LNG_PLACEHOLDER,
+    radius: 12,
     info: `
-      <p>The Digitech Centre, opened in 2021, is a partnership between BT and the University of Suffolk. It provides undergraduate and postgraduate teaching across a wide range of digital technology disciplines.</p>
+      <p>Many will remember the Great Storm of 1987—but did you know that a Hurricane hit Playford long before that?</p>
 
-<br><p><strong>Listen to Tim Whitley discuss the new centre:</strong><br>
-<br><audio controls src="audio/digitech2.mp3"></audio></p>
+      <p>On 29 January 1940, Hawker Hurricane Mk.I L1984 of 56 Squadron RAF was forced to crash-land near Playford’s playing field. The aircraft struck a cottage, overturning on impact. Frozen snow drawn into the supercharger caused engine failure during a scramble against enemy aircraft.</p>
 
-<br><p><strong>Listen to Meral Bence describe how the centre was created:</strong><br>
-<br><audio controls src="audio/digitech.mp3"></audio></p>
-<br><br><img src="images/7-digitech1.jpg" class="info-img">
-<br><br><img src="images/7-digitech2.jpg" class="info-img">
-<br><br><img src="images/7-digitech3.jpg" class="info-img">
-<p><br><br>Did you know? The Digitech centre was officially opened by Princess Anne in 2019. (Subtract 2019)</p>
-
-`,
+      <p>The pilot, Sergeant Cecil John Cooney, survived the crash but was later killed in action in July 1940. Repairs to the cottage can still be seen today.</p>
+    `
   },
+
   {
-    name: "Martlesham Teleport",
-    lat: 52.05929207,
-    lng: 1.28631234,
-    radius: 15,
+    name: "Rocket Pit",
+    lat: LAT_PLACEHOLDER,
+    lng: LNG_PLACEHOLDER,
+    radius: 12,
     info: `
-    <p>Through the trees ahead are the satellite dishes of Martlesham Teleport. Once operated by BT and now by Arqiva, the Teleport is used by broadcasters worldwide to route content between locations. The funeral of Diana, Princess of Wales, was relayed globally from here in 1997. It remains the UK’s most easterly satellite earth station.</p>
+      <p>It may sound unbelievable, but Playford was once hit by a German V2 rocket. On 11 October 1944 at 2:20pm, a V2 impacted the village, creating a crater 39 feet wide and over 12 feet deep. The blast blew a farm worker off his tractor and shattered windows throughout the village.</p>
 
-<br><p><strong>Listen to Jon Wakeling discuss the teleport’s history:</strong><br>
-<br><audio controls src="audio/teleport.mp3"></audio></p>
-<p><br><br>Did you know? Princess Diana's funeral was relayed around the world from our Teleport in 1997. (Add 97)</p>
-          `,
+      <p>The crater, known for years as the “Rocket Pit,” was later used as a rubbish dump before being filled in. On dry summers, some say the scar can still be seen from the air.</p>
+
+      <br><img src="images/rocket-pit.jpg" class="info-img">
+      <br><img src="images/rocket-pit-aerial.jpg" class="info-img">
+      <br><img src="images/v2-rocket.jpg" class="info-img">
+    `
   },
-  {
-    name: "ROMES",
-    lat: 52.05926545,
-    lng: 1.2858495,
-    radius: 15,
-     info: `
-     <p>This area was once used to store emergency exchange hardware for rural areas — equipment that could be deployed following fire, flood, or major outages. Technology has since moved on, and the area now supports research into space communications.</p>
 
-<br><p><strong>Listen to Jon Wakeling talk about the area:</strong><br>
-<br><audio controls src="audio/romes.mp3"></audio></p>
-<br><br><img src="images/9-romes.jpg" class="info-img">
-<p><br><br>Did you know? The radio tower is 212 ft high. (Add 212)</p>
-          `,
-  },
   {
-    name: "Smart Home",
-    lat: 52.0592116,
-    lng: 1.28462507,
-    radius: 15,
-     info: `
-       <p>This experimental Smart Home is being developed by BT and the University of Suffolk as part of the Digitech Project. It enables research and testing into future building technologies, sustainable living, and digital construction.</p>
-
-<br><p><strong>Listen to Meral Bence describe this new facility:</strong><br>
-<br><audio controls src="audio/smarthome.mp3"></audio></p>
-<p><br><br>Did you know? Adastral has over 60 buildings on site. (Add 60)</p>
-
-       `,   
-  },
-  {
-    name: "Sports Hall",
-    lat: 52.05920839,
-    lng: 1.28417848,
-    radius: 16,
-     info: `
-     <p>The Sports Hall supports health and wellbeing through fitness and team activities. It contains facilities for basketball, netball, badminton, fitness classes, judo, and even indoor model aeroplane flying.</p>
-     <br></p>Famous sporting visitors have included Austin Healey, Lawrence Dallaglio, Sam Quek, Daley Thompson, and the GB Archery Team.</p>
-
-<br><p><strong>Listen to Bernie Fenn talk about sport at Adastral Park:</strong><br>
-<br><audio controls src="audio/sports.mp3"></audio></p>
-<br><br><img src="images/11-sports1.jpg" class="info-img">          
-<br><br><img src="images/11-sports2.jpg" class="info-img">
-<br><br><img src="images/11-sports3.jpg" class="info-img">
-<p><br><br>Did you know? Our onsite sports facility AtLAS has 12 clubs. (Add 12)</p>
-`,
-  },
-  {
-    name: "Gaming",
-    lat: 52.05886422,
-    lng: 1.28180741,
-    radius: 15,
+    name: "The Naughtiest Girl in the World",
+    lat: LAT_PLACEHOLDER,
+    lng: LNG_PLACEHOLDER,
+    radius: 12,
     info: `
-       <p>Wireplay was an online multiplayer gaming network developed by BT in the 1990s. It allowed PC gamers to play against each other remotely using a dial-up internet connection — a pioneering service at the time.</p>
+      <p>This story tells of Peggy Fisk, a well-loved resident of the village. Whenever Peggy misbehaved as a child, her mother would punish her by sending her into the fields to dig up snowdrops and replant them in the churchyard.</p>
 
-<br><p><strong>Listen to Chris Adams talk about the development of Wireplay:</strong><br>
-<br><audio controls src="audio/wireplay.mp3"></audio></p>
-<p><br><br>Did you know? Our Adastral Arcade showcased Wireplay this week in B80 the Hub. (Add 80)</p>
-          `,
+      <p>To this day, St Mary’s Churchyard is covered in thousands of snowdrops each spring — a beautiful legacy of a very “naughty” girl!</p>
+    `
   },
+
   {
-    name: "Emergency Services",
-    lat: 52.05734862,
-    lng: 1.28259329,
-    radius: 20,
-     info: `
-     <p>Adastral Park has its own emergency services team, including fire and ambulance capabilities.</p>
+    name: "Thunderstruck Toilet",
+    lat: LAT_PLACEHOLDER,
+    lng: LNG_PLACEHOLDER,
+    radius: 12,
+    info: `
+      <p>In 2015, a powerful thunderstorm rolled over Playford. A bolt of lightning struck next to St Mary’s Church, blowing fuses in nearby houses. The church itself was untouched — but the outdoor wooden toilet beside it was completely destroyed.</p>
 
-<br><p><strong>Listen to Mike Warden talk about the formation of the BT Emergency Team in 1977:</strong><br>
-<br><audio controls src="audio/formation.mp3"></audio></p>
-
-<br><p><strong>Listen to Mike describe the team’s first fire engine:</strong><br>
-<br><audio controls src="audio/engine.mp3"></audio></p>
-
-<br><p><strong>Mike recalls emergency incidents at the Park:</strong><br>
-<br><audio controls src="audio/emergencies.mp3"></audio></p>
-
-<br><p><strong>Bernie Fenn talks about a worrying power incident:</strong><br>
-<br><audio controls src="audio/power.mp3"></audio></p>
-<p><br><br>Did you know? We have over 30 employees volunteering as part of our Ambulance and fire team on site. (Add 30)</p>
-          `,
-
+      <p>Many wondered how lightning hit the small shed instead of the tall church tower just five metres away. Luck, coincidence, or divine protection? We’ll never know.</p>
+    `
   },
+
   {
-    name: "Network Ops",
-    lat: 52.05718534,
-    lng: 1.2811905,
-    radius: 15,
-     info: `
-       <p>The Network Operations Centre (NoC) manages BT’s national network — including broadband, leased lines, Ethernet circuits, and mobile backhaul for millions of customers.</p>
+    name: "Airy’s Cottage – Where Time Begins",
+    lat: LAT_PLACEHOLDER,
+    lng: LNG_PLACEHOLDER,
+    radius: 12,
+    info: `
+      <p>Sir George Biddell Airy, Astronomer Royal from 1835 to 1881, lived here at Airy’s Cottage. He designed the Airy Transit Circle, the telescope that defined the Prime Meridian — the basis of Greenwich Mean Time (GMT).</p>
 
-<br><p><strong>Listen to Andy Skingley discuss the history of the NoC:</strong><br>
-<br><audio controls src="audio/nocintro.mp3"></audio></p>
+      <p>His observations, using spider-web threads stretched across the eyepiece, allowed exact timing of stars crossing the meridian, helping set the world’s clocks.</p>
 
-<br><p><strong>Listen to Andy outline situations where the NoC resolves network issues:</strong><br>
-<br><audio controls src="audio/nocscenarios.mp3"></audio></p>
-<p><br><br>Did you know? Our network operations centre operates 24 hours a day, 7 days a week. (Add 24)</p>
-          `,
+      <p>Airy’s garden once contained a large larch tree grown from a seedling taken from Greenwich Observatory.</p>
+    `
   },
+
   {
-    name: "Innovation Martlesham",
-    lat: 52.05744922,
-    lng: 1.2811905,
-    radius: 16,
-     info: `
-     <p>Innovation Martlesham is a thriving ecosystem of ICT and digital companies, launched in 2011. It was created to support collaboration, creativity, and the development of pioneering digital technologies.</p>
-     <p><br><br>Did you know? Innovation Martlesham was officially opened in 2000. (Add 2)</p>
-          `,
+    name: "Anna Airy – Artist of War and Peace",
+    lat: LAT_PLACEHOLDER,
+    lng: LNG_PLACEHOLDER,
+    radius: 12,
+    info: `
+      <p>Anna Airy, granddaughter of Sir George Biddell Airy, was one of the first women officially commissioned as a war artist in WW1. A respected painter and etcher, she became president of the Ipswich Art Society for 24 years.</p>
+
+      <p>An annual award in her name continues to support young artists today.</p>
+    `
   },
+
   {
-    name: "Heritage Centre",
-    lat: 52.05891122,
-    lng: 1.27937062,
-    radius: 20,
-     info: `
-       <p>This is the last spot on the trail. Congratulations — you have reached the final spot on the trail! The new Adastral Park Heritage Centre showcases the history of the site and the groundbreaking work carried out here over the decades. Take your time exploring this unique facility.</p>
+    name: "Lost Inns of Playford",
+    lat: LAT_PLACEHOLDER,
+    lng: LNG_PLACEHOLDER,
+    radius: 12,
+    info: `
+      <p>Playford once had at least two pubs: the Kicking Donkey at the top of Brook Lane and the Eels’ Foot on Church Lane (formerly Slush Lane). The Eels’ Foot was said to be popular with smugglers travelling over the heath from Hollesley Bay.</p>
 
-<br><p><strong>Listen to Terry Henshall talk about the new centre:</strong><br>
-<br><audio controls src="audio/heritage.mp3"></audio></p>
-<p><br><br><strong>Collect a free commemorative pin badge</strong></p>
-<p><br>If you have visited all of the locations on the trail, you'll notice there is a "Did you know?" question at the end of each location with an associated number.  Simply add or subtract the numbers as indicated to 
-calculate a 3-digit number which you can dial in our commemorative golden phone box outside the Hub to hear a secret message with the location to collect your commemorative special edition pin badge.</p>
+      <p>Legend tells of villagers waking to find their horses muddy and exhausted — with a casket of spirits left behind in thanks.</p>
+    `
+  },
 
-<br><p>Photo of switching parts from a mechanical switch from a Strowger Echange:</p>
-    <br><img src="images/16-heritage1.jpg" class="info-img">
-    <br><p>Photo of an old switchboard:</p>
-    <br><img src="images/16-heritage2.jpg" class="info-img">
-     <p>We hope you enjoyed the heritage trail. Please now enjoy looking around our very own heritage centre.</p>
-    `,
+  {
+    name: "The Old Shop and Post Office",
+    lat: LAT_PLACEHOLDER,
+    lng: LNG_PLACEHOLDER,
+    radius: 12,
+    info: `
+      <p>Playford once had its own shop and post office. The earliest was located at the corner of Hill Farm Road and Butts Road before later moving to Church Lane.</p>
+
+      <p>Villagers remember shelves of glass jars filled with wine gums, aniseed balls, sherbet dips, and Bazooka Joe gum — all sold by the quarter.</p>
+    `
+  },
+
+  {
+    name: "The Village School",
+    lat: LAT_PLACEHOLDER,
+    lng: LNG_PLACEHOLDER,
+    radius: 12,
+    info: `
+      <p>Playford once had a small village school, remembered fondly by older residents. Though no longer standing, it played an important role in early village life and community identity.</p>
+    `
+  },
+
+  {
+    name: "Football Legends of Playford",
+    lat: LAT_PLACEHOLDER,
+    lng: LNG_PLACEHOLDER,
+    radius: 12,
+    info: `
+      <p>During the golden era of Ipswich Town FC in the 1970s and early 1980s, manager Sir Bobby Robson lived in a house in Spring Meadow. Players such as Frans Thijssen were frequent visitors.</p>
+
+      <p>One villager recalls owning Thijssen’s leather jacket — bought at a local jumble sale!</p>
+    `
+  },
+
+  {
+    name: "View over the Mere – Peaceful Charm",
+    lat: LAT_PLACEHOLDER,
+    lng: LNG_PLACEHOLDER,
+    radius: 12,
+    info: `
+      <p>This spot overlooks one of the most beautiful views in Playford: the Fynn Valley and Playford Mere.</p>
+
+      <p>The former mill can be seen across the valley, and the railway line built in the 1850s still runs from Ipswich to Lowestoft. In Saxon times, the Mere served as a tidal harbour.</p>
+    `
+  },
+
+  {
+    name: "Thomas Clarkson – Freedom from Slavery",
+    lat: LAT_PLACEHOLDER,
+    lng: LNG_PLACEHOLDER,
+    radius: 12,
+    info: `
+      <p>Thomas Clarkson (1760–1846) was one of the most influential abolitionists in British history. His tireless campaigning helped secure the 1807 Act abolishing the slave trade, and he continued the fight until slavery itself was abolished in 1833.</p>
+
+      <p>Clarkson lived at Playford Hall, where he welcomed abolitionists from around the world, including Frederick Douglass and Harriet Beecher Stowe. He is buried in St Mary’s Churchyard.</p>
+    `
+  },
+
+  {
+    name: "VE Day Celebration on the Green",
+    lat: LAT_PLACEHOLDER,
+    lng: LNG_PLACEHOLDER,
+    radius: 12,
+    info: `
+      <p>On 8 May 1945, villagers gathered on the green to celebrate the end of the war in Europe. Local farmer Mr Fisk organised a bonfire, and one resident brought out Molotov Cocktails stored under the Village Hall stage—kept by the Home Guard in case of invasion.</p>
+
+      <p>Fortunately, the fire was lit safely, and the village celebrated long into the night.</p>
+    `
   }
 ];
 
