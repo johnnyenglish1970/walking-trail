@@ -29,8 +29,8 @@ The telecommunications part of the Post Office became BT in the early 1980s and 
 const spots = [
   {
     name: "The Village Hall",
-    lat: LAT_PLACEHOLDER,
-    lng: LNG_PLACEHOLDER,
+    lat: 52.08442785,
+    lng: 1.23134315,
     radius: 12,
     info: `
       <p>Did you know where Playford got its name? One theory is that it originated from “Plega Forda,” meaning “battle,” referring to a local encounter between the Danes and Saxons. In early times the River Fynn was large enough for boats to travel along it, and artefacts—including a Saxon sword now in the British Museum—support this theory.</p>
@@ -41,8 +41,8 @@ const spots = [
 
   {
     name: "Hurricane Crash Site",
-    lat: LAT_PLACEHOLDER,
-    lng: LNG_PLACEHOLDER,
+    lat: 52.08410150,
+    lng: 1.23158991,
     radius: 12,
     info: `
       <p>Many will remember the Great Storm of 1987—but did you know that a Hurricane hit Playford long before that?</p>
@@ -55,8 +55,8 @@ const spots = [
 
   {
     name: "Rocket Pit",
-    lat: LAT_PLACEHOLDER,
-    lng: LNG_PLACEHOLDER,
+    lat: 52.08016536,
+    lng: 1.22529745,
     radius: 12,
     info: `
       <p>It may sound unbelievable, but Playford was once hit by a German V2 rocket. On 11 October 1944 at 2:20pm, a V2 impacted the village, creating a crater 39 feet wide and over 12 feet deep. The blast blew a farm worker off his tractor and shattered windows throughout the village.</p>
@@ -71,8 +71,8 @@ const spots = [
 
   {
     name: "The Naughtiest Girl in the World",
-    lat: LAT_PLACEHOLDER,
-    lng: LNG_PLACEHOLDER,
+    lat: 52.08644522,
+    lng: 1.23539329,
     radius: 12,
     info: `
       <p>This story tells of Peggy Fisk, a well-loved resident of the village. Whenever Peggy misbehaved as a child, her mother would punish her by sending her into the fields to dig up snowdrops and replant them in the churchyard.</p>
@@ -83,8 +83,8 @@ const spots = [
 
   {
     name: "Thunderstruck Toilet",
-    lat: LAT_PLACEHOLDER,
-    lng: LNG_PLACEHOLDER,
+    lat: 52.08672540,
+    lng: 1.23526454,
     radius: 12,
     info: `
       <p>In 2015, a powerful thunderstorm rolled over Playford. A bolt of lightning struck next to St Mary’s Church, blowing fuses in nearby houses. The church itself was untouched — but the outdoor wooden toilet beside it was completely destroyed.</p>
@@ -95,8 +95,8 @@ const spots = [
 
   {
     name: "Airy’s Cottage – Where Time Begins",
-    lat: LAT_PLACEHOLDER,
-    lng: LNG_PLACEHOLDER,
+    lat: 52.08595737,
+    lng: 1.23477638,
     radius: 12,
     info: `
       <p>Sir George Biddell Airy, Astronomer Royal from 1835 to 1881, lived here at Airy’s Cottage. He designed the Airy Transit Circle, the telescope that defined the Prime Meridian — the basis of Greenwich Mean Time (GMT).</p>
@@ -109,8 +109,8 @@ const spots = [
 
   {
     name: "Anna Airy – Artist of War and Peace",
-    lat: LAT_PLACEHOLDER,
-    lng: LNG_PLACEHOLDER,
+    lat: 52.08602329,
+    lng: 1.23489439,
     radius: 12,
     info: `
       <p>Anna Airy, granddaughter of Sir George Biddell Airy, was one of the first women officially commissioned as a war artist in WW1. A respected painter and etcher, she became president of the Ipswich Art Society for 24 years.</p>
@@ -121,8 +121,8 @@ const spots = [
 
   {
     name: "Lost Inns of Playford",
-    lat: LAT_PLACEHOLDER,
-    lng: LNG_PLACEHOLDER,
+    lat: 52.08526843,
+    lng: 1.23208880,
     radius: 12,
     info: `
       <p>Playford once had at least two pubs: the Kicking Donkey at the top of Brook Lane and the Eels’ Foot on Church Lane (formerly Slush Lane). The Eels’ Foot was said to be popular with smugglers travelling over the heath from Hollesley Bay.</p>
@@ -133,8 +133,8 @@ const spots = [
 
   {
     name: "The Old Shop and Post Office",
-    lat: LAT_PLACEHOLDER,
-    lng: LNG_PLACEHOLDER,
+    lat: 52.08489594,
+    lng: 1.23075306,
     radius: 12,
     info: `
       <p>Playford once had its own shop and post office. The earliest was located at the corner of Hill Farm Road and Butts Road before later moving to Church Lane.</p>
@@ -145,8 +145,8 @@ const spots = [
 
   {
     name: "The Village School",
-    lat: LAT_PLACEHOLDER,
-    lng: LNG_PLACEHOLDER,
+    lat: 52.08450696,
+    lng: 1.23509288,
     radius: 12,
     info: `
       <p>Playford once had a small village school, remembered fondly by older residents. Though no longer standing, it played an important role in early village life and community identity.</p>
@@ -155,8 +155,8 @@ const spots = [
 
   {
     name: "Football Legends of Playford",
-    lat: LAT_PLACEHOLDER,
-    lng: LNG_PLACEHOLDER,
+    lat: 52.08512998,
+    lng: 1.23379469,
     radius: 12,
     info: `
       <p>During the golden era of Ipswich Town FC in the 1970s and early 1980s, manager Sir Bobby Robson lived in a house in Spring Meadow. Players such as Frans Thijssen were frequent visitors.</p>
@@ -167,8 +167,8 @@ const spots = [
 
   {
     name: "View over the Mere – Peaceful Charm",
-    lat: LAT_PLACEHOLDER,
-    lng: LNG_PLACEHOLDER,
+    lat: 52.08387075,
+    lng: 1.23709917,
     radius: 12,
     info: `
       <p>This spot overlooks one of the most beautiful views in Playford: the Fynn Valley and Playford Mere.</p>
@@ -179,8 +179,8 @@ const spots = [
 
   {
     name: "Thomas Clarkson – Freedom from Slavery",
-    lat: LAT_PLACEHOLDER,
-    lng: LNG_PLACEHOLDER,
+    lat: 52.08659685,
+    lng: 1.23529673,
     radius: 12,
     info: `
       <p>Thomas Clarkson (1760–1846) was one of the most influential abolitionists in British history. His tireless campaigning helped secure the 1807 Act abolishing the slave trade, and he continued the fight until slavery itself was abolished in 1833.</p>
@@ -191,8 +191,8 @@ const spots = [
 
   {
     name: "VE Day Celebration on the Green",
-    lat: LAT_PLACEHOLDER,
-    lng: LNG_PLACEHOLDER,
+    lat: 52.08443444,
+    lng: 1.23112321,
     radius: 12,
     info: `
       <p>On 8 May 1945, villagers gathered on the green to celebrate the end of the war in Europe. Local farmer Mr Fisk organised a bonfire, and one resident brought out Molotov Cocktails stored under the Village Hall stage—kept by the Home Guard in case of invasion.</p>
