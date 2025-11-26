@@ -372,7 +372,7 @@ welcome.innerHTML = `
     </div>
     <div class="trail-text">
       <p class="trail-snippet">
-        Enjoy this trail around Adastral Park to uncover points of interest about the site.
+        Enjoy this trail around Playford to uncover points of interest about the village.
       </p>
       <p style="font-size:0.75rem;color:#666;">Approx: 1.5 miles.</p>
     </div>
@@ -389,16 +389,16 @@ welcome.querySelector(".welcome-readmore").onclick = () => {
 
   document.getElementById("spotBody").innerHTML = `
 
-    <p>There are 16 spots on the trail which will guide you around key locations of the site. The trail will take approximately 1 hour.</p>
+    <p>There are 16 spots on the trail which will guide you around key locations of the village. The trail will take approximately 2 hour.</p>
 <br>
     <p>To use the app, just follow the direction finder to discover each location in turn. When you get close to a location, the content will be unlocked for you to view. The content is a mix of text, images and audio.</p>
 <br>
-    <p><strong>Please be aware of your surroundings at all times and please use the pedestrian paths around the site. Take care when crossing roads.</strong></p>
+    <p><strong>Please be aware of your surroundings at all times and please use the pedestrian paths around the village. Take care when crossing roads.</strong></p>
 <br>
     <p>Please listen to this introduction to the trail from Dr Peter Bell, MD of Fixed Network and Adastral Park, BT:</p>
     <br><audio controls src="audio/welcome.mp3"></audio>
     <br><br>
-    <p><strong>Introduction to the Site</strong></p>
+    <p><strong>Introduction to the Village</strong></p>
 <br>
     <p>Adastral Park was built as the Post Office Research Centre in the early 1970s, to replace the original research station at Dollis Hill in North London.</p>
 
